@@ -5,6 +5,8 @@ using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
+using Image = KHQ.Domain.Entities.Image;
 
 namespace KHQ.Portal.Controllers
 {
@@ -23,51 +25,99 @@ namespace KHQ.Portal.Controllers
 
 
         [HttpPost("SaveImages")]
-        public async Task<IActionResult> SaveImages(List<IFormFile> images, Guid fKey)
+        public async Task<IActionResult> SaveImages(List<IFormFile> images, [FromForm] Guid fKey, [FromForm] string existingImages = "")
         {
-            if (images == null || images.Count == 0 || fKey == Guid.Empty)
-                return BadRequest("No images uploaded or invalid F_Key");
-
-            var id = Guid.NewGuid();
-            var savedImages = new List<Image>();
-            string[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(c => c.ToString()).ToArray();
-            string folderPath = Path.Combine("wwwroot", "Images");
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            for (int i = 0; i < images.Count; i++)
+            try
             {
-                var file = images[i];
-                if (file.Length > 0)
+                List<string> existingImagePaths = new List<string>();
+                if (!string.IsNullOrEmpty(existingImages))
                 {
-                    string fileExtension = Path.GetExtension(file.FileName);
-                    string sortedName = alphabet.Length > i ? alphabet[i] : $"Image_{i}";
-                    string newFileName = $"{sortedName}_{id}{fileExtension}";
-                    string fullPath = Path.Combine(folderPath, newFileName);
+                    existingImagePaths = System.Text.Json.JsonSerializer.Deserialize<List<string>>(existingImages);
+                }
+                if (fKey != Guid.Empty)
+                {
+                    // delete the old images
+                    await DeleteOldImages(fKey , existingImagePaths);
+                }
+                else
+                {
+                    fKey = Guid.NewGuid();
+                }
 
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
+                // Parse existing images if provided
+                
 
+                var savedImages = new List<Image>();
+                string[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(c => c.ToString()).ToArray();
+                string folderPath = Path.Combine("wwwroot", "Images");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                int sortIndex = 0;
+
+                // First, add existing images to maintain order
+                foreach (var existingPath in existingImagePaths)
+                {
+                    var id = Guid.NewGuid();
                     savedImages.Add(new Image
                     {
                         Id = id,
                         F_Key = fKey,
-                        PathLink = $"/Images/{newFileName}",
+                        PathLink = existingPath,
                         ImageType = ImageType.Sliders,
-                        ImageName = newFileName,
-                        Sort = i
+                        ImageName = Path.GetFileName(existingPath),
+                        Sort = sortIndex++
                     });
                 }
+
+                // Then add new uploaded images
+                if (images != null && images.Count > 0)
+                {
+                    for (int i = 0; i < images.Count; i++)
+                    {
+                        var id = Guid.NewGuid();
+                        var file = images[i];
+                        if (file.Length > 0)
+                        {
+                            string fileExtension = Path.GetExtension(file.FileName);
+                            string sortedName = alphabet.Length > sortIndex ? alphabet[sortIndex] : $"Image_{sortIndex}";
+                            string newFileName = $"{sortedName}_{id}{fileExtension}";
+                            string fullPath = Path.Combine(folderPath, newFileName);
+
+                            using (var stream = new FileStream(fullPath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            savedImages.Add(new Image
+                            {
+                                Id = id,
+                                F_Key = fKey,
+                                PathLink = $"/Images/{newFileName}",
+                                ImageType = ImageType.Sliders,
+                                ImageName = newFileName,
+                                Sort = sortIndex++
+                            });
+                        }
+                    }
+                }
+
+                if (savedImages.Any())
+                {
+                    await _unitOfWork.Repository<Image>().AddRange(savedImages);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+
+                return Ok(new { success = true, count = savedImages.Count, fkey = fKey });
             }
-            await _unitOfWork.Repository<Image>().AddRange(savedImages);
-            await _unitOfWork.SaveChangesAsync();
+            catch (Exception ex)
+            {
 
-            return Ok(new { success = true, count = savedImages.Count });
+                throw ex;
+            }
+
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DeleteImage(Guid id, Guid fKey)
@@ -111,6 +161,36 @@ namespace KHQ.Portal.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             return Ok(new { success = true });
+        }
+
+        private async Task<bool> DeleteOldImages(Guid fKey, List<string> existingImagePaths)
+        {
+            try
+            {
+                var oldImages = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == fKey).ToListAsync();
+                foreach (var image in oldImages)
+                {
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.PathLink.TrimStart('/'));
+                    if(!existingImagePaths.Contains(filePath))
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
+
+                    await _unitOfWork.Repository<Image>().Delete(image);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                var result = 1;
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
     }
 }

@@ -1,59 +1,42 @@
-﻿using KHQ.Domain;
+﻿using AutoMapper;
+using KHQ.Domain;
 using KHQ.Domain.Entities;
+using KHQ.Domain.ViewModel;
+using KHQ.Repo.UOW;
 using KHQ.Srv.Services;
 
 namespace KHQ.Portal.Service
 {
     public class ImageService : IImageService
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ImageService(IWebHostEnvironment webHostEnvironment)
+        public ImageService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _webHostEnvironment = webHostEnvironment;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<Image>> SaveImagesAsync(List<IFormFile> images, Guid foreignKey, ImageType imageType)
+        public async Task<List<Image>> GetImagesAsync(Guid foreignKey, ImageType imageType)
         {
-            List<Image> savedImages = new();
-
-            if (images == null || !images.Any())
-                return savedImages;
-
-            string folderName = Path.Combine("Images", imageType.ToString());
-            string wwwRootPath = Path.Combine(_webHostEnvironment.WebRootPath, folderName);
-
-            if (!Directory.Exists(wwwRootPath))
-                Directory.CreateDirectory(wwwRootPath);
-            var sort = 0;
-            foreach (var file in images)
+            var entities = await _unitOfWork.Repository<Image>().GetAllAsync();
+            return entities.Where(x => x.F_Key == foreignKey && x.ImageType == imageType).ToList();
+        }
+        public async Task<int> DeleteImagesAsync(Guid foreignKey)
+        {
+            var result = 0;
+            var entities = await _unitOfWork.Repository<Image>()
+                .GetWhereAsync(img => img.F_Key == foreignKey);
+            
+            if (entities != null)
             {
-                sort++;
-                if (file.Length <= 0)
-                    continue;
-
-                string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                string filePath = Path.Combine(wwwRootPath, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
+                foreach (var entity in entities) {
+                    _unitOfWork.Repository<Image>().Delete(entity);
+                    result = await _unitOfWork.SaveChangesAsync();
                 }
-
-                string relativePath = Path.Combine(folderName, uniqueFileName).Replace("\\", "/");
-
-                savedImages.Add(new Image
-                {
-                    Id = Guid.NewGuid(),
-                    F_Key = foreignKey,
-                    PathLink = $"/{relativePath}",
-                    ImageType = imageType,
-                    ImageName = file.FileName,
-                    Sort = sort
-                });
             }
-
-            return savedImages.OrderBy(x => x.Sort).ToList();
+            return result;
         }
     }
 }

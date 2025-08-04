@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +24,10 @@ namespace KHQ.Repo.Repositories
         {
             return await _dbSet.FindAsync(id);
         }
-
+        public virtual async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
@@ -36,7 +40,16 @@ namespace KHQ.Repo.Repositories
 
         public virtual async Task AddRange(List<T> entities)
         {
-            _dbSet.AddRange(entities);
+            try
+            {
+
+                await _dbSet.AddRangeAsync(entities);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public virtual void Update(T entity)
@@ -44,9 +57,10 @@ namespace KHQ.Repo.Repositories
             _dbSet.Update(entity);
         }
 
-        public virtual void Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
-            _dbSet.Remove(entity);
+            await _dbSet.ExecuteDeleteAsync<T>();
+            //_dbSet.Remove(entity);
         }
 
         public virtual IQueryable<T> Queryable()

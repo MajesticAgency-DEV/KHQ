@@ -1,5 +1,6 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.ViewModel;
+using KHQ.Portal.Service;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,30 +19,35 @@ namespace KHQ.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var sliderData = await _sliderSrv.GetAllAsync();
+            IEnumerable<SliderVM> sliderData = await _sliderSrv.GetAllAsync();
+
+            foreach (SliderVM sliderVM in sliderData)
+            {
+                // Initialize PathLink if it's null
+                if (sliderVM.PathLink == null)
+                {
+                    sliderVM.PathLink = new List<string>();
+                }
+
+                var images = await _imageService.GetImagesAsync(sliderVM.Id, ImageType.Sliders);
+
+                foreach (var image in images)
+                {
+                    sliderVM.PathLink.Add(image.PathLink);
+                }
+            }
+
             return View(sliderData);
         }
 
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var sliderData = await _sliderSrv.GetByIdAsync(id);
-            return View(sliderData);
-        }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] SliderVM sliderVM, List<IFormFile> files)
+        public async Task<IActionResult> Add([FromForm] SliderVM sliderVM)
         {
             try
             {
                 var result = await _sliderSrv.AddAsync(sliderVM);
                 if (result > 0)
                 {
-                    var images = await _imageService.SaveImagesAsync(files, sliderVM.Id, ImageType.Sliders);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -51,20 +57,12 @@ namespace KHQ.Portal.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            
         }
 
-
-        [HttpGet]
-        public IActionResult Update()
-        {
-            return View();
-        }
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] SliderVM sliderVM)
+        public async Task<IActionResult> Update([FromForm] SliderVM sliderVM)
         {
             try
             {
@@ -80,12 +78,11 @@ namespace KHQ.Portal.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -93,7 +90,15 @@ namespace KHQ.Portal.Controllers
                 var result = await _sliderSrv.DeleteAsync(id);
                 if (result > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var res = await _imageService.DeleteImagesAsync(id);
+                    if (res > 0)
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {
@@ -102,34 +107,8 @@ namespace KHQ.Portal.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            
         }
-
-        //private async Task<string> SaveImageAsync(IFormFile imageUpload)
-        //{
-        //    if (imageUpload == null || imageUpload.Length == 0)
-        //    {
-        //        throw new ArgumentException("Invalid image upload");
-        //    }
-
-        //    var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-        //    if (!Directory.Exists(uploadsFolder))
-        //    {
-        //        Directory.CreateDirectory(uploadsFolder);
-        //    }
-
-        //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageUpload.FileName);
-        //    var filePath = Path.Combine(uploadsFolder, fileName);
-
-        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //    {
-        //        await imageUpload.CopyToAsync(fileStream);
-        //    }
-
-        //    return fileName;
-        //}
     }
 }
