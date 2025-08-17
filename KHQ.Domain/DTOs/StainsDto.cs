@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace KHQ.Domain.DTOs
 {
-    internal class EConInnerDto
+    public class StainsDto
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

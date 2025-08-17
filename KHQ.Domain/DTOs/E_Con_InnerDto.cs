@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace KHQ.Domain.DTOs
 {
-    public class BaseHomeDto
+    internal class E_Con_InnerDto
     {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
     }
-
 }
