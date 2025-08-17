@@ -30,7 +30,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] BrandsVM brandsVM)
+        public async Task<IActionResult> Add(BrandsVM brandsVM)
         {
             var result = await _BrandSrv.AddAsync(brandsVM);
             if (result > 0)
