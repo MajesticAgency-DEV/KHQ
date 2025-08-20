@@ -13,6 +13,5 @@ namespace KHQ.Domain.Entities
         public string NameAr { get; set; }
         public string DescriptionEn { get; set; }
         public string DescriptionAr { get; set; }
-        public string ImageLink { get; set; }
     }
 }
