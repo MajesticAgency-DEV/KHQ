@@ -4,6 +4,7 @@ using KHQ.Repo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KHQ.Repo.Migrations
 {
     [DbContext(typeof(KHQDBContext))]
-    partial class KHQDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250820194026_RemoveImageLink")]
+    partial class RemoveImageLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,13 +94,13 @@ namespace KHQ.Repo.Migrations
                         {
                             Id = "a18be9c0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b07b8b74-e7d7-4ace-9864-a0092bc27888",
+                            ConcurrencyStamp = "5afed407-b0eb-4778-9c0d-88c2b2556363",
                             Email = "Admin@KHQ.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "Admin@KHQ.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJVhHAkB88D3A+XzNmJ7eES1Llie1A1mlieD/R8l2BBsYFq3DPnu/nVuJyeTPnSkBA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENlPFnu/UGIukvkVMUsrcgqZYaIUM01R6dbRp9XyLa0MAe/H9VzT8w9OxgOrOqF5jw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -181,6 +184,10 @@ namespace KHQ.Repo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageLink")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -431,7 +438,7 @@ namespace KHQ.Repo.Migrations
                         },
                         new
                         {
-                            Id = "ab369bd0-fd1a-4647-bb60-f1f6bea14f18",
+                            Id = "5deb47b1-862d-4470-beea-1f65994d5d84",
                             Name = "User",
                             NormalizedName = "User"
                         });

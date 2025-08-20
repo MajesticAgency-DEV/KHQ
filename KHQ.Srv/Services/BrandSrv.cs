@@ -21,10 +21,19 @@ namespace KHQ.Srv.Services
         }
         public async Task<int> AddAsync(BrandsVM entity)
         {
-            var brandToBeAdded = _mapper.Map<Brands>(entity);
-            await _unitOfWork.Repository<Brands>().AddAsync(brandToBeAdded);
-            var result = await _unitOfWork.SaveChangesAsync();
-            return result;
+            try
+            {
+                var brandToBeAdded = _mapper.Map<Brands>(entity);
+                await _unitOfWork.Repository<Brands>().AddAsync(brandToBeAdded);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
         }
 
         public async Task<int> DeleteAsync(Guid id)

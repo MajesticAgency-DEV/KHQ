@@ -59,8 +59,8 @@ namespace KHQ.Repo.Repositories
 
         public virtual async Task Delete(T entity)
         {
-            await _dbSet.ExecuteDeleteAsync<T>();
-            //_dbSet.Remove(entity);
+            //await _dbSet.ExecuteDeleteAsync<T>();
+            _dbSet.Remove(entity);
         }
 
         public virtual IQueryable<T> Queryable()
