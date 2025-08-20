@@ -41,9 +41,9 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
-            CreateMap<E_Con_Inner, E_Con_InnerDto>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
+            //CreateMap<E_Con_Inner, E_Con_InnerDto>()
+            //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
+            //     CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
 
             CreateMap<Stains, StainsDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>

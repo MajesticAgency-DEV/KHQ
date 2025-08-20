@@ -5,6 +5,7 @@ using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
 using Image = KHQ.Domain.Entities.Image;
 
@@ -25,19 +26,22 @@ namespace KHQ.Portal.Controllers
 
 
         [HttpPost("SaveImages")]
-        public async Task<IActionResult> SaveImages(List<IFormFile> images, [FromForm] Guid fKey, [FromForm] string existingImages = "")
+        public async Task<IActionResult> SaveImages(List<IFormFile> images, [FromForm] Guid fKey, [FromForm] int imageType, [FromForm] string existingImages = "")
         {
             try
             {
                 List<string> existingImagePaths = new List<string>();
+
                 if (!string.IsNullOrEmpty(existingImages))
                 {
-                    existingImagePaths = System.Text.Json.JsonSerializer.Deserialize<List<string>>(existingImages);
+                    // Try to determine if it's JSON or a delimited string
+                    existingImagePaths = ParseExistingImages(existingImages);
                 }
+
                 if (fKey != Guid.Empty)
                 {
                     // delete the old images
-                    await DeleteOldImages(fKey , existingImagePaths);
+                    await DeleteOldImages(fKey, existingImagePaths);
                 }
                 else
                 {
@@ -45,12 +49,9 @@ namespace KHQ.Portal.Controllers
                 }
 
                 // Parse existing images if provided
-                
-
                 var savedImages = new List<Image>();
                 string[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(c => c.ToString()).ToArray();
                 string folderPath = Path.Combine("wwwroot", "Images");
-
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
 
@@ -65,7 +66,7 @@ namespace KHQ.Portal.Controllers
                         Id = id,
                         F_Key = fKey,
                         PathLink = existingPath,
-                        ImageType = ImageType.Sliders,
+                        ImageType = (ImageType)imageType, // Convert int to enum
                         ImageName = Path.GetFileName(existingPath),
                         Sort = sortIndex++
                     });
@@ -95,7 +96,7 @@ namespace KHQ.Portal.Controllers
                                 Id = id,
                                 F_Key = fKey,
                                 PathLink = $"/Images/{newFileName}",
-                                ImageType = ImageType.Sliders,
+                                ImageType = (ImageType)imageType, // Convert int to enum
                                 ImageName = newFileName,
                                 Sort = sortIndex++
                             });
@@ -113,10 +114,44 @@ namespace KHQ.Portal.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+        }
 
+        private List<string> ParseExistingImages(string existingImages)
+        {
+            var result = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(existingImages))
+                return result;
+
+            // Trim whitespace
+            existingImages = existingImages.Trim();
+
+            // Check if it looks like JSON (starts with [ and ends with ])
+            if (existingImages.StartsWith("[") && existingImages.EndsWith("]"))
+            {
+                try
+                {
+                    result = JsonSerializer.Deserialize<List<string>>(existingImages);
+                    return result;
+                }
+                catch (JsonException)
+                {
+                    // If JSON parsing fails, fall through to string parsing
+                }
+            }
+
+            // Parse as delimited string - try common delimiters
+            char[] delimiters = { ',', ';', '|', '\n', '\r' };
+
+            result = existingImages
+                .Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
+                .Select(path => path.Trim())
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .ToList();
+
+            return result;
         }
 
         [HttpPost]

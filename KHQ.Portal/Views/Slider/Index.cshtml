@@ -585,7 +585,7 @@ function saveImageInDB(mode, itemId = '') {
     } else {
         formData.append('fKey', '00000000-0000-0000-0000-000000000000'); // Empty GUID for add mode
     }
-
+    formData.append("imageType", 4);
     $.ajax({
         url: '/api/Common/SaveImages',
         type: 'POST',

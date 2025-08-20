@@ -1,4 +1,6 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.ViewModel;
+using KHQ.Portal.Service;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +9,33 @@ namespace KHQ.Portal.Controllers
     public class BrandsController : Controller
     {
         private readonly IBrandSrv _BrandSrv;
+        private readonly IImageService _imageService;
 
-        public BrandsController(IBrandSrv brandSrv)
+        public BrandsController(IBrandSrv brandSrv, IImageService imageService)
         {
             _BrandSrv = brandSrv;
+            _imageService = imageService;
         }
         public async Task<IActionResult> Index()
         {
-            var brandsData = await _BrandSrv.GetAllAsync();
+            IEnumerable<BrandsVM> brandsData = await _BrandSrv.GetAllAsync();
+
+            foreach (BrandsVM brandsVM in brandsData)
+            {
+                // Initialize PathLink if it's null
+                if (brandsVM.ImageLink == null)
+                {
+                    brandsVM.ImageLink = "";
+                }
+
+                var images = await _imageService.GetImagesAsync(brandsVM.Id, ImageType.Brands);
+
+                foreach (var image in images)
+                {
+                    brandsVM.ImageLink = image.PathLink;
+                }
+            }
+
             return View(brandsData);
         }
 
@@ -50,7 +71,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] BrandsVM brandsVM)
+        public async Task<IActionResult> Update(BrandsVM brandsVM)
         {
             var result = await _BrandSrv.UpdateAsync(brandsVM);
             if (result > 0)
@@ -68,7 +89,15 @@ namespace KHQ.Portal.Controllers
             var result = await _BrandSrv.DeleteAsync(id);
             if (result > 0)
             {
-                return RedirectToAction(nameof(Index));
+                var res = await _imageService.DeleteImagesAsync(id);
+                if (res > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {

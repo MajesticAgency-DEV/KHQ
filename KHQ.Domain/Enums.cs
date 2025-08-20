@@ -12,7 +12,7 @@ namespace KHQ.Domain
         AboutUs_Page = 2,
         FAQ_Home = 3,
         Sliders = 4,
-
+        Brands = 5,
     }
 
     public enum SectionType
