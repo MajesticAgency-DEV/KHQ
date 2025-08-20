@@ -1,0 +1,454 @@
+﻿@model List<KHQ.Domain.ViewModel.FaqVM>
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
+                            <li class="breadcrumb-item active">FAQ sections</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">FAQ sections</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row justify-content-end">
+                            <div class="col-auto">
+                                <div class="text-lg-end my-1 my-lg-0">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#add-modal">
+                                        <i class="fa-regular fa-circle-plus"></i> Add New
+                                    </button>
+                                </div>
+                            </div><!-- end col-->
+                        </div> <!-- end row -->
+                    </div>
+                </div> <!-- end card -->
+            </div> <!-- end col-->
+        </div>
+        <!-- end row-->
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-xl-6">
+                    <div class="card product-box">
+                        <div class="card-body">
+                            <div class="product-action">
+                                <input value="@item.Id" type="hidden" id="FAQId-@item.Id" />
+                                <button class="btn btn-xs waves-effect waves-light mt-2 mt-md-0" type="button"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-@item.Id"
+                                        aria-controls="offcanvasRight" style="background:#ccc">
+                                    <i class="fa-light fa-eye text-white"></i>
+                                </button>
+                                <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
+                                        data-bs-target="#edit-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#danger-alert-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- English Section -->
+                            <ul class="nav nav-tabs nav-bordered nav-justified" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="#question-en-@item.Id" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="false" role="tab" tabindex="-1">
+                                        Question in English
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#answer-en-@item.Id" data-bs-toggle="tab" aria-expanded="false" class="nav-link" aria-selected="true" role="tab">
+                                        Answer in English
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="question-en-@item.Id" role="tabpanel">
+                                    <p>@item.QuestionEn</p>
+                                </div>
+                                <div class="tab-pane" id="answer-en-@item.Id" role="tabpanel">
+                                    <p>@item.AnswerEn</p>
+                                </div>
+                            </div>
+
+                            <!-- Arabic Section -->
+                            <ul class="nav nav-tabs nav-bordered nav-justified" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="#question-ar-@item.Id" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="false" role="tab" tabindex="-1">
+                                        Question in Arabic
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#answer-ar-@item.Id" data-bs-toggle="tab" aria-expanded="false" class="nav-link" aria-selected="true" role="tab">
+                                        Answer in Arabic
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="question-ar-@item.Id" role="tabpanel">
+                                    <p>@item.QuestionAr</p>
+                                </div>
+                                <div class="tab-pane" id="answer-ar-@item.Id" role="tabpanel">
+                                    <p>@item.AnswerAr</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-->
+                </div>
+
+                <!-- Edit Modal -->
+                <div id="edit-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="alert alert-success alert-success-edit display-none">
+                                    <i class="fa-sharp fa-light fa-circle-check"></i> Section edited successfully.
+                                </div>
+                                <form id="FAQFormEdit" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="QEn-edit-@item.Id" class="form-label">Question in English:</label>
+                                        <input class="form-control" type="text" id="QEn-edit-@item.Id"
+                                               required="" placeholder="Enter question in english" value="@item.QuestionEn">
+                                        <span class="validationQEn text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="QAr-edit-@item.Id" class="form-label">Question in Arabic:</label>
+                                        <input class="form-control" type="text" id="QAr-edit-@item.Id"
+                                               required="" placeholder="Enter question in arabic" value="@item.QuestionAr">
+                                        <span class="validationQAr text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="AEn-edit-@item.Id" class="form-label">Answer in English:</label>
+                                        <textarea class="form-control" type="text" id="AEn-edit-@item.Id"
+                                              required="" placeholder="Enter answer in english">@item.AnswerEn</textarea>
+                                        <span class="validationAEn text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="AAr-edit-@item.Id" class="form-label">Answer in Arabic:</label>
+                                        <textarea class="form-control" type="text" id="AAr-edit-@item.Id"
+                                              required="" placeholder="Enter answer in arabic">@item.AnswerAr</textarea>
+                                        <span class="validationAAr text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-2 text-center">
+                                        <button class="btn btn-primary btn-submit" id="EditFAQSectionsbtn-@item.Id"
+                                                type="button" onclick="saveEdit('@item.Id')">
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View Offcanvas -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-@item.Id" aria-labelledby="offcanvasRightLabel-@item.Id">
+                    <div class="offcanvas-header">
+                        <div>
+                            <h3 id="offcanvasRightLabel-@item.Id">@item.QuestionEn</h3>
+                            <h3>@item.QuestionAr</h3>
+                        </div>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <h5 class="mt-3">English Answer:</h5>
+                        <p>@item.AnswerEn</p>
+                        <hr />
+                        <h5 class="mt-3">Arabic Answer:</h5>
+                        <p>@item.AnswerAr</p>
+                        <hr />
+                    </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div id="danger-alert-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-filled bg-danger">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="fa-regular fa-ban text-white font-36"></i>
+                                    <h4 class="mt-2 text-white">Oh snap!</h4>
+                                    <p class="mt-3 text-white">Are you sure you want to delete?</p>
+                                    <button type="button"
+                                            data-id="@item.Id"
+                                            class="btn btn-light my-2 deleteFAQ"
+                                            data-bs-dismiss="modal">
+                                        Continue
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+</div>
+
+<!-- Add modal content -->
+<div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="alert alert-success display-none">
+                    <i class="fa-sharp fa-light fa-circle-check"></i> Section added successfully.
+                </div>
+                <form id="FAQForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="QEn" class="form-label">Question in english:</label>
+                        <input class="form-control" type="text" id="QEn"
+                               required="" placeholder="Enter question in english">
+                        <span class="validationQEn text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="QAr" class="form-label">Question in arabic:</label>
+                        <input class="form-control" type="text" id="QAr"
+                               required="" placeholder="Enter question in arabic">
+                        <span class="validationQAr text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="AEn" class="form-label">Answer in english:</label>
+                        <input class="form-control" type="text" id="AEn"
+                               required="" placeholder="Enter answer in english">
+                        <span class="validationAEn text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="AAr" class="form-label">Answer in arabic:</label>
+                        <input class="form-control" type="text" id="AAr"
+                               required="" placeholder="Enter answer in arabic">
+                        <span class="validationAAr text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-2 text-center">
+                        <button class="btn btn-primary btn-submit" id="SaveFAQSectionsbtn"
+                                type="button">
+                            Save
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#SaveFAQSectionsbtn').click(function () {
+        var validation = true;
+        var qEnValue = $('#QEn').val();
+        var qArValue = $('#QAr').val();
+        var aEnValue = $('#AEn').val();
+        var aArValue = $('#AAr').val();
+
+        // Validation logic
+        if (qEnValue == "") {
+            $(".validationQEn").removeClass("display-none");
+            validation = false;
+        } else {
+            $(".validationQEn").addClass("display-none");
+        }
+        if (qArValue == "") {
+            $(".validationQAr").removeClass("display-none");
+            validation = false;
+        } else {
+            $(".validationQAr").addClass("display-none");
+        }
+        if (aEnValue == "") {
+            $(".validationAEn").removeClass("display-none");
+            validation = false;
+        } else {
+            $(".validationAEn").addClass("display-none");
+        }
+        if (aArValue == "") {
+            $(".validationAAr").removeClass("display-none");
+            validation = false;
+        } else {
+            $(".validationAAr").addClass("display-none");
+        }
+
+        if (validation) {
+            var formData = new FormData();
+            formData.append("QuestionEn", qEnValue);
+            formData.append("QuestionAr", qArValue);
+            formData.append("AnswerEn", aEnValue);
+            formData.append("AnswerAr", aArValue);
+
+            $.ajax({
+                url: '@Url.Action("Add", "FAQ")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $(".alert-success").removeClass("display-none");
+                    $(".alert-success").addClass("d-flex");
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".deleteFAQ", function () {
+        var id = $(this).data('id');
+        var formData = new FormData();
+        formData.append('id', id);
+
+        $.ajax({
+            url: '@Url.Action("Delete", "FAQ")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+});
+
+function saveEdit(itemId) {
+        var validation = true;
+
+        var qEnValue = $('#QEn-edit-' + itemId).val();
+        var qArValue = $('#QAr-edit-' + itemId).val();
+        var aEnValue = $('#AEn-edit-' + itemId).val();
+        var aArValue = $('#AAr-edit-' + itemId).val();
+        // Validation logic
+            if (qEnValue == "") {
+                $(".validationQEn").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationQEn").addClass("display-none");
+            }
+            if (qArValue == "") {
+                $(".validationQAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationQAr").addClass("display-none");
+            }
+            if (aEnValue == "") {
+                $(".validationAEn").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationAEn").addClass("display-none");
+            }
+            if (aArValue == "") {
+                $(".validationAAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationAAr").addClass("display-none");
+            }
+
+        if (validation) {
+            var formData = new FormData();
+                formData.append("QuestionEn", qEnValue);
+                formData.append("QuestionAr", qArValue);
+                formData.append("AnswerEn", aEnValue);
+                formData.append("AnswerAr", aArValue);
+                formData.append('id', itemId);
+
+            $.ajax({
+                url: '@Url.Action("Update", "FAQ")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $(".alert-success-edit").removeClass("display-none");
+                    $(".alert-success-edit").addClass("d-flex");
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+}
+
+function uploadImage(event, itemId) {
+    try {
+        const imagePreview = $("#imagePreview-edit-" + itemId);
+        
+        // Store file specifically for this item
+        editModalFiles[itemId] = event.target.files[0] || null;
+        
+        // Clear previous preview
+        imagePreview.empty();
+
+        if (editModalFiles[itemId]) {
+            // Create a container for the image with a delete button
+            const imageContainer = $("<div>")
+                .addClass("image-container col-4")
+                .css({
+                    "position": "relative",
+                    "margin-bottom": "8px"
+                });
+            
+            // Create an image element for the selected image
+            const img = $("<img>")
+                .attr("src", URL.createObjectURL(editModalFiles[itemId]))
+                .addClass("img-thumbnail")
+                .css("max-width", "150px")
+                .on('error', function() {
+                    console.error('Failed to load image preview');
+                    imageContainer.remove();
+                });
+
+            // Create a delete button for the image
+            const deleteButton = $("<button>")
+                .attr("type", "button")
+                .addClass("btn btn-danger btn-sm")
+                .css({
+                    "position": "absolute",
+                    "bottom": "0",
+                    "right": "0"
+                })
+                .html('<i class="fa-light fa-trash"></i>')
+                .on("click", function () {
+                    // Clear the selected file for this specific item
+                    delete editModalFiles[itemId];
+                    imageContainer.remove();
+                    $("#imageInput-edit-" + itemId).val(''); // Clear the file input
+                });
+
+            // Append the image and delete button to the container
+            imageContainer.append(img, deleteButton);
+
+            // Append the container to the image preview div
+            imagePreview.append(imageContainer);
+        }
+    } catch (error) {
+        console.error('Error in uploadImage function:', error);
+        alert('Error uploading image. Please try again.');
+    }
+}
+</script>
