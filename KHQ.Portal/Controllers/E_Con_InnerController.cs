@@ -30,7 +30,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] E_Con_InnerVM e_Con_InnerVM)
+        public async Task<IActionResult> Add(E_Con_InnerVM e_Con_InnerVM)
         {
             var result = await _EConInnerService.AddAsync(e_Con_InnerVM);
             if (result > 0)
@@ -50,7 +50,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] E_Con_InnerVM e_Con_InnerVM)
+        public async Task<IActionResult> Update(E_Con_InnerVM e_Con_InnerVM)
         {
             var result = await _EConInnerService.UpdateAsync(e_Con_InnerVM);
             if (result > 0)
