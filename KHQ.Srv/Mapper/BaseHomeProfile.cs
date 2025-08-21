@@ -2,14 +2,7 @@
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
-using KHQ.Srv.Services;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KHQ.Srv.Mapper
 {
@@ -88,9 +81,11 @@ namespace KHQ.Srv.Mapper
             CreateMap<Slider, SliderVM>().ReverseMap();
             CreateMap<SliderVM, Slider>().ReverseMap();
 
-            //CreateMap<Slider, SliderDto>()
-            //.ForMember(dest => dest.ImagePath,
-            //    opt => opt.MapFrom(src => src.SliderImages.FirstOrDefault().ImagePath));
+            CreateMap<SocialMediaVM, SocialMedia>().ReverseMap();
+            CreateMap<SocialMedia, SocialMediaVM>().ReverseMap();
+
+            CreateMap<SocialMediaDto, SocialMedia>().ReverseMap();
+            CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
         }
     }
 
