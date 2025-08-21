@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KHQ.Domain.ViewModel
+﻿namespace KHQ.Domain.ViewModel
 {
     public class H_AboutUsVM
     {
+        public Guid Id { get; set; }
+        public string PointEn { get; set; }
+        public string PointAr { get; set; }
+        public string Icon { get; set; }
     }
 }

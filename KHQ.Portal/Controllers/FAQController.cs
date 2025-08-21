@@ -30,7 +30,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] FaqVM faqVM)
+        public async Task<IActionResult> Add(FaqVM faqVM)
         {
             var result = await _FaqService.AddAsync(faqVM);
             if (result > 0)
@@ -50,7 +50,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] FaqVM faqVM)
+        public async Task<IActionResult> Update(FaqVM faqVM)
         {
             var result = await _FaqService.UpdateAsync(faqVM);
             if (result > 0)
