@@ -1,10 +1,4 @@
-﻿using KHQ.Domain.Entities;
-using KHQ.Domain.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KHQ.Domain.ViewModel;
 
 namespace KHQ.Srv.Services
 {

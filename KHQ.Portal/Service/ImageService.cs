@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using KHQ.Domain;
 using KHQ.Domain.Entities;
-using KHQ.Domain.ViewModel;
 using KHQ.Repo.UOW;
 using KHQ.Srv.Services;
 

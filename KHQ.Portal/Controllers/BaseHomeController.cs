@@ -1,5 +1,4 @@
-﻿using KHQ.Domain.Entities;
-using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain.ViewModel;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 

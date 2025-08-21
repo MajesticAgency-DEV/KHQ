@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
-using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 using Image = KHQ.Domain.Entities.Image;
 
 namespace KHQ.Portal.Controllers
@@ -34,13 +32,12 @@ namespace KHQ.Portal.Controllers
 
                 if (!string.IsNullOrEmpty(existingImages))
                 {
-                    // Try to determine if it's JSON or a delimited string
                     existingImagePaths = ParseExistingImages(existingImages);
                 }
 
                 if (fKey != Guid.Empty)
                 {
-                    // delete the old images
+                    // Delete unwanted old images
                     await DeleteOldImages(fKey, existingImagePaths);
                 }
                 else
@@ -48,8 +45,7 @@ namespace KHQ.Portal.Controllers
                     fKey = Guid.NewGuid();
                 }
 
-                // Parse existing images if provided
-                var savedImages = new List<Image>();
+                var newImagesToSave = new List<Image>();
                 string[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(c => c.ToString()).ToArray();
                 string folderPath = Path.Combine("wwwroot", "Images");
                 if (!Directory.Exists(folderPath))
@@ -57,22 +53,25 @@ namespace KHQ.Portal.Controllers
 
                 int sortIndex = 0;
 
-                // First, add existing images to maintain order
-                foreach (var existingPath in existingImagePaths)
+                // Update sort order for existing images that are kept
+                if (existingImagePaths.Any())
                 {
-                    var id = Guid.NewGuid();
-                    savedImages.Add(new Image
+                    var existingImagesInDb = await _unitOfWork.Repository<Image>()
+                        .Queryable()
+                        .Where(x => x.F_Key == fKey && existingImagePaths.Contains(x.PathLink))
+                        .ToListAsync();
+
+                    foreach (var existingPath in existingImagePaths)
                     {
-                        Id = id,
-                        F_Key = fKey,
-                        PathLink = existingPath,
-                        ImageType = (ImageType)imageType, // Convert int to enum
-                        ImageName = Path.GetFileName(existingPath),
-                        Sort = sortIndex++
-                    });
+                        var existingImage = existingImagesInDb.FirstOrDefault(x => x.PathLink == existingPath);
+                        if (existingImage != null)
+                        {
+                            existingImage.Sort = sortIndex++;
+                        }
+                    }
                 }
 
-                // Then add new uploaded images
+                // Add new uploaded images
                 if (images != null && images.Count > 0)
                 {
                     for (int i = 0; i < images.Count; i++)
@@ -91,12 +90,12 @@ namespace KHQ.Portal.Controllers
                                 await file.CopyToAsync(stream);
                             }
 
-                            savedImages.Add(new Image
+                            newImagesToSave.Add(new Image
                             {
                                 Id = id,
                                 F_Key = fKey,
                                 PathLink = $"/Images/{newFileName}",
-                                ImageType = (ImageType)imageType, // Convert int to enum
+                                ImageType = (ImageType)imageType,
                                 ImageName = newFileName,
                                 Sort = sortIndex++
                             });
@@ -104,13 +103,18 @@ namespace KHQ.Portal.Controllers
                     }
                 }
 
-                if (savedImages.Any())
+                // Save only new images and update existing ones
+                if (newImagesToSave.Any())
                 {
-                    await _unitOfWork.Repository<Image>().AddRange(savedImages);
-                    await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.Repository<Image>().AddRange(newImagesToSave);
                 }
 
-                return Ok(new { success = true, count = savedImages.Count, fkey = fKey });
+                await _unitOfWork.SaveChangesAsync();
+
+                // Get total count for response
+                var totalCount = existingImagePaths.Count + newImagesToSave.Count;
+
+                return Ok(new { success = true, count = totalCount, fkey = fKey });
             }
             catch (Exception ex)
             {
@@ -202,30 +206,39 @@ namespace KHQ.Portal.Controllers
         {
             try
             {
-                var oldImages = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == fKey).ToListAsync();
+                var oldImages = await _unitOfWork.Repository<Image>().Queryable()
+                    .Where(x => x.F_Key == fKey).ToListAsync();
+
+                bool anyDeleted = false;
+
                 foreach (var image in oldImages)
                 {
-                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.PathLink.TrimStart('/'));
-                    if(!existingImagePaths.Contains(filePath))
-                    if (System.IO.File.Exists(filePath))
-                        System.IO.File.Delete(filePath);
+                    // Compare against the PathLink (database path) not the file system path
+                    if (!existingImagePaths.Contains(image.PathLink))
+                    {
+                        // Delete the physical file
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.PathLink.TrimStart('/'));
+                        if (System.IO.File.Exists(filePath))
+                            System.IO.File.Delete(filePath);
 
-                    await _unitOfWork.Repository<Image>().Delete(image);
+                        // Delete from database
+                        await _unitOfWork.Repository<Image>().Delete(image);
+                        anyDeleted = true;
+                    }
+                }
+
+                // Save changes once after all deletions
+                if (anyDeleted)
+                {
                     await _unitOfWork.SaveChangesAsync();
                 }
-                var result = 1;
-                if (result > 0)
-                {
-                    return true;
-                }
-                return false;
+
+                return anyDeleted;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
         }
     }
 }

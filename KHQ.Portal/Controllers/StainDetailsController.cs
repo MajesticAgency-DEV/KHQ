@@ -1,7 +1,6 @@
 ﻿using KHQ.Domain.ViewModel;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace KHQ.Portal.Controllers
 {

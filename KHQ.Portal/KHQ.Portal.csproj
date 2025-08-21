@@ -19,4 +19,8 @@
     <ProjectReference Include="..\KHQ.Srv\KHQ.Srv.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
 </Project>
