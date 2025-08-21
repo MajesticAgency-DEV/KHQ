@@ -87,11 +87,13 @@ builder.Services.AddScoped<IContactUsSrv, ContactUsSrv>();
 builder.Services.AddScoped<IEConInnerService, EConInnerService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IH_AboutUsService, H_AboutUsService>();
+builder.Services.AddScoped<ISocialMediaSrv, SocialMediaSrv>();
 builder.Services.AddScoped<IProductSrv, ProductSrv>();
 builder.Services.AddScoped<ISubProductSrv, SubProductSrv>();
 builder.Services.AddScoped<ISliderSrv, SliderSrv>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
 
 
 // Add services to the container.

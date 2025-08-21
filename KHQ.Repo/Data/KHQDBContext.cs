@@ -23,6 +23,7 @@ namespace KHQ.Repo.Data
         public DbSet<Image> images { get; set; }
         public DbSet<FAQ> FAQs { get; set; }
         public DbSet<E_Con_Inner> E_Con_Inners { get; set; }
+        public DbSet<SocialMedia> SocialMedia { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SubProduct> SubProduct { get; set; }
         public DbSet<Slider> Sliders { get; set; }
