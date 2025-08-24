@@ -92,6 +92,7 @@ builder.Services.AddScoped<IProductSrv, ProductSrv>();
 builder.Services.AddScoped<ISubProductSrv, SubProductSrv>();
 builder.Services.AddScoped<ISliderSrv, SliderSrv>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 

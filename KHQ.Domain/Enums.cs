@@ -7,6 +7,7 @@
         FAQ_Home = 3,
         Sliders = 4,
         Brands = 5,
+        AboutUs_Cover = 6,
     }
 
     public enum SectionType

@@ -1,4 +1,6 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.Entities;
+using KHQ.Domain.ViewModel;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +21,11 @@ namespace KHQ.Portal.Controllers
             IEnumerable<AboutUsVM> aboutUsData = await _AboutUsSrv.GetAllAsync();
             return View(aboutUsData);
         }
-
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Cover);
+            return View(images);
+        }
         public async Task<IActionResult> GetById(Guid id)
         {
             var aboutUsData = await _AboutUsSrv.GetByIdAsync(id);
