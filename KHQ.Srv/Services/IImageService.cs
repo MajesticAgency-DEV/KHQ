@@ -7,6 +7,7 @@ namespace KHQ.Srv.Services
     {
         Task<List<Image>> GetImagesAsync(Guid foreignKey, ImageType imageType);
         Task<int> DeleteImagesAsync(Guid foreignKey);
+        Task<List<Image>> GetImagesByImageTypeAsync(ImageType imageType);
     }
 
 }

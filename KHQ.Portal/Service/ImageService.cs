@@ -22,6 +22,12 @@ namespace KHQ.Portal.Service
             var entities = await _unitOfWork.Repository<Image>().GetAllAsync();
             return entities.Where(x => x.F_Key == foreignKey && x.ImageType == imageType).ToList();
         }
+
+        public async Task<List<Image>> GetImagesByImageTypeAsync(ImageType imageType)
+        {
+            var entities = await _unitOfWork.Repository<Image>().GetAllAsync();
+            return entities.Where(x => x.ImageType == imageType).ToList();
+        }
         public async Task<int> DeleteImagesAsync(Guid foreignKey)
         {
             var result = 0;
