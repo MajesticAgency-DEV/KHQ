@@ -42,6 +42,10 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
 
+            CreateMap<H_AboutUs, H_AboutUsDto>()
+                .ForMember(dest => dest.Point, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.PointAr : src.PointEn));
+
             CreateMap<StainDetails, StainDetailsDto>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
@@ -78,8 +82,12 @@ namespace KHQ.Srv.Mapper
             CreateMap<ContactUs, ContactUsVM>().ReverseMap();
             CreateMap<ContactUsVM, ContactUs>().ReverseMap();
 
+            CreateMap<Slider, SliderDto>().ReverseMap();
             CreateMap<Slider, SliderVM>().ReverseMap();
             CreateMap<SliderVM, Slider>().ReverseMap();
+
+            CreateMap<H_AboutUs, H_AboutUsVM>().ReverseMap();
+            CreateMap<H_AboutUsVM, H_AboutUs>().ReverseMap();
 
             CreateMap<SocialMediaVM, SocialMedia>().ReverseMap();
             CreateMap<SocialMedia, SocialMediaVM>().ReverseMap();
