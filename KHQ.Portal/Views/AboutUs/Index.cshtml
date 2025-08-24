@@ -19,7 +19,8 @@
             </div>
         </div>
         <!-- end page title -->
-
+        @if (Model.Count == 0 || Model == null)
+        {
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -39,31 +40,53 @@
             </div> <!-- end col-->
         </div>
         <!-- end row-->
+        }
 
         <div class="row">
             @foreach (var item in Model)
             {
-                <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="col-12">
                     <div class="card product-box">
                         <div class="card-body">
                             <div class="product-action">
                                 <input value="@item.Id" type="hidden" id="AboutUsId-@item.Id" />
+                                <button class="btn btn-xs waves-effect waves-light mt-2 mt-md-0" type="button"
+                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-@item.Id"
+                                        aria-controls="offcanvasRight" style="background:#ccc">
+                                    <i class="fa-light fa-eye text-white"></i>
+                                </button>
                                 <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
                                     data-bs-target="#edit-modal-@item.Id">
                                     <i class="fa-sharp fa-light fa-pencil"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger btn-xs waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#danger-alert-modal-@item.Id">
-                                    <i class="fa-sharp fa-light fa-trash"></i>
-                                </button>
                             </div>
 
-                            @* <div class="product-info">
-                                <div class="row align-items-center">
-                                    <div class="col d-flex gap-2">
-                                        <h5 class="font-16 mt-0 sp-line-1 text-dark">@item.NameEn</h5>/ <h5 class="font-16 mt-0 sp-line-1 text-dark">@item.NameAr</h5>
-                                    </div>
-                                </div> <!-- end row -->
-                            </div> <!-- end product info--> *@
+                            <div class="product-info">
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="cardCollpase5" class="collapse show">
+                                                <div class="table-responsive pt-3">
+                                                    <table class="table table-hover table-centered mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Title in english</th>
+                                                                <th>Title in arabic</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>@item.TitleEn</td>
+                                                                <td>@item.TitleAr</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table responsive-->
+                                            </div> <!-- collapsed end -->
+                                        </div> <!-- end card-body -->
+                                    </div> <!-- end card-->
+                                </div>
+                            </div>                        
                         </div>
                     </div> <!-- end card-->
                 </div> <!-- end col-->
@@ -89,13 +112,13 @@
                                         <span class="validationTitleAr text-danger display-none">* this field is required</span>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="desc-edit-@item.Id" class="form-label">Description:</label>
+                                        <label for="desc-edit-@item.Id" class="form-label">Description in english:</label>
                                         <textarea class="form-control" type="text" id="desc-edit-@item.Id"
                                            required="" placeholder="Enter name of title">@item.DescriptionEn</textarea>
                                         <span class="validationDesc text-danger display-none">* this field is required</span>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="descAr-edit-@item.Id" class="form-label">Description:</label>
+                                        <label for="descAr-edit-@item.Id" class="form-label">Description in arabic:</label>
                                         <textarea class="form-control" type="text" id="descAr-edit-@item.Id"
                                            required="" placeholder="Enter name of title">@item.DescriptionAr</textarea>
                                         <span class="validationDescAr text-danger display-none">* this field is required</span>
@@ -111,21 +134,21 @@
                         </div>
                     </div>
                 </div>
-                <div id="danger-alert-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content modal-filled bg-danger">
-                            <div class="modal-body p-4">
-                                <div class="text-center">
-                                    <i class="fa-regular fa-ban text-white font-36"></i>
-                                    <h4 class="mt-2 text-white">Oh snap!</h4>
-                                    <p class="mt-3 text-white">Are you sure you want to delete ?</p>
-                                    <button type="button"
-                                        data-id="@item.Id"
-                                        class="btn btn-light my-2 deleteAboutUs"
-                                        data-bs-dismiss="modal">Continue</button>
-                                </div>
-                            </div>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-@item.Id" aria-labelledby="offcanvasRightLabel-@item.Id">
+                    <div class="offcanvas-header">
+                        <div>
+                            <h3 id="offcanvasRightLabel-@item.Id">@item.TitleEn</h3>
+                            <h3>@item.TitleAr</h3>
                         </div>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <h5 class="mt-3">Description in english:</h5>
+                        <p>@item.DescriptionEn</p>
+                        <hr />
+                        <h5 class="mt-3">Description in arabic:</h5>
+                        <p>@item.DescriptionAr</p>
+                        <hr />
                     </div>
                 </div>
             }
@@ -155,13 +178,13 @@
                         <span class="validationTitleAr text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-3">
-                        <label for="desc" class="form-label">Description:</label>
+                        <label for="desc" class="form-label">Description in english:</label>
                         <textarea class="form-control" type="text" id="desc"
                            required="" placeholder="Enter name of title"></textarea>
                         <span class="validationDesc text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-3">
-                        <label for="descAr" class="form-label">Description:</label>
+                        <label for="descAr" class="form-label">Description in arabic:</label>
                         <textarea class="form-control" type="text" id="descAr"
                            required="" placeholder="Enter name of title"></textarea>
                         <span class="validationDescAr text-danger display-none">* this field is required</span>

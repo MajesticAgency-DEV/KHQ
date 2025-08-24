@@ -1,4 +1,6 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.ViewModel;
+using KHQ.Portal.Service;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,17 +9,23 @@ namespace KHQ.Portal.Controllers
     public class ContactUsController : Controller
     {
         private readonly IContactUsSrv _ContactUsSrv;
+        private readonly IImageService _imageService;
 
-        public ContactUsController(IContactUsSrv contactUsSrv)
+        public ContactUsController(IContactUsSrv contactUsSrv, IImageService imageService)
         {
             _ContactUsSrv = contactUsSrv;
+            _imageService = imageService;
         }
         public async Task<IActionResult> Index()
         {
             var contactUsData = await _ContactUsSrv.GetAllAsync();
             return View(contactUsData);
         }
-
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.ContactUs_Cover);
+            return View(images);
+        }
         public async Task<IActionResult> GetById(Guid id)
         {
             var contactUsData = await _ContactUsSrv.GetByIdAsync(id);

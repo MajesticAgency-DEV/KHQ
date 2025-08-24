@@ -8,6 +8,7 @@
         Sliders = 4,
         Brands = 5,
         AboutUs_Cover = 6,
+        ContactUs_Cover = 7,
     }
 
     public enum SectionType
