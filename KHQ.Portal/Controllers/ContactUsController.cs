@@ -30,7 +30,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] ContactUsVM contactUsVM)
+        public async Task<IActionResult> Add(ContactUsVM contactUsVM)
         {
             var result = await _ContactUsSrv.AddAsync(contactUsVM);
             if (result > 0)
@@ -50,7 +50,7 @@ namespace KHQ.Portal.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] ContactUsVM contactUsVM)
+        public async Task<IActionResult> Update(ContactUsVM contactUsVM)
         {
             var result = await _ContactUsSrv.UpdateAsync(contactUsVM);
             if (result > 0)
