@@ -22,6 +22,9 @@ namespace KHQ.Repo.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<SubProduct> SubProduct { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<AboutUs> AboutUs { get; set; }
+        public DbSet<Stains> Stains { get; set; }
+        public DbSet<StainDetails> StainDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
