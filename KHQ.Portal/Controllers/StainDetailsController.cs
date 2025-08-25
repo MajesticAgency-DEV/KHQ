@@ -38,13 +38,13 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainDetailsSrv.DeleteAsync(id);
                 if (result > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return Json(new { success = true, message = "Stain details deleted successfully" });
                 }
-                return BadRequest();
+                return Json(new { success = false, message = "Failed to delete stain details" });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { success = false, message = "An error occurred while deleting stain details" });
             }
         }
 
@@ -55,13 +55,14 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainDetailsSrv.AddAsync(stainDetailsVM);
                 if (result > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return Json(new { success = true, message = "Stain details added successfully" });
                 }
-                return BadRequest();
+                return Json(new { success = false, message = "Failed to add stain details" });
             }
             catch (Exception ex)
             {
-                throw ex;
+                // Log the exception if you have logging
+                return Json(new { success = false, message = "An error occurred while adding stain details" });
             }
         }
 
@@ -70,15 +71,15 @@ namespace KHQ.Portal.Controllers
             try
             {
                 var result = await _stainDetailsSrv.UpdateAsync(stainDetailsVM);
-                if(result > 0)
+                if (result > 0)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return Json(new { success = true, message = "Stain details updated successfully" });
                 }
-                return BadRequest();
+                return Json(new { success = false, message = "Failed to update stain details" });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { success = false, message = "An error occurred while updating stain details" });
             }
         }
     }

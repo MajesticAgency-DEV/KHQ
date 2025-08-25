@@ -8,5 +8,6 @@
         public string DescriptionEn { get; set; }
         public string DescriptionAr { get; set; }
         public Guid StainsId { get; set; }
+        public StainsVM StainsVM { get; set; }
     }
 }

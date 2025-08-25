@@ -93,6 +93,8 @@ builder.Services.AddScoped<ISubProductSrv, SubProductSrv>();
 builder.Services.AddScoped<ISliderSrv, SliderSrv>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
+builder.Services.AddScoped<IStainsService, StainsService>();
+builder.Services.AddScoped<IStainDetailsSrv, StainDetailsSrv>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 

@@ -7,15 +7,34 @@ namespace KHQ.Portal.Controllers
     public class StainsController : Controller
     {
         private readonly IStainsService _stainsService;
+        private readonly IStainDetailsSrv _stainDetailsSrv;
 
-        public StainsController(IStainsService stainsService)
+
+        public StainsController(IStainsService stainsService, IStainDetailsSrv stainDetailsSrv)
         {
             _stainsService = stainsService;
+            _stainDetailsSrv = stainDetailsSrv;
         }
         public async Task<IActionResult> Index()
         {
             var stains = await _stainsService.GetAllAsync();
             return View(stains);
+        }
+        [HttpGet]
+        [Route("GetAllStatin")]
+        public async Task<IEnumerable<StainsVM>> GetAllStains()
+        {
+            var stains = await _stainsService.GetAllAsync();
+            return stains;
+        }
+        public async Task<IActionResult> StainDetails()
+        {
+            var stainDetails = await _stainDetailsSrv.GetAllAsync();
+            foreach (var item in stainDetails)
+            {
+                item.StainsVM = await _stainsService.GetByIdAsync(item.StainsId);
+            }
+            return View(stainDetails);
         }
 
         public async Task<IActionResult> GetById(Guid id)
