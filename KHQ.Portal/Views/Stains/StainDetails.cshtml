@@ -1,4 +1,10 @@
 ﻿@model List<KHQ.Domain.ViewModel.StainDetailsVM>
+<link href="~/libs/quill/quill.core.css" rel="stylesheet" />
+<link href="~/libs/quill/quill.snow.css" rel="stylesheet" />
+
+@{
+    var xxxxx = string.Empty;
+}
 <div class="content">
 
     <!-- Start Content-->
@@ -115,6 +121,12 @@
                                            required="" placeholder="Enter name of title">@item.DescriptionAr</textarea>
                                         <span class="validationDescAr text-danger display-none">* this field is required</span>
                                     </div>
+                                    @{
+                                         xxxxx = @item.DescriptionAr;
+                                    }
+                                    <div id="snow-editor-edit" style="height: 300px;" class="ql-container ql-snow"><div class="ql-editor" data-gramm="false" contenteditable="true" spellcheck="false" aria-label="To enrich screen reader interactions, please activate Accessibility in Grammarly extension settings"><h3><span class="ql-size-large">Hello World!</span></h3><p><br></p><h3>This is an simple editable area.</h3><p><br></p><ul><li>Select a text to reveal the toolbar.</li><li>Edit rich document on-the-fly, so elastic!</li></ul><p><br></p><p>End of simple area</p></div><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: -0.8px; pointer-events: none; z-index: auto; --rem: 16;" class="dnXmp"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: -0.8px; pointer-events: none; z-index: auto; --rem: 16;" class="dnXmp"></grammarly-extension><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div class="ql-tooltip ql-hidden"><a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>
+                        <input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">@item.DescriptionAr<a class="ql-action"></a><a class="ql-remove"></a></div></div>
+                    
                                     <div class="mb-2 text-center">
                                         <button class="btn btn-primary btn-submit" id="EditStainDetailsSectionsbtn-@item.Id"
                                             type="button" onclick="saveEdit('@item.Id')">
@@ -213,6 +225,8 @@
                            required="" placeholder="Enter name of title"></textarea>
                         <span class="validationDescAr text-danger display-none">* this field is required</span>
                     </div>
+                    <div id="snow-editor" style="height: 300px;" class="ql-container ql-snow"><div class="ql-editor" data-gramm="false" contenteditable="true" spellcheck="false" aria-label="To enrich screen reader interactions, please activate Accessibility in Grammarly extension settings"><h3><span class="ql-size-large">Hello World!</span></h3><p><br></p><h3>This is an simple editable area.</h3><p><br></p><ul><li>Select a text to reveal the toolbar.</li><li>Edit rich document on-the-fly, so elastic!</li></ul><p><br></p><p>End of simple area</p></div><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: -0.8px; pointer-events: none; z-index: auto; --rem: 16;" class="dnXmp"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: -0.8px; pointer-events: none; z-index: auto; --rem: 16;" class="dnXmp"></grammarly-extension><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div class="ql-tooltip ql-hidden"><a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>
+                        <input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL"><a class="ql-action"></a><a class="ql-remove"></a></div></div>
                     <div class="mb-2 text-center">
                         <button class="btn btn-primary btn-submit" id="SaveStainDetailsSectionsbtn"
                                 type="button">
@@ -227,9 +241,35 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
+<script src="~/libs/quill/quill.min.js"></script>
+<script src="~/js/pages/form-quilljs.init.js"></script>
 
+<script src="~/js/vendor.min.js"></script>
 <script>
 $(document).ready(function () {
+
+    // Initialize Quill Editor
+const quill = new Quill('#snow-editor', {
+    theme: 'snow',
+    placeholder: 'أدخل وصف المنتج بالعربية...',
+    modules: {
+        toolbar: [
+            [{ 'font': [] }, { 'size': [] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'script': 'super' }, { 'script': 'sub' }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }, 'blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }, { 'align': [] }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ]
+    }
+});
+
+quillEdit.root.innerHTML = {@xxxxx}
+document.getElementById('snow-editor-edit').value = {@xxxxx};
+
     // Load stains when page loads (for add modal)
     loadStrainsForDropdown('#section-select-add');
     
@@ -255,7 +295,8 @@ $(document).ready(function () {
         var titleValue = $('#title').val();
         var titleArValue = $('#titleAr').val();
         var descValue = $('#desc').val();
-        var descArValue = $('#descAr').val();
+        debugger;
+        var descArValue = quill.root.innerHTML;
         var selectedStain = $('#section-select-add').val();
 
         // Validation logic
