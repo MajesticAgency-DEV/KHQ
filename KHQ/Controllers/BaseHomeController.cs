@@ -22,6 +22,8 @@ namespace KHQ.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("GetAll")]
         public async Task<BaseHomeDto> GetAll()
         {
             var baseHomeData = await _unitOfWork.Repository<BaseHome>().Queryable().ToListAsync();
@@ -29,6 +31,8 @@ namespace KHQ.Controllers
             return result;
         }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
         public async Task<BaseHomeDto> GetById(Guid id)
         {
             var baseHomeData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();

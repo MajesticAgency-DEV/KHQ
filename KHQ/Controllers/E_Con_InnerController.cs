@@ -10,12 +10,12 @@ namespace KHQ.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandsController : ControllerBase
+    public class E_Con_InnerController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public E_Con_InnerController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -23,19 +23,19 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<BrandsDto>> GetAll()
+        public async Task<E_Con_InnerDto> GetAll()
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
+            var e_Con_InnerData = await _unitOfWork.Repository<E_Con_Inner>().Queryable().ToListAsync();
+            var result = _mapper.Map<E_Con_InnerDto>(e_Con_InnerData);
             return result;
         }
 
         [HttpGet]
         [Route("GetById/{id}")]
-        public async Task<BrandsDto> GetById(Guid id)
+        public async Task<E_Con_InnerDto> GetById(Guid id)
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
-            var result = _mapper.Map<BrandsDto>(brandsData);
+            var e_Con_InnerData = await _unitOfWork.Repository<E_Con_Inner>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = _mapper.Map<E_Con_InnerDto>(e_Con_InnerData);
             return result;
         }
     }

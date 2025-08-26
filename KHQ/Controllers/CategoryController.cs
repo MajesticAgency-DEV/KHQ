@@ -22,10 +22,10 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<CategoryDto> GetAll()
+        public async Task<IEnumerable<CategoryDto>> GetAll()
         {
             var categoryData = await _unitOfWork.Repository<Category>().GetAllAsync();
-            var result = _mapper.Map<CategoryDto>(categoryData);
+            var result = _mapper.Map<IEnumerable<CategoryDto>>(categoryData);
             return result;
         }
 

@@ -1,6 +1,9 @@
 ﻿namespace KHQ.Domain.DTOs
 {
-    internal class E_Con_InnerDto
+    public class E_Con_InnerDto
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public int Number { get; set; }
     }
 }
