@@ -171,13 +171,13 @@
                             @if (item.PathLink.Count > 0)
                             {
                             <div class="bg-light">
-                                <img src="@item.PathLink.OrderBy(p => p).FirstOrDefault()" alt="product-pic" class="img-fluid">
+                                <img src="@item.PathLink.FirstOrDefault()" alt="product-pic" class="img-fluid">
                             </div>
                             }
 
                         <div class="product-info">
                             <div class="avatar-group mb-3" id="tooltips-container">
-                            @foreach (var img in item.PathLink.OrderBy(p => p))
+                            @foreach (var img in item.PathLink)
                             {
                                 <a href="javascript: void(0);" class="avatar-group-item">
                                     <img src="@img" class="rounded-circle avatar-sm" alt="friend" >
@@ -195,7 +195,7 @@
                 
                 <!-- Edit Modal - Modified to store existing images in data attribute -->
                 <div id="edit-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
-                     data-existing-images='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item.PathLink.OrderBy(p => p).ToList()))'>
+                     data-existing-images='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item.PathLink.ToList()))'>
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -577,15 +577,16 @@ function saveImageInDB(mode, itemId = '') {
     if (mode === 'edit') {
         formData.append('fKey', itemId);
         
-        // Get ordered existing images based on current DOM order
-        const orderedExistingImages = getOrderedExistingImages(itemId);
-        if (orderedExistingImages.length > 0) {
-            formData.append('existingImages', JSON.stringify(orderedExistingImages));
+        // Get complete sort order information including both existing and new images
+        const sortOrderData = getCompleteSortOrder(itemId);
+        if (sortOrderData) {
+            formData.append('sortOrderData', JSON.stringify(sortOrderData));
         }
     } else {
         formData.append('fKey', '00000000-0000-0000-0000-000000000000'); // Empty GUID for add mode
     }
     formData.append("imageType", 4);
+    
     $.ajax({
         url: '/api/Common/SaveImages',
         type: 'POST',
@@ -599,6 +600,45 @@ function saveImageInDB(mode, itemId = '') {
             showError('Error saving images: ' + xhr.responseText, mode, itemId);
         }
     });
+}
+
+function getCompleteSortOrder(itemId) {
+    const containerId = `sortable-photos-edit-${itemId}`;
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+
+    const photoElements = container.querySelectorAll('.photo-item');
+    const sortOrderData = {
+        existingImages: [],
+        newImageOrder: []
+    };
+
+    let currentPhotos = uploadedPhotosEdit[itemId] || [];
+    let existingPhotos = existingPhotosEdit[itemId] || [];
+
+    photoElements.forEach((element, index) => {
+        const photoId = element.dataset.photoId;
+        
+        // Check if this is an existing photo
+        const existingPhoto = existingPhotos.find(p => p.id === photoId);
+        if (existingPhoto && existingPhoto.isExisting) {
+            sortOrderData.existingImages.push({
+                path: existingPhoto.path,
+                sortOrder: index
+            });
+        } else {
+            // This is a new photo
+            const newPhoto = currentPhotos.find(p => p.id === photoId);
+            if (newPhoto) {
+                sortOrderData.newImageOrder.push({
+                    photoId: photoId,
+                    sortOrder: index
+                });
+            }
+        }
+    });
+
+    return sortOrderData;
 }
 
 function submitForm(fkey, mode, itemId = '') {
@@ -668,17 +708,19 @@ function updatePhotoOrder(mode, itemId = '') {
     let currentPhotos = mode === 'add' ? uploadedPhotosAdd : (uploadedPhotosEdit[itemId] || []);
     let existingPhotos = mode === 'edit' ? (existingPhotosEdit[itemId] || []) : [];
 
-    photoElements.forEach((element) => {
+    photoElements.forEach((element, index) => {
         const photoId = element.dataset.photoId;
         
         // Check in uploaded photos first
         let photo = currentPhotos.find(p => p.id === photoId);
         if (photo) {
+            photo.sortOrder = index; // Add sort order tracking
             newOrderNew.push(photo);
         } else {
             // Check in existing photos
             photo = existingPhotos.find(p => p.id === photoId);
             if (photo) {
+                photo.sortOrder = index; // Add sort order tracking
                 newOrderExisting.push(photo);
             }
         }
@@ -690,6 +732,8 @@ function updatePhotoOrder(mode, itemId = '') {
         uploadedPhotosEdit[itemId] = newOrderNew;
         existingPhotosEdit[itemId] = newOrderExisting;
     }
+    
+    console.log(`Photo order updated for ${mode} mode${itemId ? ` (item: ${itemId})` : ''}`);
 }
     function updateOrderNumbers(mode, itemId = '') {
         const containerId = mode === 'add' ? 'sortable-photos-add' : `sortable-photos-edit-${itemId}`;

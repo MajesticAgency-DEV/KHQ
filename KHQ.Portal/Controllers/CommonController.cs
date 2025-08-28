@@ -24,21 +24,37 @@ namespace KHQ.Portal.Controllers
 
 
         [HttpPost("SaveImages")]
-        public async Task<IActionResult> SaveImages(List<IFormFile> images, [FromForm] Guid fKey, [FromForm] int imageType, [FromForm] string existingImages = "")
+        public async Task<IActionResult> SaveImages(List<IFormFile> images, [FromForm] int imageType, [FromForm] Guid? fKey = null ,[FromForm] string existingImages = "", [FromForm] string sortOrderData = "")
         {
             try
             {
                 List<string> existingImagePaths = new List<string>();
+                SortOrderData sortOrder = null;
 
                 if (!string.IsNullOrEmpty(existingImages))
                 {
                     existingImagePaths = ParseExistingImages(existingImages);
                 }
 
+                // Parse sort order data if provided
+                if (!string.IsNullOrEmpty(sortOrderData))
+                {
+                    sortOrder = ParseSortOrderData(sortOrderData);
+                }
+
                 if (fKey != Guid.Empty)
                 {
-                    // Delete unwanted old images
-                    await DeleteOldImages(fKey, existingImagePaths);
+                    // Delete unwanted old images (those not in the sort order data)
+                    if (sortOrder != null)
+                    {
+                        var imagesToKeep = sortOrder.ExistingImages.Select(ei => ei.Path).ToList();
+                        await DeleteOldImages(imagesToKeep, fKey );
+                    }
+                    else
+                    {
+                        // Fallback to existing logic if no sort order data
+                        await DeleteOldImages(existingImagePaths, fKey);
+                    }
                 }
                 else
                 {
@@ -51,27 +67,55 @@ namespace KHQ.Portal.Controllers
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
 
-                int sortIndex = 0;
-
-                // Update sort order for existing images that are kept
-                if (existingImagePaths.Any())
+                // Handle existing images with sort order
+                if (sortOrder != null && sortOrder.ExistingImages.Any())
                 {
+                    var existingImagesInDb = new List<Image>();
+                    if (fKey != null)
+                    {
+                        existingImagesInDb = await _unitOfWork.Repository<Image>()
+                            .Queryable()
+                            .Where(x => x.F_Key == fKey && sortOrder.ExistingImages.Select(ei => ei.Path).Contains(x.PathLink))
+                            .ToListAsync();
+                    }
+                    else
+                    {
+                        existingImagesInDb = await _unitOfWork.Repository<Image>()
+                            .Queryable()
+                            .Where(x => sortOrder.ExistingImages.Select(ei => ei.Path).Contains(x.PathLink))
+                            .ToListAsync();
+                    }
+
+                    foreach (var existingImageData in sortOrder.ExistingImages)
+                    {
+                        var existingImage = existingImagesInDb.FirstOrDefault(x => x.PathLink == existingImageData.Path);
+                        if (existingImage != null)
+                        {
+                            existingImage.Sort = existingImageData.SortOrder;
+                            _unitOfWork.Repository<Image>().Update(existingImage);
+                        }
+                    }
+                }
+                else if (existingImagePaths.Any())
+                {
+                    // Fallback to sequential ordering if no sort order data
                     var existingImagesInDb = await _unitOfWork.Repository<Image>()
                         .Queryable()
                         .Where(x => x.F_Key == fKey && existingImagePaths.Contains(x.PathLink))
                         .ToListAsync();
 
-                    foreach (var existingPath in existingImagePaths)
+                    for (int i = 0; i < existingImagePaths.Count; i++)
                     {
-                        var existingImage = existingImagesInDb.FirstOrDefault(x => x.PathLink == existingPath);
+                        var existingImage = existingImagesInDb.FirstOrDefault(x => x.PathLink == existingImagePaths[i]);
                         if (existingImage != null)
                         {
-                            existingImage.Sort = sortIndex++;
+                            existingImage.Sort = i;
+                            _unitOfWork.Repository<Image>().Update(existingImage);
                         }
                     }
                 }
 
-                // Add new uploaded images
+                // Add new uploaded images with proper sort order
                 if (images != null && images.Count > 0)
                 {
                     for (int i = 0; i < images.Count; i++)
@@ -80,6 +124,31 @@ namespace KHQ.Portal.Controllers
                         var file = images[i];
                         if (file.Length > 0)
                         {
+                            int sortIndex = 0;
+
+                            // Determine sort index based on sort order data
+                            if (sortOrder != null && sortOrder.NewImageOrder.Any())
+                            {
+                                var newImageOrder = sortOrder.NewImageOrder.OrderBy(nio => nio.SortOrder).ToList();
+                                if (i < newImageOrder.Count)
+                                {
+                                    sortIndex = newImageOrder[i].SortOrder;
+                                }
+                                else
+                                {
+                                    // If we have more images than sort order data, continue sequentially
+                                    var maxExistingSort = sortOrder.ExistingImages.Any() ? sortOrder.ExistingImages.Max(ei => ei.SortOrder) : -1;
+                                    var maxNewSort = newImageOrder.Max(nio => nio.SortOrder);
+                                    sortIndex = Math.Max(maxExistingSort, maxNewSort) + 1 + (i - newImageOrder.Count);
+                                }
+                            }
+                            else
+                            {
+                                // Fallback: place new images after existing ones
+                                var maxExistingSort = existingImagePaths.Count - 1;
+                                sortIndex = maxExistingSort + 1 + i;
+                            }
+
                             string fileExtension = Path.GetExtension(file.FileName);
                             string sortedName = alphabet.Length > sortIndex ? alphabet[sortIndex] : $"Image_{sortIndex}";
                             string newFileName = $"{sortedName}_{id}{fileExtension}";
@@ -93,17 +162,17 @@ namespace KHQ.Portal.Controllers
                             newImagesToSave.Add(new Image
                             {
                                 Id = id,
-                                F_Key = fKey,
+                                F_Key = fKey ?? Guid.NewGuid(),
                                 PathLink = $"/Images/{newFileName}",
                                 ImageType = (ImageType)imageType,
                                 ImageName = newFileName,
-                                Sort = sortIndex++
+                                Sort = sortIndex
                             });
                         }
                     }
                 }
 
-                // Save only new images and update existing ones
+                // Save only new images (existing ones are already updated)
                 if (newImagesToSave.Any())
                 {
                     await _unitOfWork.Repository<Image>().AddRange(newImagesToSave);
@@ -112,13 +181,33 @@ namespace KHQ.Portal.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 // Get total count for response
-                var totalCount = existingImagePaths.Count + newImagesToSave.Count;
+                var totalCount = (sortOrder?.ExistingImages.Count ?? existingImagePaths.Count) + newImagesToSave.Count;
 
                 return Ok(new { success = true, count = totalCount, fkey = fKey });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        private SortOrderData ParseSortOrderData(string sortOrderData)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sortOrderData))
+                    return null;
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                return JsonSerializer.Deserialize<SortOrderData>(sortOrderData, options);
+            }
+            catch (JsonException)
+            {
+                return null;
             }
         }
 
@@ -178,36 +267,19 @@ namespace KHQ.Portal.Controllers
             return Ok(new { success = true });
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateImageSort([FromBody] List<ImageSortUpdateDto> sortedImages)
-        {
-            if (sortedImages == null || !sortedImages.Any())
-                return BadRequest("Invalid sort data.");
-
-            var imageIds = sortedImages.Select(i => i.Id).ToList();
-            var images = await _unitOfWork.Repository<Image>().Queryable().Where(i => imageIds.Contains(i.Id)).ToListAsync();
-
-            foreach (var update in sortedImages)
-            {
-                var image = images.FirstOrDefault(i => i.Id == update.Id);
-                if (image != null)
-                {
-                    image.Sort = update.Sort;
-                }
-            }
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok(new { success = true });
-        }
-
-        private async Task<bool> DeleteOldImages(Guid fKey, List<string> existingImagePaths)
+        private async Task<bool> DeleteOldImages(List<string> existingImagePaths , Guid? fKey = null)
         {
             try
             {
-                var oldImages = await _unitOfWork.Repository<Image>().Queryable()
-                    .Where(x => x.F_Key == fKey).ToListAsync();
+                var oldImages = new List<Image>();
+                if (fKey != null)
+                {
+                    oldImages = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == fKey).ToListAsync();
+                }
+                else
+                {
+                    oldImages = await _unitOfWork.Repository<Image>().Queryable().ToListAsync();
+                }
 
                 bool anyDeleted = false;
 
@@ -240,5 +312,23 @@ namespace KHQ.Portal.Controllers
                 throw ex;
             }
         }
+    }
+
+    public class SortOrderData
+    {
+        public List<ExistingImageSort> ExistingImages { get; set; } = new List<ExistingImageSort>();
+        public List<NewImageSort> NewImageOrder { get; set; } = new List<NewImageSort>();
+    }
+
+    public class ExistingImageSort
+    {
+        public string Path { get; set; }
+        public int SortOrder { get; set; }
+    }
+
+    public class NewImageSort
+    {
+        public string PhotoId { get; set; }
+        public int SortOrder { get; set; }
     }
 }

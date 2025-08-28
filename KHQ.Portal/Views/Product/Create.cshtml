@@ -1,0 +1,107 @@
+﻿<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
+                            <li class="breadcrumb-item">Ecommerce / </li>
+                            <li class="breadcrumb-item active">Create product</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Create product</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">General</h5>
+
+                        <div class="mb-3">
+                            <label for="product-category" class="form-label">Categories <span class="text-danger">*</span></label>
+                            <select class="form-control select2 select2-hidden-accessible" id="product-category" data-select2-id="product-category" tabindex="-1" aria-hidden="true">
+                                <option data-select2-id="2">Select</option>
+                                <option value="SH1">Shopping 1</option>
+                                <option value="SH2">Shopping 2</option>
+                                <option value="SH3">Shopping 3</option>
+                                <option value="SH4">Shopping 4</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="product-name-en" class="form-label">Product name in english<span class="text-danger">*</span></label>
+                            <input type="text" id="product-name-en" class="form-control" placeholder="Enter product name in english">
+                        </div>
+                        <div class="mb-3">
+                            <label for="product-name-ar" class="form-label">Product name in arabic<span class="text-danger">*</span></label>
+                            <input type="text" id="product-name-ar" class="form-control" placeholder="Enter product name in arabic">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="product-description-en" class="form-label">Product description in english</label>
+                            <textarea class="form-control" id="product-description-en" rows="3" placeholder="Enter product description in english"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="product-description-ar" class="form-label">Product description in arabic</label>
+                            <textarea class="form-control" id="product-description-ar" rows="3" placeholder="Enter product description in arabic"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="product-price">Price <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="product-price" placeholder="Enter amount">
+                        </div>
+                    </div>
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+
+            <div class="col-lg-6">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Product Images</h5>
+
+                        <form action="/" method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+
+
+                            <div class="dz-message needsclick">
+                                <i class="h1 text-muted dripicons-cloud-upload"></i>
+                                <h3>Drop files here or click to upload.</h3>
+                                <span class="text-muted font-13">
+                                    (This is just a demo dropzone. Selected files are
+                                    <strong>not</strong> actually uploaded.)
+                                </span>
+                            </div>
+                        </form>
+
+                        <!-- Preview -->
+                        <div class="dropzone-previews mt-3" id="file-previews"></div>
+                    </div>
+                </div> <!-- end col-->
+
+            </div> <!-- end col-->
+        </div>
+        <!-- end row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="text-end mb-3">
+                    <button type="button" class="btn w-sm btn-light waves-effect">Cancel</button>
+                    <button type="button" class="btn w-sm btn-success waves-effect waves-light">Save</button>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div>
