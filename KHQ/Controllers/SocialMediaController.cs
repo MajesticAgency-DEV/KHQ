@@ -10,12 +10,12 @@ namespace KHQ.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandsController : ControllerBase
+    public class SocialMediaController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public SocialMediaController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -23,19 +23,19 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<BrandsDto>> GetAll()
+        public async Task<IEnumerable<SocialMediaDto>> GetAll()
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
+            var socialMediaData = await _unitOfWork.Repository<SocialMedia>().Queryable().ToListAsync();
+            var result = _mapper.Map<IEnumerable<SocialMediaDto>>(socialMediaData);
             return result;
         }
 
         [HttpGet]
         [Route("GetById/{id}")]
-        public async Task<BrandsDto> GetById(Guid id)
+        public async Task<SocialMediaDto> GetById(Guid id)
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
-            var result = _mapper.Map<BrandsDto>(brandsData);
+            var socialMediaData = await _unitOfWork.Repository<SocialMedia>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = _mapper.Map<SocialMediaDto>(socialMediaData);
             return result;
         }
     }

@@ -10,12 +10,12 @@ namespace KHQ.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandsController : ControllerBase
+    public class SlidersController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public SlidersController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -23,19 +23,19 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<BrandsDto>> GetAll()
+        public async Task<SliderDto> GetAll()
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
+            var sliderData = await _unitOfWork.Repository<Slider>().Queryable().ToListAsync();
+            var result = _mapper.Map<SliderDto>(sliderData);
             return result;
         }
 
         [HttpGet]
         [Route("GetById/{id}")]
-        public async Task<BrandsDto> GetById(Guid id)
+        public async Task<SliderDto> GetById(Guid id)
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
-            var result = _mapper.Map<BrandsDto>(brandsData);
+            var sliderData = await _unitOfWork.Repository<Slider>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = _mapper.Map<SliderDto>(sliderData);
             return result;
         }
     }

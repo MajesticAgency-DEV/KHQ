@@ -22,13 +22,17 @@ namespace KHQ.Controllers
             _mapper = mapper;
         }
 
-        public async Task<AboutUsDto> GetAll()
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IEnumerable<AboutUsDto>> GetAll()
         {
             var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().ToListAsync();
-            var result = _mapper.Map<AboutUsDto>(aboutUsData);
+            var result = _mapper.Map<IEnumerable<AboutUsDto>>(aboutUsData);
             return result;
         }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
         public async Task<AboutUsDto> GetById(Guid id)
         {
             var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
@@ -36,11 +40,5 @@ namespace KHQ.Controllers
             return result;
         }
 
-        public async Task<AboutUsDto> GetAboutUsByImage(ImageType imageType)
-        {
-            var aboutUsCover = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == imageType).FirstOrDefaultAsync();
-            var result = _mapper.Map<AboutUsDto>(aboutUsCover);
-            return result;
-        }
     }
 }
