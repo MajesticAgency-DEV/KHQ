@@ -1,4 +1,6 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.DTOs;
+using KHQ.Domain.ViewModel;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,17 +9,30 @@ namespace KHQ.Portal.Controllers
     public class H_AboutUsController : Controller
     {
         private readonly IH_AboutUsService _H_AboutUsService;
+        private readonly IImageService _imageService;
 
-        public H_AboutUsController(IH_AboutUsService h_AboutUsService)
+
+        public H_AboutUsController(IH_AboutUsService h_AboutUsService, IImageService imageService)
         {
             _H_AboutUsService = h_AboutUsService;
+            _imageService = imageService;
         }
         public async Task<IActionResult> Index()
         {
             var h_AboutUsData = await _H_AboutUsService.GetAllAsync();
             return View(h_AboutUsData);
         }
+        public async Task<IActionResult> Images()
+        {
+            var h_AboutUsData_images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Home);
+            List<string> images = new List<string>();
 
+            foreach (var item in h_AboutUsData_images.OrderBy(x => x.Sort))
+            {
+                images.Add(item.PathLink);
+            }
+            return View(images);
+        }
         public async Task<IActionResult> GetById(Guid id)
         {
             var h_AboutUsData = await _H_AboutUsService.GetByIdAsync(id);

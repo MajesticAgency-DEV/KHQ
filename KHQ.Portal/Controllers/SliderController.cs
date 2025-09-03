@@ -30,7 +30,7 @@ namespace KHQ.Portal.Controllers
 
                 var images = await _imageService.GetImagesAsync(sliderVM.Id, ImageType.Sliders);
 
-                foreach (var image in images)
+                foreach (var image in images.OrderBy(x => x.Sort))
                 {
                     sliderVM.PathLink.Add(image.PathLink);
                 }
