@@ -4,6 +4,7 @@ using KHQ.Repo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KHQ.Repo.Migrations
 {
     [DbContext(typeof(KHQDBContext))]
-    partial class KHQDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250901201514_update sub products")]
+    partial class updatesubproducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,13 +121,13 @@ namespace KHQ.Repo.Migrations
                         {
                             Id = "a18be9c0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84d888e2-fcb8-4cf5-a27f-f167ed85d705",
+                            ConcurrencyStamp = "d57ce1bd-362c-4cde-9e8c-e3a5ee034b20",
                             Email = "Admin@KHQ.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "Admin@KHQ.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFBQVDNdmNWE+Ze4MKKxN7ZRwYEKT2+8VmgA8gODgD/Cu8IN9XxLff6X2xtjfJHrDQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJyEsvPcmBtZ7jac9+/kZCF5P9Nmhm9Z4YOyHU6VO36qCpRfgijm1fZcJCO4rzeUYg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -356,9 +359,6 @@ namespace KHQ.Repo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("DescriptionAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -545,7 +545,7 @@ namespace KHQ.Repo.Migrations
                         },
                         new
                         {
-                            Id = "702340ca-8b4e-441d-ab9c-7e8b45bae5ea",
+                            Id = "21cb8a6c-bf92-4cb3-a217-a1449b30c704",
                             Name = "User",
                             NormalizedName = "User"
                         });

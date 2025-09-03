@@ -9,6 +9,7 @@
         Brands = 5,
         AboutUs_Cover = 6,
         ContactUs_Cover = 7,
+        Product = 8
     }
 
     public enum SectionType
