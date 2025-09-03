@@ -73,6 +73,9 @@ namespace KHQ.Srv.Mapper
             CreateMap<Product, ProductVM>().ReverseMap();
             CreateMap<ProductVM, Product>().ReverseMap();
 
+            CreateMap<SubProduct, SubProductVM>().ReverseMap();
+            CreateMap<SubProductVM, SubProduct>().ReverseMap();
+
             CreateMap<FAQ, FaqVM>().ReverseMap();
             CreateMap<FaqVM, FAQ>().ReverseMap();
 

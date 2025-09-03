@@ -1,107 +1,482 @@
-﻿<div class="content">
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+<style>
+    .content {
+        padding: 30px;
+    }
 
-    <!-- Start Content-->
+    .dropzone {
+        border: 3px dashed #6658dd;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+        transition: all 0.3s ease;
+    }
+
+        .dropzone:hover {
+            border-color: #6658dd;
+            transform: translateY(-2px);
+        }
+
+    .dz-message {
+        text-align: center;
+        margin: 2em 0;
+        color: #6658dd;
+        font-size: 1.2em;
+    }
+
+    .sortable-container {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .photo-item {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        cursor: grab;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .photo-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+    .remove-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #f1556c;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .dropzone.dz-drag-hover {
+        background: #eef;
+    }
+</style>
+
+<div class="content">
     <div class="container-fluid">
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
-                            <li class="breadcrumb-item">Ecommerce / </li>
-                            <li class="breadcrumb-item active">Create product</li>
-                        </ol>
-                    </div>
-                    <h4 class="page-title">Create product</h4>
+        <h4 class="page-title">Create product</h4>
+
+        <!-- Product Form -->
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-success display-none">
+                    <i class="fa-sharp fa-light fa-circle-check"></i> Section update successfully.
+                </div>
+                <h5 class="text-uppercase bg-light p-2">General</h5>
+                <div class="mb-3">
+                    <label for="product-category" class="form-label">Category <span class="text-danger">*</span></label>
+                    <select class="form-control" id="product-category">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span class="text-danger validation-error" id="error-category"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Name (EN)<span class="text-danger">*</span></label>
+                    <input type="text" id="product-name-en" class="form-control">
+                    <span class="text-danger validation-error" id="error-name-en"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Name (AR)<span class="text-danger">*</span></label>
+                    <input type="text" id="product-name-ar" class="form-control">
+                    <span class="text-danger validation-error" id="error-name-ar"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Description (EN)</label>
+                    <textarea class="form-control" id="product-description-en"></textarea>
+                    <span class="text-danger validation-error" id="error-description-en"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Description (AR)</label>
+                    <textarea class="form-control" id="product-description-ar"></textarea>
+                    <span class="text-danger validation-error" id="error-description-ar"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Price <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="product-price">
+                    <span class="text-danger validation-error" id="error-price"></span>
                 </div>
             </div>
         </div>
-        <!-- end page title -->
 
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">General</h5>
-
-                        <div class="mb-3">
-                            <label for="product-category" class="form-label">Categories <span class="text-danger">*</span></label>
-                            <select class="form-control select2 select2-hidden-accessible" id="product-category" data-select2-id="product-category" tabindex="-1" aria-hidden="true">
-                                <option data-select2-id="2">Select</option>
-                                <option value="SH1">Shopping 1</option>
-                                <option value="SH2">Shopping 2</option>
-                                <option value="SH3">Shopping 3</option>
-                                <option value="SH4">Shopping 4</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="product-name-en" class="form-label">Product name in english<span class="text-danger">*</span></label>
-                            <input type="text" id="product-name-en" class="form-control" placeholder="Enter product name in english">
-                        </div>
-                        <div class="mb-3">
-                            <label for="product-name-ar" class="form-label">Product name in arabic<span class="text-danger">*</span></label>
-                            <input type="text" id="product-name-ar" class="form-control" placeholder="Enter product name in arabic">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="product-description-en" class="form-label">Product description in english</label>
-                            <textarea class="form-control" id="product-description-en" rows="3" placeholder="Enter product description in english"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="product-description-ar" class="form-label">Product description in arabic</label>
-                            <textarea class="form-control" id="product-description-ar" rows="3" placeholder="Enter product description in arabic"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="product-price">Price <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="product-price" placeholder="Enter amount">
-                        </div>
+        <!-- Dropzone for uploading images -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-uppercase bg-light p-2">Product Images</h5>
+                <form action="/upload" class="dropzone" id="photo-dropzone-add">
+                    <div class="dz-message">
+                        <strong>Drop photos here or click to browse</strong>
                     </div>
-                </div> <!-- end card -->
-            </div> <!-- end col -->
+                </form>
+                <span class="validationImage text-danger display-none">* This field is required</span>
 
-            <div class="col-lg-6">
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Product Images</h5>
-
-                        <form action="/" method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-
-
-                            <div class="dz-message needsclick">
-                                <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                <h3>Drop files here or click to upload.</h3>
-                                <span class="text-muted font-13">
-                                    (This is just a demo dropzone. Selected files are
-                                    <strong>not</strong> actually uploaded.)
-                                </span>
-                            </div>
-                        </form>
-
-                        <!-- Preview -->
-                        <div class="dropzone-previews mt-3" id="file-previews"></div>
-                    </div>
-                </div> <!-- end col-->
-
-            </div> <!-- end col-->
+                <div class="sortable-container" id="sortable-photos-add"></div>
+            </div>
         </div>
-        <!-- end row -->
 
-        <div class="row">
-            <div class="col-12">
-                <div class="text-end mb-3">
-                    <button type="button" class="btn w-sm btn-light waves-effect">Cancel</button>
-                    <button type="button" class="btn w-sm btn-success waves-effect waves-light">Save</button>
-                </div>
-            </div> <!-- end col -->
+        <!-- Image Details Table -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="text-uppercase bg-light p-2">Image Details</h5>
+                <table class="table table-bordered align-middle" id="image-details-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 120px;">Image</th>
+                            <th>Description (English)</th>
+                            <th>Description (Arabic)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="image-details-body"></tbody>
+                </table>
+            </div>
         </div>
-        <!-- end row -->
 
-    </div> <!-- container -->
-
+        <!-- Save Buttons -->
+        <div class="text-end mt-3">
+            <button type="button" class="btn btn-light">Cancel</button>
+            <button type="button" class="btn btn-success" id="save-product-btn">Save</button>
+        </div>
+    </div>
 </div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+    let uploadedPhotosAdd = [];
+    let photoCounter = 0;
+
+    // Init Dropzone
+    new Dropzone("#photo-dropzone-add", {
+        url: "/upload",
+        autoProcessQueue: false,
+        acceptedFiles: "image/*",
+        maxFilesize: 10,
+        init: function() {
+            this.on("addedfile", function(file) {
+                this.removeFile(file);
+                addPhotoToGallery(file);
+            });
+        }
+    });
+
+    // Sortable for Gallery
+    new Sortable(document.getElementById("sortable-photos-add"), {
+        animation: 150,
+        onEnd: function() { syncTableWithGallery(); }
+    });
+
+    // Sortable for Table
+    new Sortable(document.getElementById("image-details-body"), {
+        animation: 150,
+        onEnd: function() { syncGalleryWithTable(); }
+    });
+
+    // Add photo to gallery + description table
+    function addPhotoToGallery(file) {
+        photoCounter++;
+        const photoId = `photo-${photoCounter}`;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Add to gallery
+            const photoItem = document.createElement('div');
+            photoItem.className = 'photo-item';
+            photoItem.dataset.photoId = photoId;
+            photoItem.innerHTML = `
+                <div class="remove-btn" onclick="removePhoto('${photoId}')">×</div>
+                <img src="${e.target.result}" alt="${file.name}">
+            `;
+            document.getElementById("sortable-photos-add").appendChild(photoItem);
+
+            // Add row in descriptions table
+            addImageRow(photoId, e.target.result, file.name);
+        };
+        reader.readAsDataURL(file);
+
+        // Save in memory
+        uploadedPhotosAdd.push({
+            id: photoId,
+            file: file,
+            descriptionEn: '',
+            descriptionAr: ''
+        });
+    }
+
+    // Add row with description inputs
+    function addImageRow(photoId, imageUrl, fileName) {
+        const tbody = document.getElementById("image-details-body");
+        const row = document.createElement("tr");
+        row.setAttribute("data-photo-id", photoId);
+
+        row.innerHTML = `
+            <td><img src="${imageUrl}" style="width:100px;height:70px;object-fit:cover;"></td>
+            <td><input type="text" class="form-control" placeholder="English description"
+                       oninput="updateDescription('${photoId}', 'en', this.value)"></td>
+            <td><input type="text" class="form-control text-end" placeholder="Arabic description"
+                       oninput="updateDescription('${photoId}', 'ar', this.value)"></td>
+        `;
+
+        tbody.appendChild(row);
+    }
+
+    // Update descriptions in JS object
+    function updateDescription(photoId, lang, value) {
+        let photo = uploadedPhotosAdd.find(p => p.id === photoId);
+        if (photo) {
+            if (lang === 'en') photo.descriptionEn = value;
+            if (lang === 'ar') photo.descriptionAr = value;
+        }
+    }
+
+    // Remove image + table row
+    function removePhoto(photoId) {
+        uploadedPhotosAdd = uploadedPhotosAdd.filter(p => p.id !== photoId);
+
+        const galleryItem = document.querySelector(`.photo-item[data-photo-id="${photoId}"]`);
+        if (galleryItem) galleryItem.remove();
+
+        const tableRow = document.querySelector(`#image-details-body tr[data-photo-id="${photoId}"]`);
+        if (tableRow) tableRow.remove();
+    }
+
+    // Sync TABLE order with GALLERY order
+    function syncTableWithGallery() {
+        const galleryItems = document.querySelectorAll("#sortable-photos-add .photo-item");
+        const tbody = document.getElementById("image-details-body");
+
+        let newTableOrder = [];
+        galleryItems.forEach(item => {
+            const photoId = item.dataset.photoId;
+            const row = document.querySelector(`#image-details-body tr[data-photo-id="${photoId}"]`);
+            if (row) newTableOrder.push(row);
+        });
+
+        newTableOrder.forEach(row => tbody.appendChild(row));
+    }
+
+    // Sync GALLERY order with TABLE order
+    function syncGalleryWithTable() {
+        const tableRows = document.querySelectorAll("#image-details-body tr");
+        const galleryContainer = document.getElementById("sortable-photos-add");
+
+        let newGalleryOrder = [];
+        tableRows.forEach(row => {
+            const photoId = row.dataset.photoId;
+            const item = document.querySelector(`.photo-item[data-photo-id="${photoId}"]`);
+            if (item) newGalleryOrder.push(item);
+        });
+
+        newGalleryOrder.forEach(item => galleryContainer.appendChild(item));
+    }
+
+        function saveProductImagesBeforeSubmit() {
+        if (!validateForm()) return;
+
+        const formData = new FormData();
+        uploadedPhotosAdd.forEach(photo => {
+            formData.append("images", photo.file);
+        });
+
+        formData.append("fKey", "00000000-0000-0000-0000-000000000000"); // new product
+        formData.append("imageType", 8);
+
+        $.ajax({
+            url: "/api/Common/SaveImages",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                // result.fkey = product ID or temp ID returned
+                submitProductForm(result.fkey);
+            },
+            error: function(xhr) {
+                $("#error-photos").text("Error uploading images: " + xhr.responseText);
+            }
+        });
+    }
+
+        function submitProductForm(fkey) {
+        if (!validateForm()) return;
+
+        const productData = {
+            Id: fkey,
+            NameEn: $("#product-name-en").val(),
+            NameAr: $("#product-name-ar").val(),
+            DescriptionEn: $("#product-description-en").val(),
+            DescriptionAr: $("#product-description-ar").val(),
+            Price: $("#product-price").val(),
+            CategoryId: $("#product-category").val(),
+            SubProducts: uploadedPhotosAdd.map((p, idx) => ({
+                DescriptionEn: p.descriptionEn,
+                DescriptionAr: p.descriptionAr,
+                imageFile: p.file,
+                SortOrder: idx
+            }))
+        };
+
+        $.ajax({
+            url: "/Product/Add",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(productData),
+            success: function() {
+            showSuccess(mode, itemId);
+            setTimeout(function () {
+                location.reload();
+            }, 1500);            },
+            error: function(xhr) {
+                $("#error-alert").text("Error saving product: " + xhr.responseText);
+            }
+        });
+    }
+
+    // --- Prepare Product for Save ---
+    function prepareProductData() {
+        return {
+            nameEn: $("#product-name-en").val(),
+            nameAr: $("#product-name-ar").val(),
+            descriptionEn: $("#product-description-en").val(),
+            descriptionAr: $("#product-description-ar").val(),
+            price: $("#product-price").val(),
+            categoryId: $("#product-category").val(),
+            subProducts: uploadedPhotosAdd.map(p => ({
+                descriptionEn: p.descriptionEn,
+                descriptionAr: p.descriptionAr,
+                imageFile: p.file
+            }))
+        };
+    }
+
+        // Validation function
+    function validateForm() {
+        let isValid = true;
+
+        // Clear previous error messages
+        $(".validation-error").text("");
+
+        // Category
+        if (!$("#product-category").val()) {
+            $("#error-category").text("Category is required.");
+            isValid = false;
+        }
+
+        // Product Name EN
+        if (!$("#product-name-en").val().trim()) {
+            $("#error-name-en").text("Product Name (EN) is required.");
+            isValid = false;
+        }
+
+        // Product Name AR
+        if (!$("#product-name-ar").val().trim()) {
+            $("#error-name-ar").text("Product Name (AR) is required.");
+            isValid = false;
+        }
+
+        // Description EN
+        if (!$("#product-description-en").val().trim()) {
+            $("#error-description-en").text("Description (EN) is required.");
+            isValid = false;
+        }
+
+        // Description AR
+        if (!$("#product-description-ar").val().trim()) {
+            $("#error-description-ar").text("Description (AR) is required.");
+            isValid = false;
+        }
+
+        // Price
+        const price = $("#product-price").val();
+        if (!price || parseFloat(price) <= 0) {
+            $("#error-price").text("Price must be greater than 0.");
+            isValid = false;
+        }
+
+        // Images + Descriptions
+        if (uploadedPhotosAdd.length === 0) {
+            $(".validationImage").text("At least one image is required.");
+            $(".validationImage").removeClass('display-none');
+            isValid = false;
+        } else {
+            uploadedPhotosAdd.forEach((photo, idx) => {
+                const row = $(`#image-details-body tr[data-photo-id="${photo.id}"]`);
+
+                // Add validation spans below inputs if not exist
+                if (row.find(".error-en").length === 0) {
+                    row.find("td:eq(1)").append('<span class="text-danger error-en"></span>');
+                }
+                if (row.find(".error-ar").length === 0) {
+                    row.find("td:eq(2)").append('<span class="text-danger error-ar"></span>');
+                }
+
+                // Reset old errors
+                row.find(".error-en").text("");
+                row.find(".error-ar").text("");
+
+                if (!photo.descriptionEn.trim()) {
+                    row.find(".error-en").text("Required");
+                    isValid = false;
+                }
+                if (!photo.descriptionAr.trim()) {
+                    row.find(".error-ar").text("Required");
+                    isValid = false;
+                }
+            });
+        }
+
+        return isValid;
+    }
+
+    // Save Button click
+    $("#save-product-btn").on("click", function() {
+        saveProductImagesBeforeSubmit();
+    });
+
+    function loadCategories() {
+    $.ajax({
+        url: '@Url.Action("GetAllCategories", "Product")',
+        type: "GET",
+        success: function (categories) {
+            const ddl = $("#product-category");
+            ddl.empty();
+            ddl.append('<option value="">-- Select Category --</option>');
+
+            categories.$values.forEach(cat => {
+                ddl.append(`<option value="${cat.id}">${cat.nameEn} - ${cat.nameAr}</option>`);
+            });
+        },
+        error: function (xhr) {
+            console.error("Failed to load categories:", xhr.responseText);
+        }
+    });
+    }
+
+    // Call categories load on page ready
+    $(document).ready(function () {
+        loadCategories();
+    });
+</script>

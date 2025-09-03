@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
 using KHQ.Repo.UOW;
+using Microsoft.EntityFrameworkCore;
 
 namespace KHQ.Srv.Services
 {
@@ -18,6 +20,11 @@ namespace KHQ.Srv.Services
         {
             var productToBeAdded = _mapper.Map<Product>(entity);
             await _unitOfWork.Repository<Product>().AddAsync(productToBeAdded);
+            foreach (var item in productToBeAdded.SubProducts)
+            {
+                item.ProductId = productToBeAdded.Id;
+            }
+            await _unitOfWork.Repository<SubProduct>().AddRange(productToBeAdded.SubProducts);
             var result = await _unitOfWork.SaveChangesAsync();
             return result;
         }
@@ -36,13 +43,35 @@ namespace KHQ.Srv.Services
 
         public async Task<IEnumerable<ProductVM>> GetAllAsync()
         {
-            var products = await _unitOfWork.Repository<Product>().GetAllAsync();
+            var products = await _unitOfWork.Repository<Product>().Queryable()
+                    .Include(p => p.SubProducts)
+                    .Select(p => new Product
+                    {
+                        Id = p.Id,
+                        NameEn = p.NameEn,
+                        NameAr = p.NameAr,
+                        DescriptionEn = p.DescriptionEn,
+                        DescriptionAr = p.DescriptionAr,
+                        Price = p.Price,
+                        SubProducts = p.SubProducts.Select(sp => new SubProduct
+                        {
+                            Id = sp.Id,
+                            DescriptionEn = sp.DescriptionEn,
+                            DescriptionAr = sp.DescriptionAr
+                            // 👈 Notice: we don’t include `Product` here!
+                        }).ToList()
+                    })
+                    .ToListAsync();
             return _mapper.Map<IEnumerable<ProductVM>>(products);
         }
 
         public async Task<ProductVM?> GetByIdAsync(Guid id)
         {
-            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+            var product = await _unitOfWork.Repository<Product>()
+                .Queryable()
+                .Include(p => p.SubProducts)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             return _mapper.Map<ProductVM>(product);
         }
 

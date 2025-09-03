@@ -8,6 +8,8 @@
         public string DescriptionEn { get; set; }
         public string DescriptionAr { get; set; }
         public decimal Price { get; set; }
-        public ICollection<SubProductVM> SubProducts { get; set; }
+        public List<string> PathLink { get; set; }
+        public Guid CategoryId { get; set; }
+        public IList<SubProductVM> SubProducts { get; set; }
     }
 }

@@ -1,0 +1,299 @@
+﻿@model KHQ.Domain.ViewModel.ProductVM
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+<style>
+    .content { padding:30px; }
+    .dropzone {
+        border: 3px dashed #6658dd;
+        border-radius: 15px;
+        background: linear-gradient(135deg,#f8faff 0%,#f0f4ff 100%);
+        transition: all .3s ease;
+    }
+    .dropzone:hover { transform: translateY(-2px); }
+    .dz-message { text-align:center;color:#6658dd;font-size:1.2em;margin:2em 0; }
+    .sortable-container { margin-top:30px; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
+    .photo-item { background:white;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.1);cursor:grab;transition:all .3s ease;position:relative;}
+    .photo-item img {width:100%;height:150px;object-fit:cover;}
+    .remove-btn {position:absolute;top:10px;left:10px;background:#f1556c;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;}
+</style>
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Update Product</h4>
+        <!-- Product Info -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-uppercase bg-light p-2">General</h5>
+                <input type="hidden" id="product-id" value="@Model.Id"/>
+                <div class="mb-3">
+                    <label>Category *</label>
+                    <select class="form-control" id="product-category"></select>
+                    <span class="text-danger validation-error" id="error-category"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Name (EN) *</label>
+                    <input type="text" id="product-name-en" class="form-control" value="@Model.NameEn"/>
+                    <span class="text-danger validation-error" id="error-name-en"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Name (AR) *</label>
+                    <input type="text" id="product-name-ar" class="form-control" value="@Model.NameAr"/>
+                    <span class="text-danger validation-error" id="error-name-ar"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Description (EN)</label>
+                    <textarea class="form-control" id="product-description-en">@Model.DescriptionEn</textarea>
+                    <span class="text-danger validation-error" id="error-description-en"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Description (AR)</label>
+                    <textarea class="form-control" id="product-description-ar">@Model.DescriptionAr</textarea>
+                    <span class="text-danger validation-error" id="error-description-ar"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Price *</label>
+                    <input type="number" id="product-price" class="form-control" value="@Model.Price"/>
+                    <span class="text-danger validation-error" id="error-price"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Images -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-uppercase bg-light p-2">Product Images</h5>
+                <!-- Dropzone -->
+                <form action="/upload" class="dropzone" id="photo-dropzone-edit">
+                    <div class="dz-message">Drop photos here or click to browse</div>
+                </form>
+                <!-- Gallery -->
+                <div class="sortable-container" id="sortable-photos-edit">
+                    @foreach (var sub in Model.SubProducts)
+                    {
+                        <div class="photo-item" data-photo-id="existing-@sub.Id">
+                            <div class="remove-btn" onclick="removePhoto('existing-@sub.Id')">×</div>
+                            <img src="@sub.ImageUrl" alt="photo"/>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Details -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="text-uppercase bg-light p-2">Image Details</h5>
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr><th>Image</th><th>Description (EN)</th><th>Description (AR)</th></tr>
+                    </thead>
+                    <tbody id="image-details-body">
+                        @foreach (var sub in Model.SubProducts)
+                        {
+                            <tr data-photo-id="existing-@sub.Id">
+                                <td><img src="@sub.ImageUrl" style="width:100px;height:70px;object-fit:cover;"></td>
+                                <td><input type="text" class="form-control" value="@sub.DescriptionEn"
+                                           oninput="updateDescription('existing-@sub.Id','en',this.value)"/></td>
+                                <td><input type="text" class="form-control text-end" value="@sub.DescriptionAr"
+                                           oninput="updateDescription('existing-@sub.Id','ar',this.value)"/></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="text-end mt-3">
+            <a href="/Product" class="btn btn-light">Cancel</a>
+            <button type="button" id="update-product-btn" class="btn btn-success">Update</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+Dropzone.autoDiscover = false;
+
+// Track photos
+let existingPhotos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+    Model.SubProducts.Select(sp => new {
+        id = "existing-" + sp.Id,
+        descriptionEn = sp.DescriptionEn,
+        descriptionAr = sp.DescriptionAr,
+        imagePath = sp.ImageUrl
+    })
+));
+let newPhotos = [];
+let photoCounter = 0;
+
+// ---- Dropzone ----
+new Dropzone("#photo-dropzone-edit", {
+    url: "/upload",
+    autoProcessQueue:false,
+    acceptedFiles:"image/*",
+    maxFilesize:10,
+    init:function(){
+        this.on("addedfile", file=>{
+            this.removeFile(file);
+            addNewPhoto(file);
+        });
+    }
+});
+
+// ---- Add New Photo ----
+function addNewPhoto(file){
+    photoCounter++;
+    const photoId = "new-"+photoCounter;
+    const reader = new FileReader();
+    reader.onload=function(e){
+        $("#sortable-photos-edit").append(`
+            <div class="photo-item" data-photo-id="${photoId}">
+                <div class="remove-btn" onclick="removePhoto('${photoId}')">×</div>
+                <img src="${e.target.result}">
+            </div>
+        `);
+        $("#image-details-body").append(`
+            <tr data-photo-id="${photoId}">
+                <td><img src="${e.target.result}" style="width:100px;height:70px;object-fit:cover;"></td>
+                <td><input type="text" class="form-control"
+                    oninput="updateDescription('${photoId}','en',this.value)"></td>
+                <td><input type="text" class="form-control text-end"
+                    oninput="updateDescription('${photoId}','ar',this.value)"></td>
+            </tr>
+        `);
+    };
+    reader.readAsDataURL(file);
+    newPhotos.push({id:photoId,file:file,descriptionEn:"",descriptionAr:""});
+}
+
+// ---- Update Description ----
+function updateDescription(photoId,lang,val){
+    let p=newPhotos.find(x=>x.id===photoId)||existingPhotos.find(x=>x.id===photoId);
+    if(p){ if(lang==="en") p.descriptionEn=val; if(lang==="ar") p.descriptionAr=val;}
+}
+
+// ---- Remove ----
+function removePhoto(photoId){
+    newPhotos=newPhotos.filter(x=>x.id!==photoId);
+    existingPhotos=existingPhotos.filter(x=>x.id!==photoId);
+    $(`[data-photo-id="${photoId}"]`).remove();
+    $(`#image-details-body tr[data-photo-id="${photoId}"]`).remove();
+}
+
+// ---- Validate Form ----
+function validateForm(){
+    let ok=true; $(".validation-error").text("");
+    if(!$("#product-category").val()){ $("#error-category").text("Required"); ok=false;}
+    if(!$("#product-name-en").val().trim()){ $("#error-name-en").text("Required"); ok=false;}
+    if(!$("#product-name-ar").val().trim()){ $("#error-name-ar").text("Required"); ok=false;}
+    if(!$("#product-description-en").val().trim()){ $("#error-description-en").text("Required"); ok=false;}
+    if(!$("#product-description-ar").val().trim()){ $("#error-description-ar").text("Required"); ok=false;}
+    if(!$("#product-price").val() || parseFloat($("#product-price").val())<=0){ $("#error-price").text("Required"); ok=false;}
+    [...existingPhotos,...newPhotos].forEach((p,i)=>{
+        let row=$(`#image-details-body tr[data-photo-id="${p.id}"]`);
+        if(!p.descriptionEn||!p.descriptionEn.trim()){row.find("td:eq(1)").append("<span class='text-danger'>Required</span>"); ok=false;}
+        if(!p.descriptionAr||!p.descriptionAr.trim()){row.find("td:eq(2)").append("<span class='text-danger'>Required</span>"); ok=false;}
+    });
+    return ok;
+}
+
+// ---- Save New Photos First ----
+function saveProductImagesBeforeUpdate(){
+    const fd=new FormData();
+    newPhotos.forEach(p=>fd.append("images",p.file));
+    fd.append("fKey",$("#product-id").val());
+    fd.append("imageType",8);
+    $.ajax({
+        url:"/api/Common/SaveImages",
+        type:"POST",data:fd,processData:false,contentType:false,
+        success:function(res){ submitUpdateForm(res.fkey); },
+        error:x=>alert("Error uploading images "+x.responseText)
+    });
+}
+
+// ---- Final Submit ----
+function submitUpdateForm(fkey){
+    if(!validateForm()) return;
+
+    // Get current order from gallery
+    const orderedIds = [...document.querySelectorAll("#sortable-photos-edit .photo-item")]
+                       .map(it => it.dataset.photoId);
+
+    // Merge existing + new with updated order
+    let all=[...existingPhotos,...newPhotos];
+    all.sort((a,b)=>orderedIds.indexOf(a.id)-orderedIds.indexOf(b.id));
+
+    const product={
+        Id:fkey,
+        NameEn:$("#product-name-en").val(),
+        NameAr:$("#product-name-ar").val(),
+        DescriptionEn:$("#product-description-en").val(),
+        DescriptionAr:$("#product-description-ar").val(),
+        Price:$("#product-price").val(),
+        CategoryId:$("#product-category").val(),
+        SubProducts:all.map((p,i)=>({
+            Id:p.id.startsWith("existing-")?p.id.replace("existing-",""):null,
+            DescriptionEn:p.descriptionEn,
+            DescriptionAr:p.descriptionAr,
+            SortOrder:i,
+            ImagePath:p.imagePath||null
+        }))
+    };
+    $.ajax({
+        url:"/Product/Update",
+        type:"POST",contentType:"application/json",
+        data:JSON.stringify(product),
+        success:()=>{alert("Updated!");window.location="/Product";},
+        error:x=>alert("Error "+x.responseText)
+    });
+}
+
+$("#update-product-btn").on("click",()=>saveProductImagesBeforeUpdate());
+
+// ---- Add Sorting Sync ----
+new Sortable(document.getElementById("sortable-photos-edit"), {
+    animation: 150,
+    onEnd: function () { syncTableWithGallery(); }
+});
+new Sortable(document.getElementById("image-details-body"), {
+    animation: 150,
+    onEnd: function () { syncGalleryWithTable(); }
+});
+function syncTableWithGallery() {
+    const galleryItems = document.querySelectorAll("#sortable-photos-edit .photo-item");
+    const tbody = document.getElementById("image-details-body");
+    let newOrder = [];
+    galleryItems.forEach(item => {
+        const row = document.querySelector(`#image-details-body tr[data-photo-id="${item.dataset.photoId}"]`);
+        if(row) newOrder.push(row);
+    });
+    newOrder.forEach(r=>tbody.appendChild(r));
+}
+function syncGalleryWithTable() {
+    const rows = document.querySelectorAll("#image-details-body tr");
+    const g = document.getElementById("sortable-photos-edit");
+    let newOrder = [];
+    rows.forEach(r => {
+        const item = document.querySelector(`.photo-item[data-photo-id="${r.dataset.photoId}"]`);
+        if(item) newOrder.push(item);
+    });
+    newOrder.forEach(it=>g.appendChild(it));
+}
+
+// ---- Load Categories ----
+function loadCategories(){
+    $.ajax({
+        url:'@Url.Action("GetAllCategories","Product")',
+        type:"GET",
+        success: cats=>{
+            const ddl=$("#product-category"); ddl.empty().append('<option value="">-- Select --</option>');
+            cats.$values.forEach(c=>ddl.append(`<option value="${c.id}">${c.nameEn} - ${c.nameAr}</option>`));
+            ddl.val("@Model.CategoryId");
+        }
+    });
+}
+$(document).ready(loadCategories);
+</script>
