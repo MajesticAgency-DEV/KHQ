@@ -23,10 +23,10 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<StainDetailsDto>> GetAll()
+        public async Task<IList<StainDetailsDto>> GetAll()
         {
             var stainDetailsData = await _unitOfWork.Repository<StainDetails>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<StainDetailsDto>>(stainDetailsData);
+            var result = _mapper.Map<IList<StainDetailsDto>>(stainDetailsData);
             return result;
         }
 
