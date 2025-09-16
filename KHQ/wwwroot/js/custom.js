@@ -182,11 +182,17 @@ All JavaScript fuctions Start
 
 // > footer fixed on bottom function by = custom.js ======================== //	
 	function footer_fixed() {
-	  jQuery('.site-footer').css('display', 'block');
-	  jQuery('.site-footer').css('height', 'auto');
-	  var footerHeight = jQuery('.site-footer').outerHeight();
+	  var $footer = jQuery('.site-footer');
+	  if (!$footer.length) return;
+	  $footer.css('display', 'block');
+	  $footer.css('height', 'auto');
+	  var footerHeight = $footer.outerHeight();
+	  if (!footerHeight || footerHeight < 0) {
+		  setTimeout(footer_fixed, 50);
+		  return;
+	  }
 	  jQuery('.footer-fixed > .page-wraper').css('padding-bottom', footerHeight);
-	  jQuery('.site-footer').css('height', footerHeight);
+	  $footer.css('height', footerHeight);
 	}
 	
 	
@@ -732,6 +738,11 @@ $.fn.owlFilter = function(data, callback) {
 	// > footer fixed on bottom function by = custom.js		 
 	 	footer_fixed();
 	});
+
+// Re-run footer sizing when footer gets injected asynchronously
+document.addEventListener('footer:loaded', function(){
+	footer_fixed();
+});
 
 /*===========================
 	Document on  Submit FUNCTION START

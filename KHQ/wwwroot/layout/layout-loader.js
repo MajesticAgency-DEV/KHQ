@@ -17,7 +17,11 @@
     if (footerEl) {
         fetch("layout/footer.html")
             .then(res => res.text())
-            .then(html => { footerEl.innerHTML = html; })
+            .then(html => {
+                footerEl.innerHTML = html;
+                // Signal that footer markup is now in the DOM so scripts can adjust sizing
+                document.dispatchEvent(new CustomEvent("footer:loaded"));
+            })
             .catch(function(){ /* ignore footer load errors */ });
     }
 }
