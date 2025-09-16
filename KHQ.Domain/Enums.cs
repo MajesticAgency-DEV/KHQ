@@ -18,5 +18,7 @@
         Brands = 2 ,
         Category = 3 ,
         FAQ = 4 ,
+        WhyChooseUs = 5 ,
+        Stains = 6,
     }
 }

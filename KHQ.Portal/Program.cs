@@ -96,6 +96,8 @@ builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
 builder.Services.AddScoped<IStainsService, StainsService>();
 builder.Services.AddScoped<IStainDetailsSrv, StainDetailsSrv>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBrouchuresSrv, BrouchuresSrv>();
+builder.Services.AddScoped<IEmailsSrv, EmailsSrv>();
 
 
 

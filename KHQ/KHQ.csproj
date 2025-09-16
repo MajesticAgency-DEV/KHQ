@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KHQ.Domain\KHQ.Domain.csproj" />
     <ProjectReference Include="..\KHQ.Repo\KHQ.Repo.csproj" />
+    <ProjectReference Include="..\KHQ.Srv\KHQ.Srv.csproj" />
   </ItemGroup>
 
 </Project>

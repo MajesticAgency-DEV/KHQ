@@ -15,6 +15,12 @@ namespace KHQ.Srv.Mapper
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
+            
+            CreateMap<Brouchures, BrouchuresDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
             CreateMap<StainDetails, StainDetailsDto>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
@@ -43,9 +49,9 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
-            //CreateMap<E_Con_Inner, E_Con_InnerDto>()
-            //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
-            //     CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
+            CreateMap<E_Con_Inner, E_Con_InnerDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
 
             CreateMap<Stains, StainsDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
@@ -63,6 +69,9 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<BaseHome, BaseHomeVM>().ReverseMap();
             CreateMap<BaseHomeVM, BaseHome>().ReverseMap();
+
+            CreateMap<Brouchures, BrouchuresVM>().ReverseMap();
+            CreateMap<BrouchuresVM, Brouchures>().ReverseMap();
 
             CreateMap<AboutUs, AboutUsVM>().ReverseMap();
             CreateMap<AboutUsVM, AboutUs>().ReverseMap();
@@ -112,6 +121,12 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<StainDetailsDto, StainDetails>().ReverseMap();
             CreateMap<StainDetails, StainDetailsDto>().ReverseMap();
+
+            CreateMap<EmailsDto, Emails>().ReverseMap();
+            CreateMap<Emails, EmailsDto>().ReverseMap();
+
+            CreateMap<EmailsVM, Emails>().ReverseMap();
+            CreateMap<Emails, EmailsVM>().ReverseMap();
         }
     }
 

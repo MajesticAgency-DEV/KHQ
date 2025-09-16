@@ -109,6 +109,8 @@
                             <option value="2">Brands</option>
                             <option value="3">Category</option>
                             <option value="4">FAQ</option>
+                            <option value="5">Why Choose Us</option>
+                            <option value="6">Stains</option>
                         </select>
                     </div>
 
@@ -159,6 +161,7 @@
 
 <script>
     $(document).ready(function () {
+        $('#SaveBaseHomeSectionsbtn').prop('disabled', false);
         let currentSectionData = null;
 
         // Handle section selection
@@ -223,6 +226,8 @@
 
         // Save section
         $('#SaveBaseHomeSectionsbtn').click(function () {
+            $('#SaveBaseHomeSectionsbtn')
+            $(this).prop('disabled', true);
             var selectedSection = $('#section-select').val();
 
             if (!selectedSection) {
@@ -308,6 +313,7 @@
 
         // Reset form when modal is closed
         $('#add-modal').on('hidden.bs.modal', function () {
+            $('#SaveBaseHomeSectionsbtn').prop('disabled', false);
             $('#section-select').val('');
             $('#section-form').addClass('display-none');
             clearForm();

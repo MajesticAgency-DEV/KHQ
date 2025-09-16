@@ -24,10 +24,10 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<BaseHomeDto> GetAll()
+        public async Task<IEnumerable<BaseHomeDto>> GetAll()
         {
             var baseHomeData = await _unitOfWork.Repository<BaseHome>().Queryable().ToListAsync();
-            var result = _mapper.Map<BaseHomeDto>(baseHomeData);
+            var result = _mapper.Map<IEnumerable<BaseHomeDto>>(baseHomeData);
             return result;
         }
 
@@ -36,6 +36,15 @@ namespace KHQ.Controllers
         public async Task<BaseHomeDto> GetById(Guid id)
         {
             var baseHomeData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = _mapper.Map<BaseHomeDto>(baseHomeData);
+            return result;
+        }
+
+        [HttpGet]
+        [Route("GetByType/{type}")]
+        public async Task<BaseHomeDto> GetByType(int type)
+        {
+            var baseHomeData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == type).FirstOrDefaultAsync();
             var result = _mapper.Map<BaseHomeDto>(baseHomeData);
             return result;
         }

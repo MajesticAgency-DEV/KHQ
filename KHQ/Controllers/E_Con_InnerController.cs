@@ -23,10 +23,10 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<E_Con_InnerDto> GetAll()
+        public async Task<IEnumerable<E_Con_InnerDto>> GetAll()
         {
             var e_Con_InnerData = await _unitOfWork.Repository<E_Con_Inner>().Queryable().ToListAsync();
-            var result = _mapper.Map<E_Con_InnerDto>(e_Con_InnerData);
+            var result = _mapper.Map<IEnumerable<E_Con_InnerDto>>(e_Con_InnerData);
             return result;
         }
 
