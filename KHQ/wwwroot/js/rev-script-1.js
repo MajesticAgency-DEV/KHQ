@@ -1,8 +1,11 @@
-<!-- REVOLUTION SLIDER FUNCTION FOR HOME PAGE STYLE 1 ===== -->
 var revapi318,
-	tpj=jQuery;
-			
-tpj(document).ready(function() {
+	tpj=jQuery,
+	__rev_inited = false;
+
+function initHomeRevolutionOnce(){
+	if (__rev_inited) return;
+	if (!tpj('#webmax-one').length) return;
+	__rev_inited = true;
 	if(tpj("#webmax-one").revolution === undefined){
 		revslider_showDoubleJqueryError("#webmax-one");
 	}else{
@@ -110,7 +113,14 @@ tpj(document).ready(function() {
 		});
 	}
 	try{initSocialSharing("318")} catch(e){}
-});
-/*ready*/
+}
 
-<!-- REVOLUTION SLIDER FUNCTION FOR HOME PAGE STYLE 1 END  ===== -->
+// Init on DOM ready (covers inline slider)
+tpj(document).ready(function(){
+	initHomeRevolutionOnce();
+});
+
+// Init when the slider partial is injected asynchronously
+document.addEventListener('home:slider-loaded', function(){
+	initHomeRevolutionOnce();
+});

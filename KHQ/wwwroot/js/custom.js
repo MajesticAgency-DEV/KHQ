@@ -251,7 +251,7 @@ All JavaScript fuctions Start
 			0:{
 				items:1,
 			},
-			1400:{
+			768:{
 				items:1
 			}		
 		}
@@ -742,6 +742,18 @@ $.fn.owlFilter = function(data, callback) {
 // Re-run footer sizing when footer gets injected asynchronously
 document.addEventListener('footer:loaded', function(){
 	footer_fixed();
+});
+
+// Re-init carousels when sections are injected asynchronously
+document.addEventListener('home:testimonials-loaded', function(){
+	try { jQuery('.testimonial-1-content').trigger('destroy.owl.carousel'); } catch(_e) {}
+	testimonial_1_content();
+});
+
+document.addEventListener('home:projects-loaded', function(){
+	// Rebind filter + owl for projects
+	try { jQuery('.owl-carousel-filter').trigger('destroy.owl.carousel'); } catch(_e) {}
+	home_projects_filter();
 });
 
 /*===========================
