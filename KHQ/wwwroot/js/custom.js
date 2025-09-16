@@ -62,13 +62,49 @@ All JavaScript fuctions Start
 	}
 
 // > Main menu sticky on top  when scroll down function by = custom.js ========== //		
-	function sticky_header(){
+	function sticky_header() {
 		if(jQuery('.sticky-header').length){
 			var sticky = new Waypoint.Sticky({
 			  element: jQuery('.sticky-header')
 			});
 		}
 	}
+
+    // Initialize header behaviors once when header exists (handles async injection)
+    (function(){
+        var didInitHeader = false;
+        function initHeaderBehaviorsOnce(){
+            if (didInitHeader) return;
+            if (!jQuery('.sticky-header').length) return;
+            didInitHeader = true;
+            sticky_header();
+            mobile_nav();
+            mobile_side_drawer();
+            site_search();
+        }
+
+        // Try immediately in case header is inline on the page
+        initHeaderBehaviorsOnce();
+
+        // Listen for custom event if emitted before/after this script loads
+        document.addEventListener('header:loaded', function(){
+            initHeaderBehaviorsOnce();
+        });
+
+        // Fallback: observe #header for dynamic content
+        var headerMount = document.getElementById('header');
+        if (headerMount && !didInitHeader) {
+            try {
+                var mo = new MutationObserver(function(){
+                    if (jQuery('.sticky-header').length) {
+                        mo.disconnect();
+                        initHeaderBehaviorsOnce();
+                    }
+                });
+                mo.observe(headerMount, { childList: true, subtree: true });
+            } catch(_e) { /* ignore */ }
+        }
+    })();
 	
 
 	// > Sidebar sticky  when scroll down function by = custom.js ========== //		
