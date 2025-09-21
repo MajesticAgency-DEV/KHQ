@@ -24,10 +24,16 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<AboutUsDto>> GetAll()
+        public async Task<AboutUsDto> GetAll()
         {
-            var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<AboutUsDto>>(aboutUsData);
+            var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().FirstOrDefaultAsync();
+            var points = await _unitOfWork.Repository<H_AboutUs>().Queryable().ToListAsync();
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.AboutUs_Cover).FirstOrDefaultAsync();
+            var aboutUsImage = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == aboutUsData.Id).FirstOrDefaultAsync();
+            
+            var result = _mapper.Map<AboutUsDto>(aboutUsData);
+            result.CoverPhoto = coverPhoto == null ? "" : coverPhoto.PathLink;
+            result.AboutUsImage = aboutUsImage == null ? "" : aboutUsImage.PathLink;
             return result;
         }
 
