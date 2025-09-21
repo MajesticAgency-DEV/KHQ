@@ -1,4 +1,4 @@
-using KHQ.Middleware;
+﻿using KHQ.Middleware;
 using KHQ.Repo.Data;
 using KHQ.Repo.Repositories;
 using KHQ.Repo.UOW;
@@ -6,6 +6,7 @@ using KHQ.Srv.Mapper;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 
@@ -46,10 +47,36 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 builder.Services.AddSwaggerGen(c => {
     c.OperationFilter<AcceptLanguageHeaderOperationFilter>();
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
+
+var sharedImagesPath = Path.Combine(builder.Environment.ContentRootPath, "..", "SharedImages");
+
+if (!Directory.Exists(sharedImagesPath))
+{
+    Directory.CreateDirectory(sharedImagesPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(sharedImagesPath),
+    RequestPath = "/SharedImages"
+});
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
