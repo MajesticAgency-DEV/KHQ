@@ -10,6 +10,7 @@
         public decimal Price { get; set; }
         public List<string> PathLink { get; set; }
         public Guid CategoryId { get; set; }
+        public Guid BrandId { get; set; }
         public IList<SubProductVM> SubProducts { get; set; }
     }
 }

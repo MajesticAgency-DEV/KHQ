@@ -25,6 +25,9 @@ namespace KHQ.Repo.Data
         public DbSet<AboutUs> AboutUs { get; set; }
         public DbSet<Stains> Stains { get; set; }
         public DbSet<StainDetails> StainDetails { get; set; }
+        public DbSet<WhyChooseUs> WhyChooseUs { get; set; }
+        public DbSet<Brouchures> Brouchures { get; set; }
+        public DbSet<Emails> Emails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

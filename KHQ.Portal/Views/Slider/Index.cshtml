@@ -216,6 +216,48 @@
                                            placeholder="Enter link" value="@item.Link">
                                     <span class="validationLink text-danger display-none">* This field is required</span>
                                 </div>
+                                
+                                <div class="mb-3">
+                    <label for="titleEn-edit-@item.Id" class="form-label">Title English:</label>
+                    <input class="form-control link-input" type="text" id="titleEn-edit-@item.Id"
+                           placeholder="Enter Title English">
+                    <span class="validationTitleEn text-danger display-none">* Title English is required</span>
+                </div>
+
+                                <div class="mb-3">
+                    <label for="titleAr-edit-@item.Id" class="form-label">Title Arabic:</label>
+                    <input class="form-control link-input" type="text" id="titleAr-edit-@item.Id"
+                           placeholder="Enter Title Arabic">
+                    <span class="validationTitleAr text-danger display-none">* Title Arabic is required</span>
+                </div>
+
+                                <div class="mb-3">
+                    <label for="DescriptionEn-edit-@item.Id" class="form-label">Description English:</label>
+                    <input class="form-control link-input" type="text" id="DescriptionEn-edit-@item.Id"
+                           placeholder="Enter Description English">
+                    <span class="validationDescriptionEn text-danger display-none">* Description English is required</span>
+                </div>
+
+                                <div class="mb-3">
+                    <label for="DescriptionAr-edit-@item.Id" class="form-label">Description Arabic:</label>
+                    <input class="form-control link-input" type="text" id="DescriptionAr-edit-@item.Id"
+                           placeholder="Enter Description Arabic">
+                    <span class="validationDescriptionAr text-danger display-none">* Description Arabic is required</span>
+                </div>
+
+                                <div class="mb-3">
+                    <label for="ButtonTextEn-edit-@item.Id" class="form-label">Button Text English:</label>
+                    <input class="form-control link-input" type="text" id="ButtonTextEn-edit-@item.Id"
+                           placeholder="Enter Button Text English">
+                    <span class="validationButtonTextEn text-danger display-none">* Button Text English is required</span>
+                </div>
+
+                                <div class="mb-3">
+                    <label for="ButtonTextAr-edit-@item.Id" class="form-label">Button Text Arabic:</label>
+                    <input class="form-control link-input" type="text" id="ButtonTextAr-edit-@item.Id"
+                           placeholder="Enter Button Text Arabic">
+                    <span class="validationButtonTextAr text-danger display-none">* Button Text Arabic is required</span>
+                </div>
                                 <form action="/upload" class="dropzone" id="photo-dropzone-edit-@item.Id">
                                     <div class="dz-message">
                                         <strong>📁 Drop photos here or click to browse</strong><br>
@@ -279,6 +321,49 @@
                            placeholder="Enter link">
                     <span class="validationLink text-danger display-none">* This field is required</span>
                 </div>
+
+                <div class="mb-3">
+                    <label for="titleEn-add" class="form-label">Title English:</label>
+                    <input class="form-control link-input" type="text" id="titleEn-add"
+                           placeholder="Enter Title English">
+                    <span class="validationTitleEn text-danger display-none">* This field is required</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="titleAr-add" class="form-label">Title Arabic:</label>
+                    <input class="form-control link-input" type="text" id="titleAr-add"
+                           placeholder="Enter Title Arabic">
+                    <span class="validationTitleAr text-danger display-none">* This field is required</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="DescriptionEn-add" class="form-label">Description English:</label>
+                    <input class="form-control link-input" type="text" id="DescriptionEn-add"
+                           placeholder="Enter Description English">
+                    <span class="validationDescriptionEn text-danger display-none">* This field is required</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="DescriptionAr-add" class="form-label">Description Arabic:</label>
+                    <input class="form-control link-input" type="text" id="DescriptionAr-add"
+                           placeholder="Enter Description Arabic">
+                    <span class="validationDescriptionAr text-danger display-none">* This field is required</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ButtonTextEn-add" class="form-label">Button Text English:</label>
+                    <input class="form-control link-input" type="text" id="ButtonTextEn-add"
+                           placeholder="Enter Button Text English">
+                    <span class="validationButtonTextEn text-danger display-none">* This field is required</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ButtonTextAr-add" class="form-label">Button Text Arabic:</label>
+                    <input class="form-control link-input" type="text" id="ButtonTextAr-add"
+                           placeholder="Enter Button Text Arabic">
+                    <span class="validationButtonTextAr text-danger display-none">* This field is required</span>
+                </div>
+
                 <form action="/upload" class="dropzone" id="photo-dropzone-add">
                     <div class="dz-message">
                         <strong>📁 Drop photos here or click to browse</strong><br>
@@ -647,11 +732,23 @@ function submitForm(fkey, mode, itemId = '') {
     }
 
     const linkInputId = mode === 'add' ? 'link-add' : `link-edit-${itemId}`;
+    const titleEnInputId = mode === 'add' ? 'titleEn-add' : `titleEn-edit-${itemId}`;
+    const titleArInputId = mode === 'add' ? 'titleAr-add' : `titleAr-edit-${itemId}`;
+    const descriptionEnInputId = mode === 'add' ? 'DescriptionEn-add' : `DescriptionEn-edit-${itemId}`;
+    const descriptionArInputId = mode === 'add' ? 'DescriptionAr-add' : `DescriptionAr-edit-${itemId}`;
+    const ButtonTextEnInputId = mode === 'add' ? 'ButtonTextEn-add' : `ButtonTextEn-edit-${itemId}`;
+    const ButtonTextArInputId = mode === 'add' ? 'ButtonTextAr-add' : `ButtonTextAr-edit-${itemId}`;
     const formData = new FormData();
     
     // Use the fkey returned from SaveImages API
     formData.append('Id', fkey);
     formData.append('Link', $(`#${linkInputId}`).val());
+    formData.append('TitleEn', $(`#${titleEnInputId}`).val());
+    formData.append('TitleAr', $(`#${titleArInputId}`).val());
+    formData.append('DescriptionEn', $(`#${descriptionEnInputId}`).val());
+    formData.append('DescriptionAr', $(`#${descriptionArInputId}`).val());
+    formData.append('ButtonTextEn', $(`#${ButtonTextEnInputId}`).val());
+    formData.append('ButtonTextAr', $(`#${ButtonTextArInputId}`).val());
     
     // Use the same endpoint for both add and edit, or adjust URLs as needed
     const url = mode === 'add' ? '/Slider/Add' : '/Slider/Update';
@@ -796,6 +893,12 @@ function removeExistingPhoto(photoId, imagePath, itemId) {
 }
     function validateForm(mode, itemId = '') {
         const linkInputId = mode === 'add' ? 'link-add' : `link-edit-${itemId}`;
+        const titleEnInputId = mode === 'add' ? 'titleEn-add' : `titleEn-edit-${itemId}`;
+        const titleArInputId = mode === 'add' ? 'titleAr-add' : `titleAr-edit-${itemId}`;
+        const descriptionEnInputId = mode === 'add' ? 'DescriptionEn-add' : `DescriptionEn-edit-${itemId}`;
+        const descriptionArInputId = mode === 'add' ? 'DescriptionAr-add' : `DescriptionAr-edit-${itemId}`;
+        const ButtonTextEnInputId = mode === 'add' ? 'ButtonTextEn-add' : `ButtonTextEn-edit-${itemId}`;
+        const ButtonTextArInputId = mode === 'add' ? 'ButtonTextAr-add' : `ButtonTextAr-edit-${itemId}`;
         const modalId = mode === 'add' ? '#add-modal' : `#edit-modal-${itemId}`;
         const modal = $(modalId);
         
@@ -803,12 +906,54 @@ function removeExistingPhoto(photoId, imagePath, itemId) {
         hideValidationErrors(modal);
 
         const linkValue = $(`#${linkInputId}`).val();
+        const titleEnValue = $(`#${titleEnInputId}`).val();
+        const titleArValue = $(`#${titleArInputId}`).val();
+        const descriptionEnValue = $(`#${descriptionEnInputId}`).val();
+        const descriptionArValue = $(`#${descriptionArInputId}`).val();
+        const buttotntextEnValue = $(`#${ButtonTextEnInputId}`).val();
+        const buttotntextArValue = $(`#${ButtonTextArInputId}`).val();
         console.log(`Validating form - Mode: ${mode}, ItemId: ${itemId}, Link: ${linkValue}`);
 
         if (!linkValue || linkValue.trim() === '') {
             modal.find('.validationLink').removeClass('display-none');
             isValid = false;
             console.log('Validation failed: Link is required');
+        }
+
+        if (!titleEnValue || titleEnValue.trim() === '') {
+            modal.find('.validationTitleEn').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Title English is required');
+        }
+
+        if (!titleArValue || titleEnValue.trim() === '') {
+            modal.find('.validationTitleAr').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Title Arabic is required');
+        }
+
+        if (!descriptionEnValue || descriptionEnValue.trim() === '') {
+            modal.find('.validationDescriptionEn').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Description English is required');
+        }
+
+        if (!descriptionArValue || descriptionArValue.trim() === '') {
+            modal.find('.validationDescriptionAr').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Description Arabic is required');
+        }
+
+        if (!buttotntextEnValue || buttotntextEnValue.trim() === '') {
+            modal.find('.validationButtonTextEn').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Button Text English is required');
+        }
+
+        if (!buttotntextArValue || buttotntextArValue.trim() === '') {
+            modal.find('.validationButtonTextAr').removeClass('display-none');
+            isValid = false;
+            console.log('Validation failed: Button Text Arabic is required');
         }
 
         return isValid;

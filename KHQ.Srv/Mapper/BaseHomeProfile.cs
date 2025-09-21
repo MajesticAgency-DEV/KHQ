@@ -67,6 +67,22 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
+
+            CreateMap<Slider, SliderDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn))
+                .ForMember(dest => dest.ButtonText, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.ButtonTextAr : src.ButtonTextEn));
+
+            CreateMap<WhyChooseUs, WhyChooseUsDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
+
+
             CreateMap<BaseHome, BaseHomeVM>().ReverseMap();
             CreateMap<BaseHomeVM, BaseHome>().ReverseMap();
 
@@ -103,7 +119,6 @@ namespace KHQ.Srv.Mapper
             CreateMap<ContactUs, ContactUsVM>().ReverseMap();
             CreateMap<ContactUsVM, ContactUs>().ReverseMap();
 
-            CreateMap<Slider, SliderDto>().ReverseMap();
             CreateMap<Slider, SliderVM>().ReverseMap();
             CreateMap<SliderVM, Slider>().ReverseMap();
 
@@ -127,6 +142,9 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<EmailsVM, Emails>().ReverseMap();
             CreateMap<Emails, EmailsVM>().ReverseMap();
+
+            CreateMap<WhyChooseUsVM, WhyChooseUs>().ReverseMap();
+            CreateMap<WhyChooseUs, WhyChooseUsVM>().ReverseMap();
         }
     }
 

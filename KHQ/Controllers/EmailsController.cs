@@ -18,6 +18,8 @@ namespace KHQ.Controllers
             _emailsSrv = emailsSrv;
         }
 
+        [HttpPost]
+        [Route("AddEmail")]
         public async Task<IActionResult> AddEmail(EmailsDto emailsDto)
         {
             var result = await _emailsSrv.AddAsync(emailsDto);

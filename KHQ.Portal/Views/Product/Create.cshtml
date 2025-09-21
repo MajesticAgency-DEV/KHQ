@@ -80,6 +80,14 @@
                 </div>
                 <h5 class="text-uppercase bg-light p-2">General</h5>
                 <div class="mb-3">
+                    <label for="product-brand" class="form-label">Category <span class="text-danger">*</span></label>
+                    <select class="form-control" id="product-brand">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span class="text-danger validation-error" id="error-brand"></span>
+                </div>
+                
+                <div class="mb-3">
                     <label for="product-category" class="form-label">Category <span class="text-danger">*</span></label>
                     <select class="form-control" id="product-category">
                         <option value="">-- Select Category --</option>
@@ -331,6 +339,7 @@
             DescriptionAr: $("#product-description-ar").val(),
             Price: $("#product-price").val(),
             CategoryId: $("#product-category").val(),
+            BrandId: $("#product-brand").val(),
             SubProducts: uploadedPhotosAdd.map((p, idx) => ({
                 DescriptionEn: p.descriptionEn,
                 DescriptionAr: p.descriptionAr,
@@ -364,6 +373,7 @@
             descriptionAr: $("#product-description-ar").val(),
             price: $("#product-price").val(),
             categoryId: $("#product-category").val(),
+            brandId: $("#product-brand").val(),
             subProducts: uploadedPhotosAdd.map(p => ({
                 descriptionEn: p.descriptionEn,
                 descriptionAr: p.descriptionAr,
@@ -382,6 +392,12 @@
         // Category
         if (!$("#product-category").val()) {
             $("#error-category").text("Category is required.");
+            isValid = false;
+        }
+
+        // Brand
+        if (!$("#product-brand").val()) {
+            $("#error-brand").text("Brand is required.");
             isValid = false;
         }
 
@@ -471,6 +487,22 @@
         },
         error: function (xhr) {
             console.error("Failed to load categories:", xhr.responseText);
+        }
+    });
+     $.ajax({
+        url: '@Url.Action("GetAllBrands", "Product")',
+        type: "GET",
+        success: function (categories) {
+            const ddl = $("#product-brand");
+            ddl.empty();
+            ddl.append('<option value="">-- Select Brand --</option>');
+
+            categories.$values.forEach(cat => {
+                ddl.append(`<option value="${cat.id}">${cat.nameEn} - ${cat.nameAr}</option>`);
+            });
+        },
+        error: function (xhr) {
+            console.error("Failed to load brands:", xhr.responseText);
         }
     });
     }

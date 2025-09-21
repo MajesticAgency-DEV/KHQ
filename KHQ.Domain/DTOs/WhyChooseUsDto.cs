@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace KHQ.Domain.DTOs
 {
-    public class SliderDto
+    public class WhyChooseUsDto
     {
         public Guid Id { get; set; }
-        public string Link { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string ButtonText { get; set; }
+        public string Icon { get; set; }
     }
 }

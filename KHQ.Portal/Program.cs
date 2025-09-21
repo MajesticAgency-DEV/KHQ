@@ -98,6 +98,7 @@ builder.Services.AddScoped<IStainDetailsSrv, StainDetailsSrv>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBrouchuresSrv, BrouchuresSrv>();
 builder.Services.AddScoped<IEmailsSrv, EmailsSrv>();
+builder.Services.AddScoped<IWhyChooseUsSrv, WhyChooseUsSrv>();
 
 
 

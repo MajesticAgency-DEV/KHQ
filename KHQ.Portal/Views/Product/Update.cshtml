@@ -26,6 +26,11 @@
                 <h5 class="text-uppercase bg-light p-2">General</h5>
                 <input type="hidden" id="product-id" value="@Model.Id"/>
                 <div class="mb-3">
+                    <label>Brand *</label>
+                    <select class="form-control" id="product-brand"></select>
+                    <span class="text-danger validation-error" id="error-brand"></span>
+                </div>
+                <div class="mb-3">
                     <label>Category *</label>
                     <select class="form-control" id="product-category"></select>
                     <span class="text-danger validation-error" id="error-category"></span>
@@ -187,6 +192,7 @@ function removePhoto(photoId){
 function validateForm(){
     let ok=true; $(".validation-error").text("");
     if(!$("#product-category").val()){ $("#error-category").text("Required"); ok=false;}
+    if(!$("#product-brand").val()){ $("#error-brand").text("Required"); ok=false;}
     if(!$("#product-name-en").val().trim()){ $("#error-name-en").text("Required"); ok=false;}
     if(!$("#product-name-ar").val().trim()){ $("#error-name-ar").text("Required"); ok=false;}
     if(!$("#product-description-en").val().trim()){ $("#error-description-en").text("Required"); ok=false;}
@@ -234,6 +240,7 @@ function submitUpdateForm(fkey){
         DescriptionAr:$("#product-description-ar").val(),
         Price:$("#product-price").val(),
         CategoryId:$("#product-category").val(),
+        BrandId:$("#product-brand").val(),
         SubProducts:all.map((p,i)=>({
             Id:p.id.startsWith("existing-")?p.id.replace("existing-",""):null,
             DescriptionEn:p.descriptionEn,
@@ -292,6 +299,15 @@ function loadCategories(){
             const ddl=$("#product-category"); ddl.empty().append('<option value="">-- Select --</option>');
             cats.$values.forEach(c=>ddl.append(`<option value="${c.id}">${c.nameEn} - ${c.nameAr}</option>`));
             ddl.val("@Model.CategoryId");
+        }
+    });
+    $.ajax({
+        url:'@Url.Action("GetAllBrands","Product")',
+        type:"GET",
+        success: cats=>{
+            const ddl=$("#product-brand"); ddl.empty().append('<option value="">-- Select --</option>');
+            cats.$values.forEach(c=>ddl.append(`<option value="${c.id}">${c.nameEn} - ${c.nameAr}</option>`));
+            ddl.val("@Model.BrandId");
         }
     });
 }

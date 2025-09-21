@@ -11,14 +11,16 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IProductSrv _ProductSrv;
         private readonly ICategorySrv _CategorySrv;
+        private readonly IBrandSrv _BrandSrv;
         private readonly IImageService _imageService;
 
 
-        public ProductController(IProductSrv productSrv, ICategorySrv categorySrv, IImageService imageService)
+        public ProductController(IProductSrv productSrv, ICategorySrv categorySrv, IImageService imageService, IBrandSrv brandSrv)
         {
             _ProductSrv = productSrv;
             _CategorySrv = categorySrv;
             _imageService = imageService;
+            _BrandSrv = brandSrv;
         }
         public async Task<IActionResult> Index(string search = "", string sortBy = "", int page = 1, int pageSize = 8)
         {
@@ -87,6 +89,14 @@ namespace KHQ.Portal.Controllers
         {
             var categories = await _CategorySrv.GetAllAsync();
             return categories;
+        }
+        
+        [HttpGet]
+        [Route("GetAllBrands")]
+        public async Task<IEnumerable<BrandsVM>> GetAllBrands()
+        {
+            var brands = await _BrandSrv.GetAllAsync();
+            return brands;
         }
 
         [HttpGet]
