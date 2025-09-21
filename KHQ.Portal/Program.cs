@@ -8,6 +8,7 @@ using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
@@ -109,7 +110,18 @@ builder.Services.AddSession();
 var app = builder.Build();
 
 
+var sharedImagesPath = Path.Combine(builder.Environment.ContentRootPath, "..", "SharedImages");
 
+if (!Directory.Exists(sharedImagesPath))
+{
+    Directory.CreateDirectory(sharedImagesPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(sharedImagesPath),
+    RequestPath = "/SharedImages"
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
