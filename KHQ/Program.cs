@@ -47,6 +47,8 @@ builder.Services.AddSwaggerGen(c => {
     c.OperationFilter<AcceptLanguageHeaderOperationFilter>();
 });
 
+builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
