@@ -32,6 +32,7 @@ namespace KHQ.Controllers
             var aboutUsImage = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == aboutUsData.Id).FirstOrDefaultAsync();
             
             var result = _mapper.Map<AboutUsDto>(aboutUsData);
+            result.H_AboutUsDto = _mapper.Map<IEnumerable<H_AboutUsDto>>(points);
             result.CoverPhoto = coverPhoto == null ? "" : coverPhoto.PathLink;
             result.AboutUsImage = aboutUsImage == null ? "" : aboutUsImage.PathLink;
             return result;
