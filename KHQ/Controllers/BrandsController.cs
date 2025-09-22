@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +15,7 @@ namespace KHQ.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
+
         public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -23,11 +24,35 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<BrandsDto>> GetAll()
+        public async Task<BrandDtoNew> GetAll()
         {
             var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
+
+            var bh_brandsData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 2).FirstOrDefaultAsync();
+            var bh_result = _mapper.Map<BaseHomeDto>(bh_brandsData);
+
             var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
-            return result;
+
+            foreach (BrandsDto brands in result)
+            {
+                // Initialize PathLink if it's null
+                if (brands.ImageLink == null)
+                {
+                    brands.ImageLink = "";
+                }
+
+                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Brands).ToListAsync();
+
+                foreach (var image in images)
+                {
+                    brands.ImageLink = image.PathLink;
+                }
+            }
+            BrandDtoNew brandDtoNew = new BrandDtoNew();
+            brandDtoNew.BrandsDtos = (List<BrandsDto>)result;
+            brandDtoNew.Main_Description = bh_result.Description;
+            brandDtoNew.Title = bh_result.Title;
+            return brandDtoNew;
         }
 
         [HttpGet]
