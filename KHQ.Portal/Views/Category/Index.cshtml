@@ -308,7 +308,7 @@ $(document).ready(function () {
         if (selectedFiles) {
             formData.append("images", selectedFiles);
         }
-        formData.append("imageType", 5);
+        formData.append("imageType", 9);
 
         $.ajax({
             url: '/api/Common/SaveImages',
@@ -436,7 +436,7 @@ function saveEdit(itemId) {
         formData.append("existingImages", oldSelectedFiles);
     }
 
-    formData.append("imageType", 5);
+    formData.append("imageType", 9);
     formData.append('fKey', itemId);
 
     $.ajax({
