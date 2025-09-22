@@ -1,4 +1,5 @@
-﻿using KHQ.Middleware;
+﻿using KHQ.Caching;
+using KHQ.Middleware;
 using KHQ.Repo.Data;
 using KHQ.Repo.Repositories;
 using KHQ.Repo.UOW;
@@ -25,6 +26,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, CacheService>();
+
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {

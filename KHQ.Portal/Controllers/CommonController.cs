@@ -73,12 +73,21 @@ namespace KHQ.Portal.Controllers
                 // handle existing with sort order
                 if (sortOrder != null && sortOrder.ExistingImages.Any())
                 {
-                    var existingImagesInDb = await _unitOfWork.Repository<Image>()
-                        .Queryable()
-                        .Where(x => x.F_Key == fKey &&
-                                    sortOrder.ExistingImages.Select(ei => ei.Path).Contains(x.PathLink))
-                        .ToListAsync();
-
+                    var existingImagesInDb = new List<Image>();
+                    if (fKey != null)
+                    {
+                        existingImagesInDb = await _unitOfWork.Repository<Image>()
+                            .Queryable()
+                            .Where(x => x.F_Key == fKey && sortOrder.ExistingImages.Select(ei => ei.Path).Contains(x.PathLink))
+                            .ToListAsync();
+                    }
+                    else
+                    {
+                        existingImagesInDb = await _unitOfWork.Repository<Image>()
+                            .Queryable()
+                            .Where(x => sortOrder.ExistingImages.Select(ei => ei.Path).Contains(x.PathLink))
+                            .ToListAsync();
+                    }
                     foreach (var existingImageData in sortOrder.ExistingImages)
                     {
                         var existingImage = existingImagesInDb.FirstOrDefault(x => x.PathLink == existingImageData.Path);

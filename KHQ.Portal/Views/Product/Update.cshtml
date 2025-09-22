@@ -231,8 +231,8 @@ function submitUpdateForm(fkey){
     // Merge existing + new with updated order
     let all=[...existingPhotos,...newPhotos];
     all.sort((a,b)=>orderedIds.indexOf(a.id)-orderedIds.indexOf(b.id));
-
-    const product={
+    debugger;
+    const productData={
         Id:fkey,
         NameEn:$("#product-name-en").val(),
         NameAr:$("#product-name-ar").val(),
@@ -252,7 +252,7 @@ function submitUpdateForm(fkey){
     $.ajax({
         url:"/Product/Update",
         type:"POST",contentType:"application/json",
-        data:JSON.stringify(product),
+        data:JSON.stringify(productData),
         success:()=>{alert("Updated!");window.location="/Product";},
         error:x=>alert("Error "+x.responseText)
     });
