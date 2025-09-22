@@ -119,6 +119,9 @@ namespace KHQ.Srv.Mapper
             CreateMap<ContactUs, ContactUsVM>().ReverseMap();
             CreateMap<ContactUsVM, ContactUs>().ReverseMap();
 
+            CreateMap<ContactUs, ContactUsDto>().ReverseMap();
+            CreateMap<ContactUsDto, ContactUs>().ReverseMap();
+
             CreateMap<Slider, SliderVM>().ReverseMap();
             CreateMap<SliderVM, Slider>().ReverseMap();
 

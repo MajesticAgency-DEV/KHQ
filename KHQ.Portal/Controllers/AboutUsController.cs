@@ -20,7 +20,8 @@ namespace KHQ.Portal.Controllers
         {
             IEnumerable<AboutUsVM> aboutUsData = await _AboutUsSrv.GetAllAsync();
             var images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Page);
-            aboutUsData.FirstOrDefault().ImageLink = images.FirstOrDefault().PathLink;
+            if (images.Count() > 0) 
+                aboutUsData.FirstOrDefault().ImageLink = images.FirstOrDefault().PathLink;
             return View(aboutUsData);
         }
         public async Task<IActionResult> CoverSection()
