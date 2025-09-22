@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,9 +23,16 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<ContactUs>> GetAll()
+        public async Task<ContactUsDto> GetAll()
         {
-            var result = await _unitOfWork.Repository<ContactUs>().Queryable().ToListAsync();
+            var contactUsData = await _unitOfWork.Repository<ContactUs>().Queryable().FirstOrDefaultAsync();
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.ContactUs_Cover).FirstOrDefaultAsync();
+
+            var result = _mapper.Map<ContactUsDto>(contactUsData);
+
+            if (result != null)
+                result.CoverPhoto = coverPhoto == null ? "" : coverPhoto.PathLink;
+
             return result;
         }
 

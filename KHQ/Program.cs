@@ -62,6 +62,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
+
 var app = builder.Build();
 
 app.UseCors("AllowAll");

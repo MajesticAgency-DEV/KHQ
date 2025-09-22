@@ -69,7 +69,7 @@
                     <div class="wt-bnr-inr-entry">
                         <div class="banner-title-outer">
                             <div class="banner-title-name">
-                                <h2 class="site-text-white">About Us</h2>
+                                <h2 class="site-text-white">Brands</h2>
                             </div>
                         </div>
                         <!-- BREADCRUMB ROW -->
@@ -77,7 +77,7 @@
                         <div>
                             <ul class="wt-breadcrumb breadcrumb-style-2">
                                 <li><a href="/">Home</a></li>
-                                <li>About us</li>
+                                <li>Brands</li>
                             </ul>
                         </div>
 
@@ -86,45 +86,9 @@
                 </div>
             </div>
             <!-- INNER PAGE BANNER END -->
-            <!-- ABOUT ONE SECTION START -->
-            <div class="section-full p-t120 p-b90 bg-no-repeat bg-no-repeat bg-bottom-center bg-gray-light" style="background-image: url()">
-                <div class="about-section-one">
-                    <div class="container">
-                        <div class="section-content">
-                            <div class="row justify-content-center d-flex">
-
-                                <div class="col-lg-6 col-md-12 m-b30">
-                                    <div class="about-clean-one">
-                                        <div class="about-clean-one-media"><img src="" alt="" class="radius-md"></div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-12 m-b30">
-                                    <div class="about-section-two-right">
-                                        <!-- TITLE START-->
-                                        <div class="left wt-small-separator-outer">
-                                            <div class="wt-small-separator site-text-primary">
-                                                <div>About Company</div>
-
-                                            </div>
-                                            <h2></h2>
-                                            <p></p>
-                                        </div>
-                                        <!-- TITLE END-->
-
-                                        <ul class="site-list-style-two">
-                                            <li><div class="check-list-outer"><span><i class="flaticon-checked"></i></span></div></li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ABOUT ONE SECTION END -->
+            <!-- BRANDS SECTION START -->
+            <div data-include="layout/home/brands.html"></div>
+            <!-- BRANDS SECTION  SECTION END -->
 
 
         </div>
@@ -176,46 +140,10 @@
             function loadAboutOnce() {
                 if (loadAboutOnce._called) return; loadAboutOnce._called = true;
                 $.ajax({
-                    url: "/api/AboutUs/GetAll",
+                    url: "/api/Brands/GetAll",
                     method: "GET"
                 }).done(function (data) {
                     var first = data;
-                    var $titleEl = $(".about-section-two-right .left h2");
-                    var $descEl = $(".about-section-two-right .left p");
-                    var $bgEl = $(".bg-section");
-                    var $points = $(".site-list-style-two");
-                    var $aboutImg = $(".about-clean-one-media img");
-
-                    if (first && typeof first.title === "string") {
-                        $titleEl.text(first.title);
-                    }
-                    if (first && typeof first.description === "string") {
-                        $descEl.text(first.description);
-                    }
-                    debugger
-                    if (first && typeof first.coverPhoto === "string" && first.coverPhoto.trim() !== "") {
-                        $bgEl.css("background-image", "url(" + first.coverPhoto + ")");
-                    }
-                    if (first?.aboutUsImage) {
-                        $aboutImg.attr("src", first.aboutUsImage);
-                    }
-                    $points.empty(); // remove any static <li> items
-                    if (Array.isArray(first.h_AboutUsDto)) {
-                        first.h_AboutUsDto.forEach(function (item) {
-                            if (item && typeof item.point === "string") {
-                                // If you want to use the icon, you can also use item.icon here.
-                                var iconClass = item.icon ? item.icon : "flaticon-checked";
-                                $points.append(
-                                    '<li>' +
-                                    '<div class="check-list-outer">' +
-                                    '<span><i class="flaticon-checked"></i></span> ' +
-                                    $('<div/>').text(item.point).html() + // safe text
-                                    '</div>' +
-                                    '</li>'
-                                );
-                            }
-                        });
-                    }
 
                 }).fail(function (xhr) {
                     if (window && window.console) {

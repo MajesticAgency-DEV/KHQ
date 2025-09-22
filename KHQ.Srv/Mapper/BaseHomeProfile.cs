@@ -24,9 +24,9 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<StainDetails, StainDetailsDto>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
-    CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar"
-        ? (src.TitleAr ?? src.TitleEn)
-        : (src.TitleEn ?? src.TitleAr)));
+                CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar"
+                ? (src.TitleAr ?? src.TitleEn)
+                : (src.TitleEn ?? src.TitleAr)));
 
             CreateMap<StainDetailsDto, StainDetails>();
 
@@ -48,6 +48,7 @@ namespace KHQ.Srv.Mapper
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
+
 
             CreateMap<E_Con_Inner, E_Con_InnerDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
@@ -118,6 +119,9 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<ContactUs, ContactUsVM>().ReverseMap();
             CreateMap<ContactUsVM, ContactUs>().ReverseMap();
+
+            CreateMap<ContactUs, ContactUsDto>().ReverseMap();
+            CreateMap<ContactUsDto, ContactUs>().ReverseMap();
 
             CreateMap<Slider, SliderVM>().ReverseMap();
             CreateMap<SliderVM, Slider>().ReverseMap();

@@ -123,6 +123,21 @@
                                            required="" placeholder="Enter name of title">@item.DescriptionAr</textarea>
                                         <span class="validationDescAr text-danger display-none">* this field is required</span>
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="imageInput-edit" class="form-label">Upload image:</label>
+                                        <input type="file" id="imageInput-edit-@item.Id" class="form-control" onchange="uploadImage(event,'@item.Id')">
+
+                                        <div id="imagePreview-edit-@item.Id" class="mt-3 row">
+                                            <div class="image-container col-4" style="position: relative; margin-bottom: 8px;">
+                                                <img src="@item.ImageLink" class="img-thumbnail oldSelectedImg-@item.Id" style="max-width: 150px;">
+                                                <button type="button" class="btn btn-danger btn-sm remove-Img" style="position: absolute; bottom: 0px; right: 2px;"><i class="fa-light fa-trash"></i></button>
+                                            </div>
+                                            
+                                        </div>
+                                        <span class="validationImage text-danger display-none">* this field is required</span>
+                                    </div>
+
                                     <div class="mb-2 text-center">
                                         <button class="btn btn-primary btn-submit" id="EditAboutUsSectionsbtn-@item.Id"
                                             type="button" onclick="saveEdit('@item.Id')">
@@ -149,6 +164,11 @@
                         <h5 class="mt-3">Description in arabic:</h5>
                         <p>@item.DescriptionAr</p>
                         <hr />
+                        <div class="row row-gap-3">
+                            <div class="col-12">
+                                    <img src="@item.ImageLink" style="width: 100%;" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -189,6 +209,14 @@
                            required="" placeholder="Enter name of title"></textarea>
                         <span class="validationDescAr text-danger display-none">* this field is required</span>
                     </div>
+                    <div class="mb-3">
+                        <label for="ImageUpload" class="form-label">Upload image:</label>
+                        <input type="file" id="imageInput" class="form-control">
+                        <div id="imagePreview" class="mt-3 row"></div>
+
+                        <span class="validationImage text-danger display-none">* this field is required</span>
+                    </div>
+
                     <div class="mb-2 text-center">
                         <button class="btn btn-primary btn-submit" id="SaveAboutUsSectionsbtn"
                                 type="button">
@@ -207,8 +235,117 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
 
 <script>
+var selectedFiles = null;
+// Create object to store files for each edit modal separately
+var editModalFiles = {};
+
+// Use event delegation for remove buttons to handle dynamically generated content
+$(document).on("click", ".remove-Img", function(){
+    const $container = $(this).closest('.image-container');
+    const $preview = $container.closest('[id^="imagePreview-edit-"]');
+    
+    // Extract item ID from preview div ID
+    const previewId = $preview.attr('id');
+    if (previewId) {
+        const itemId = previewId.replace('imagePreview-edit-', '');
+        // Clear the stored file for this item
+        delete editModalFiles[itemId];
+    }
+    
+    $container.remove();
+});
+
 $(document).ready(function () {
+
+    $("#imageInput").on("change", function (event) {
+        const imagePreview = $("#imagePreview");
+        
+        selectedFiles = event.target.files[0] || null;
+        imagePreview.empty();
+        
+        if (selectedFiles) {
+            const imageContainer = $("<div>").addClass("image-container col-4")
+                .css({
+                    "position": "relative",
+                    "margin-bottom": "8px"
+                });
+            
+            const img = $("<img>")
+                .attr("src", URL.createObjectURL(selectedFiles))
+                .addClass("img-thumbnail")
+                .css("max-width", "150px");
+
+            const deleteButton = $("<button>")
+                .attr("type", "button")
+                .addClass("btn btn-danger btn-sm")
+                .css({
+                    "position": "absolute",
+                    "bottom": "0",
+                    "right": "0"
+                })
+                .html('<i class="fa-light fa-trash"></i>')
+                .on("click", function () {
+                    selectedFiles = null;
+                    imageContainer.remove();
+                    $("#imageInput").val('');
+                });
+
+            imageContainer.append(img, deleteButton);
+            imagePreview.append(imageContainer);
+        }
+    });
+
     $('#SaveAboutUsSectionsbtn').click(function () {
+        var formData = new FormData();
+
+        if (!selectedFiles) {
+            $(".validationImage").removeClass("display-none");
+        } else {
+            $(".validationImage").addClass("display-none");
+        }
+
+        if (selectedFiles) {
+            formData.append("images", selectedFiles);
+        }
+        formData.append("imageType", 2);
+
+        $.ajax({
+            url: '/api/Common/SaveImages',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                submitForm(result.fkey);
+            },
+            error: function (xhr, status, error) {
+                showError('Error saving images: ' + xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on("click", ".deleteAboutUs", function () {
+        var id = $(this).data('id');
+        var formData = new FormData();
+        formData.append('id', id);
+
+        $.ajax({
+            url: '@Url.Action("Delete", "AboutUs")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+});
+
+function submitForm(fkey) {
     var validation = true;
     var titleValue = $('#title').val();
     var titleArValue = $('#titleAr').val();
@@ -267,34 +404,56 @@ $(document).ready(function () {
             }
         });
     }
-    });
-
-    $(document).on("click", ".deleteAboutUs", function () {
-        var id = $(this).data('id');
-        var formData = new FormData();
-        formData.append('id', id);
-
-        $.ajax({
-            url: '@Url.Action("Delete", "AboutUs")',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function () {
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    });
-});
-
-function submitForm(fkey) {
-
 }
 
 function saveEdit(itemId) {
+        var formData = new FormData();
+    var oldSelectedFiles = null;
+    var oldSelectedFilesDiv = $("img").filter(".oldSelectedImg-" + itemId);
+
+    // Get single old image src
+    if (oldSelectedFilesDiv.length > 0) {
+        oldSelectedFiles = oldSelectedFilesDiv.eq(0).attr("src");
+    }
+
+    // Check for image using the item-specific storage
+    if (!editModalFiles[itemId] && !oldSelectedFiles) {
+        $(".validationImage").removeClass("display-none");
+        return; // Don't proceed if no image
+    } else {
+        $(".validationImage").addClass("display-none");
+    }
+
+    // Append single selected file for this specific item
+    if (editModalFiles[itemId]) {
+        formData.append("images", editModalFiles[itemId]);
+    }
+    
+    // Append single old image
+    if (oldSelectedFiles) {
+        formData.append("existingImages", oldSelectedFiles);
+    }
+
+    formData.append("imageType", 2);
+    formData.append('fKey', itemId);
+
+    $.ajax({
+        url: '/api/Common/SaveImages',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            editForm(result.fkey);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error saving images:', xhr.responseText);
+            alert('Error saving images. Please try again.');
+        }
+    });
+}
+
+function editForm(itemId) {
     var validation = true;
     
     var titleValue = $('#title-edit-' + itemId).val();
@@ -354,6 +513,64 @@ function saveEdit(itemId) {
                 console.log(xhr.responseText);
             }
         });
+    }
+}
+
+function uploadImage(event, itemId) {
+    try {
+        const imagePreview = $("#imagePreview-edit-" + itemId);
+        
+        // Store file specifically for this item
+        editModalFiles[itemId] = event.target.files[0] || null;
+        
+        // Clear previous preview
+        imagePreview.empty();
+
+        if (editModalFiles[itemId]) {
+            // Create a container for the image with a delete button
+            const imageContainer = $("<div>")
+                .addClass("image-container col-4")
+                .css({
+                    "position": "relative",
+                    "margin-bottom": "8px"
+                });
+            
+            // Create an image element for the selected image
+            const img = $("<img>")
+                .attr("src", URL.createObjectURL(editModalFiles[itemId]))
+                .addClass("img-thumbnail")
+                .css("max-width", "150px")
+                .on('error', function() {
+                    console.error('Failed to load image preview');
+                    imageContainer.remove();
+                });
+
+            // Create a delete button for the image
+            const deleteButton = $("<button>")
+                .attr("type", "button")
+                .addClass("btn btn-danger btn-sm")
+                .css({
+                    "position": "absolute",
+                    "bottom": "0",
+                    "right": "0"
+                })
+                .html('<i class="fa-light fa-trash"></i>')
+                .on("click", function () {
+                    // Clear the selected file for this specific item
+                    delete editModalFiles[itemId];
+                    imageContainer.remove();
+                    $("#imageInput-edit-" + itemId).val(''); // Clear the file input
+                });
+
+            // Append the image and delete button to the container
+            imageContainer.append(img, deleteButton);
+
+            // Append the container to the image preview div
+            imagePreview.append(imageContainer);
+        }
+    } catch (error) {
+        console.error('Error in uploadImage function:', error);
+        alert('Error uploading image. Please try again.');
     }
 }
 </script>
