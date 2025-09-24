@@ -13,5 +13,6 @@ namespace KHQ.Domain.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public string ButtonText { get; set; }
+        public List<string> Images { get; set; }
     }
 }

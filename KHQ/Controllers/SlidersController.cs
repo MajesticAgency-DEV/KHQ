@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KHQ.Caching;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
@@ -14,20 +15,31 @@ namespace KHQ.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
 
-        public SlidersController(IUnitOfWork unitOfWork, IMapper mapper)
+        public SlidersController(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<SliderDto> GetAll()
+        public async Task<List<SliderDto>> GetAll()
         {
-            var sliderData = await _unitOfWork.Repository<Slider>().Queryable().ToListAsync();
-            var result = _mapper.Map<SliderDto>(sliderData);
-            return result;
+            _cacheService.ClearAll();
+            var slidersData = await _cacheService.GetOrCreateAsync(async () =>
+            {
+                var sliderData = await _unitOfWork.Repository<Slider>().Queryable().ToListAsync();
+                var result = _mapper.Map<List<SliderDto>>(sliderData);
+                foreach (var item in result)
+                {
+                    item.Images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == item.Id).OrderBy(x => x.Sort).Select(x => x.PathLink).ToListAsync();
+                }
+                return result;
+            }, 5 , "SlidersData");
+            return slidersData; 
         }
 
         [HttpGet]

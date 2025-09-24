@@ -242,7 +242,7 @@ function submitUpdateForm(fkey){
         CategoryId:$("#product-category").val(),
         BrandId:$("#product-brand").val(),
         SubProducts:all.map((p,i)=>({
-            Id:p.id.startsWith("existing-")?p.id.replace("existing-",""):null,
+            Id:p.id.startsWith("existing-")?p.id.replace("existing-",""):{@Guid.NewGuid()},
             DescriptionEn:p.descriptionEn,
             DescriptionAr:p.descriptionAr,
             SortOrder:i,
