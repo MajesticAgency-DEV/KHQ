@@ -41,7 +41,7 @@ namespace KHQ.Controllers
                     cat.ImageLink = "";
                 }
 
-                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Categories).ToListAsync();
+                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Categories && x.F_Key == cat.Id).ToListAsync();
 
                 foreach (var image in images)
                 {
