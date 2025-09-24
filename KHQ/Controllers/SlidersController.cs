@@ -28,7 +28,6 @@ namespace KHQ.Controllers
         [Route("GetAll")]
         public async Task<List<SliderDto>> GetAll()
         {
-            _cacheService.ClearAll();
             var slidersData = await _cacheService.GetOrCreateAsync(async () =>
             {
                 var sliderData = await _unitOfWork.Repository<Slider>().Queryable().ToListAsync();
