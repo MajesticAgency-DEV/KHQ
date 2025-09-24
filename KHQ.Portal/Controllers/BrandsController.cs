@@ -26,8 +26,7 @@ namespace KHQ.Portal.Controllers
                 {
                     brandsVM.ImageLink = "";
                 }
-
-                var images = await _imageService.GetImagesByImageTypeAsync(ImageType.Brands);
+                var images = await _imageService.GetImagesAsync(brandsVM.Id, ImageType.Brands);
 
                 foreach (var image in images)
                 {

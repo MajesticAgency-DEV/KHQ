@@ -19,19 +19,19 @@ namespace KHQ.Portal.Controllers
         {
             IEnumerable<CategoryVM> categoryData = await _CategorySrv.GetAllAsync();
 
-            foreach (CategoryVM brandsVM in categoryData)
+            foreach (CategoryVM categoryVM in categoryData)
             {
                 // Initialize PathLink if it's null
-                if (brandsVM.ImageLink == null)
+                if (categoryVM.ImageLink == null)
                 {
-                    brandsVM.ImageLink = "";
+                    categoryVM.ImageLink = "";
                 }
 
-                var images = await _imageService.GetImagesAsync(brandsVM.Id, ImageType.Brands);
+                var images = await _imageService.GetImagesAsync(categoryVM.Id, ImageType.Categories);
 
                 foreach (var image in images)
                 {
-                    brandsVM.ImageLink = image.PathLink;
+                    categoryVM.ImageLink = image.PathLink;
                 }
             }
             return View(categoryData);

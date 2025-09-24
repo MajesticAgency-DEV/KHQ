@@ -40,9 +40,7 @@ namespace KHQ.Controllers
                 {
                     brands.ImageLink = "";
                 }
-
-                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Brands).ToListAsync();
-
+                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Brands && x.F_Key == brands.Id).ToListAsync();
                 foreach (var image in images)
                 {
                     brands.ImageLink = image.PathLink;
