@@ -11,6 +11,8 @@
         ContactUs_Cover = 7,
         Product = 8,
         Categories = 9,
+        Stains = 10,
+        StainsDetails = 11,
     }
 
     public enum SectionType
@@ -21,5 +23,6 @@
         FAQ = 4 ,
         WhyChooseUs = 5 ,
         Stains = 6,
+        Statestics = 7
     }
 }

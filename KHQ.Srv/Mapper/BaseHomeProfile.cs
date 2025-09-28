@@ -28,7 +28,6 @@ namespace KHQ.Srv.Mapper
                 ? (src.TitleAr ?? src.TitleEn)
                 : (src.TitleEn ?? src.TitleAr)));
 
-            CreateMap<StainDetailsDto, StainDetails>();
 
 
             CreateMap<AboutUs, AboutUsDto>()
@@ -56,7 +55,9 @@ namespace KHQ.Srv.Mapper
 
             CreateMap<Stains, StainsDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn));
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
             CreateMap<H_AboutUs, H_AboutUsDto>()
                 .ForMember(dest => dest.Point, opt => opt.MapFrom(src =>
@@ -135,11 +136,7 @@ namespace KHQ.Srv.Mapper
             CreateMap<SocialMediaDto, SocialMedia>().ReverseMap();
             CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
 
-            CreateMap<StainsDto, Stains>().ReverseMap();
-            CreateMap<Stains, StainsDto>().ReverseMap();
 
-            CreateMap<StainDetailsDto, StainDetails>().ReverseMap();
-            CreateMap<StainDetails, StainDetailsDto>().ReverseMap();
 
             CreateMap<EmailsDto, Emails>().ReverseMap();
             CreateMap<Emails, EmailsDto>().ReverseMap();

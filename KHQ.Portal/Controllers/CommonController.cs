@@ -45,7 +45,7 @@ namespace KHQ.Portal.Controllers
                     sortOrder = ParseSortOrderData(sortOrderData);
                 }
 
-                if (fKey != Guid.Empty)
+                if (fKey != Guid.Empty && fKey != null)
                 {
                     if (sortOrder != null)
                     {

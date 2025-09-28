@@ -31,7 +31,7 @@ namespace KHQ.Controllers
 
             var statestics = await _cacheService.GetOrCreateAsync(async () =>
             {
-                var sh_Data = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 2).FirstOrDefaultAsync();
+                var sh_Data = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 7).FirstOrDefaultAsync();
                 var bh_result = _mapper.Map<BaseHomeDto>(sh_Data);
                 var e_Con_InnerData = await _unitOfWork.Repository<E_Con_Inner>().Queryable().ToListAsync();
                 var result = _mapper.Map<List<E_Con_InnerDto>>(e_Con_InnerData);

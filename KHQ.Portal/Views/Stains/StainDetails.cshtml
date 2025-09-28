@@ -1,82 +1,6 @@
 ﻿@model List<KHQ.Domain.ViewModel.StainDetailsVM>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stain Details Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Quill styles -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <style>
-        .display-none {
-            display: none;
-        }
-
-        .product-box {
-            transition: transform 0.2s;
-        }
-
-            .product-box:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            }
-
-        .product-action {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            z-index: 10;
-        }
-
-        .ql-container {
-            font-size: 16px;
-            border-bottom-left-radius: 0.375rem;
-            border-bottom-right-radius: 0.375rem;
-        }
-
-        .ql-toolbar {
-            border-top-left-radius: 0.375rem;
-            border-top-right-radius: 0.375rem;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-        }
-
-        .offcanvas-body h5 {
-            color: #3b5de7;
-            font-weight: 600;
-        }
-
-        .content {
-            padding: 20px;
-            background-color: #f5f7fb;
-        }
-
-        .breadcrumb {
-            background-color: transparent;
-            padding: 0;
-        }
-
-        .page-title-box {
-            padding: 20px 0;
-        }
-
-        .editor-label {
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .validation-message {
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }
-    </style>
-</head>
-<body>
     <div class="content">
+
         <!-- Start Content-->
         <div class="container-fluid">
 
@@ -103,7 +27,7 @@
                                 <div class="col-auto">
                                     <div class="text-lg-end my-1 my-lg-0">
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#add-modal">
+                                            data-bs-target="#add-modal">
                                             <i class="fa-regular fa-circle-plus"></i> Add New
                                         </button>
                                     </div>
@@ -115,143 +39,174 @@
             </div>
             <!-- end row-->
 
-            <div class="row" id="stain-details-container">
+            <div class="row">
                 @foreach (var item in Model)
                 {
-                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
-                        <div class="card product-box h-100">
-                            <div class="card-body position-relative">
-                                <div class="product-action">
-                                    <input value="@item.Id" type="hidden" class="stain-detail-id" />
-                                    <button class="btn btn-xs btn-light mt-2 mt-md-0 me-1" type="button"
-                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvas-@item.Id"
-                                            aria-controls="offcanvas-@item.Id">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-success me-1" data-bs-toggle="modal"
-                                            data-bs-target="#edit-modal-@item.Id">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#delete-modal-@item.Id">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card product-box">
+                        <div class="card-body">
+                            <div class="product-action">
+                                <input value="@item.Id" type="hidden" id="StainDetailsId-@item.Id" />
+                                <button class="btn btn-xs waves-effect waves-light mt-2 mt-md-0" type="button"
+                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-@item.Id"
+                                    aria-controls="offcanvasRight" style="background:#ccc">
+                                    <i class="fa-light fa-eye text-white"></i>
+                                </button>
+                                <button type="button" class="btn btn-success btn-xs waves-effect waves-light"
+                                    data-bs-toggle="modal" data-bs-target="#edit-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs waves-effect waves-light"
+                                    data-bs-toggle="modal" data-bs-target="#danger-alert-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-trash"></i>
+                                </button>
+                            </div>
 
-                                <div class="product-info">
-                                    <div class="col-12">
-                                        <div class="card border-primary border mb-3">
-                                            <div class="card-body">
-                                                <h5>Stain: @item.StainsVM.NameEn / @item.StainsVM.NameAr</h5>
+                            <div class="product-info">
+                                <div class="col-12">
+                                    <div class="card border-primary border mb-3">
+                                        <div class="card-body">
+                                            <h4>Stain name: <br /> @item.StainsVM.NameEn / @item.StainsVM.NameAr</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-primary">Title: @item.TitleEn / @item.TitleAr
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+
+                <!-- UPDATED: Added data-stain-id attribute to edit modal -->
+                <div id="edit-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+                    data-stain-id="@item.StainsVM.Id">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="alert alert-success alert-success-edit display-none">
+                                    <i class="fa-sharp fa-light fa-circle-check"></i> Section edited successfully.
+                                </div>
+                                <form id="StainDetailsFormEdit" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="section-select-edit-@item.Id" class="form-label">Select
+                                            stain</label>
+                                        <select class="form-select section-select" id="section-select-edit-@item.Id">
+                                            <option value="">-- Select Stain --</option>
+                                        </select>
+                                        <span class="validationStain text-danger display-none">* this field is
+                                            required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="title-edit-@item.Id" class="form-label">Title in english:</label>
+                                        <input class="form-control" type="text" id="title-edit-@item.Id" required=""
+                                            placeholder="Enter name of title" value="@item.TitleEn">
+                                        <span class="validationTitle text-danger display-none">* this field is
+                                            required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="titleAr-edit-@item.Id" class="form-label">Title in arabic:</label>
+                                        <input class="form-control" type="text" id="titleAr-edit-@item.Id" required=""
+                                            placeholder="Enter name of title" value="@item.TitleAr">
+                                        <span class="validationTitleAr text-danger display-none">* this field is
+                                            required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="desc-edit-@item.Id" class="form-label">Description in
+                                            english:</label>
+                                        <textarea class="form-control" type="text" id="desc-edit-@item.Id" required=""
+                                            placeholder="Enter name of title">@item.DescriptionEn</textarea>
+                                        <span class="validationDesc text-danger display-none">* this field is
+                                            required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descAr-edit-@item.Id" class="form-label">Description in
+                                            arabic:</label>
+                                        <textarea class="form-control" type="text" id="descAr-edit-@item.Id" required=""
+                                            placeholder="Enter name of title">@item.DescriptionAr</textarea>
+                                        <span class="validationDescAr text-danger display-none">* this field is
+                                            required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="imageInput-edit" class="form-label">Upload image:</label>
+                                        <input type="file" id="imageInput-edit-@item.Id" class="form-control"
+                                            onchange="uploadImage(event,'@item.Id')">
+
+                                        <div id="imagePreview-edit-@item.Id" class="mt-3 row">
+                                            <div class="image-container col-4"
+                                                style="position: relative; margin-bottom: 8px;">
+                                                <img src="@item.ImageLink" class="img-thumbnail oldSelectedImg-@item.Id"
+                                                    style="max-width: 150px;">
+                                                <button type="button" class="btn btn-danger btn-sm remove-Img"
+                                                    style="position: absolute; bottom: 0px; right: 2px;"><i
+                                                        class="fa-light fa-trash"></i></button>
                                             </div>
-                                            <div class="card-body">
-                                                <h6 class="card-title text-primary">Title: @item.TitleEn / @item.TitleAr</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Edit Modal for this item -->
-                    <div id="edit-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-stain-id="@item.StainsVM.Id">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Edit Stain Detail</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="alert alert-success alert-edit-success display-none" id="edit-success-@item.Id">
-                                        <i class="fa-sharp fa-light fa-circle-check"></i> Section updated successfully.
+                                        </div>
+                                        <span class="validationImage text-danger display-none">* this field is
+                                            required</span>
                                     </div>
-                                    <form class="stain-detail-edit-form" data-id="@item.Id">
-                                        <div class="mb-3">
-                                            <label for="section-select-edit-@item.Id" class="form-label">Select stain</label>
-                                            <select class="form-select" id="section-select-edit-@item.Id" required>
-                                                <option value="">-- Select Stain --</option>
-                                                <!-- Options will be loaded dynamically -->
-                                            </select>
-                                            <div class="invalid-feedback validationStain">Please select a stain</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="title-en-edit-@item.Id" class="form-label">Title in English:</label>
-                                            <input class="form-control" type="text" id="title-en-edit-@item.Id"
-                                                   required value="@item.TitleEn" placeholder="Enter title in English">
-                                            <div class="invalid-feedback validationTitle">Please provide a title in English</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="title-ar-edit-@item.Id" class="form-label">Title in Arabic:</label>
-                                            <input class="form-control" type="text" id="title-ar-edit-@item.Id"
-                                                   required value="@item.TitleAr" placeholder="Enter title in Arabic">
-                                            <div class="invalid-feedback validationTitleAr">Please provide a title in Arabic</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Description in English:</label>
-                                            <div id="editor-en-edit-@item.Id" style="height: 200px;"></div>
-                                            <div class="invalid-feedback validationDesc">Please provide a description in English</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Description in Arabic:</label>
-                                            <div id="editor-ar-edit-@item.Id" style="height: 200px;"></div>
-                                            <div class="invalid-feedback validationDescAr">Please provide a description in Arabic</div>
-                                        </div>
-                                        <div class="mb-2 text-center">
-                                            <button class="btn btn-primary btn-save-edit" type="submit" data-id="@item.Id">
-                                                Save Changes
-                                            </button>
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- View Offcanvas for this item -->
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas-@item.Id" aria-labelledby="offcanvas-label-@item.Id">
-                        <div class="offcanvas-header">
-                            <div>
-                                <h5 id="offcanvas-label-@item.Id">@item.StainsVM.NameEn / @item.StainsVM.NameAr</h5>
-                            </div>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <h5 class="mt-3">Title in English:</h5>
-                            <p>@item.TitleEn</p>
-                            <hr />
-                            <h5 class="mt-3">Title in Arabic:</h5>
-                            <p>@item.TitleAr</p>
-                            <hr />
-                            <h5 class="mt-3">Description in English:</h5>
-                            <div class="ql-snow">
-                                <div class="ql-editor">@Html.Raw(item.DescriptionEn)</div>
-                            </div>
-                            <hr />
-                            <h5 class="mt-3">Description in Arabic:</h5>
-                            <div class="ql-snow">
-                                <div class="ql-editor">@Html.Raw(item.DescriptionAr)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Delete Modal for this item -->
-                    <div id="delete-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content modal-filled bg-danger">
-                                <div class="modal-body p-4">
-                                    <div class="text-center">
-                                        <i class="fas fa-exclamation-triangle text-white fa-2x"></i>
-                                        <h4 class="mt-2 text-white">Confirm Deletion</h4>
-                                        <p class="mt-3 text-white">Are you sure you want to delete this stain detail?</p>
-                                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-outline-light my-2 btn-confirm-delete" data-id="@item.Id">Delete</button>
+                                    <div class="mb-2 text-center">
+                                        <button class="btn btn-primary btn-submit"
+                                            id="EditStainDetailsSectionsbtn-@item.Id" type="button"
+                                            onclick="saveEdit('@item.Id')">
+                                            Save
+                                        </button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-@item.Id"
+                    aria-labelledby="offcanvasRightLabel-@item.Id">
+                    <div class="offcanvas-header">
+                        <div>
+                            <h3 id="offcanvasRightLabel-@item.Id">@item.StainsVM.NameEn</h3>
+                            <h3>@item.StainsVM.NameAr</h3>
+                        </div>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <h5 class="mt-3">Title in english:</h5>
+                        <p>@item.TitleEn</p>
+                        <hr />
+                        <h5 class="mt-3">Title in arabic:</h5>
+                        <p>@item.TitleAr</p>
+                        <hr />
+                        <h5 class="mt-3">Description in english:</h5>
+                        <p>@item.DescriptionEn</p>
+                        <hr />
+                        <h5 class="mt-3">Description in arabic:</h5>
+                        <p>@item.DescriptionAr</p>
+                        <hr />
+                        <div class="row row-gap-3">
+                            <div class="col-12">
+                                <img src="@item.ImageLink" style="width: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="danger-alert-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-filled bg-danger">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="fa-regular fa-ban text-white font-36"></i>
+                                    <h4 class="mt-2 text-white">Oh snap!</h4>
+                                    <p class="mt-3 text-white">Are you sure you want to delete ?</p>
+                                    <button type="button" data-id="@item.Id"
+                                        class="btn btn-light my-2 deleteStainDetails"
+                                        data-bs-dismiss="modal">Continue</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         </div>
@@ -259,52 +214,55 @@
 
     <!-- Add modal content -->
     <div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add New Stain Detail</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <div class="alert alert-success alert-add-success display-none">
+                    <div class="alert alert-success display-none">
                         <i class="fa-sharp fa-light fa-circle-check"></i> Section added successfully.
                     </div>
-                    <form id="stain-details-add-form">
+                    <form id="StainDetailsForm" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="section-select-add" class="form-label">Select stain</label>
-                            <select class="form-select" id="section-select-add" required>
-                                <option value="">-- Select Stain --</option>
-                                <!-- Options will be loaded dynamically -->
+                            <select class="form-select section-select" id="section-select-add">
+                                <option value="">-- Select Section --</option>
                             </select>
-                            <div class="invalid-feedback validationStain">Please select a stain</div>
+                            <span class="validationStain text-danger display-none">* this field is required</span>
                         </div>
                         <div class="mb-3">
-                            <label for="title-en-add" class="form-label">Title in English:</label>
-                            <input class="form-control" type="text" id="title-en-add"
-                                   required placeholder="Enter title in English">
-                            <div class="invalid-feedback validationTitle">Please provide a title in English</div>
+                            <label for="title" class="form-label">Title in english:</label>
+                            <input class="form-control" type="text" id="title" required=""
+                                placeholder="Enter name of title">
+                            <span class="validationTitle text-danger display-none">* this field is required</span>
                         </div>
                         <div class="mb-3">
-                            <label for="title-ar-add" class="form-label">Title in Arabic:</label>
-                            <input class="form-control" type="text" id="title-ar-add"
-                                   required placeholder="Enter title in Arabic">
-                            <div class="invalid-feedback validationTitleAr">Please provide a title in Arabic</div>
+                            <label for="titleAr" class="form-label">Title in arabic:</label>
+                            <input class="form-control" type="text" id="titleAr" required=""
+                                placeholder="Enter name of title">
+                            <span class="validationTitleAr text-danger display-none">* this field is required</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Description in English:</label>
-                            <div id="editor-en-add" style="height: 200px;"></div>
-                            <div class="invalid-feedback validationDesc">Please provide a description in English</div>
+                            <label for="desc" class="form-label">Description in english:</label>
+                            <textarea class="form-control" type="text" id="desc" required=""
+                                placeholder="Enter name of title"></textarea>
+                            <span class="validationDesc text-danger display-none">* this field is required</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Description in Arabic:</label>
-                            <div id="editor-ar-add" style="height: 200px;"></div>
-                            <div class="invalid-feedback validationDescAr">Please provide a description in Arabic</div>
+                            <label for="descAr" class="form-label">Description in arabic:</label>
+                            <textarea class="form-control" type="text" id="descAr" required=""
+                                placeholder="Enter name of title"></textarea>
+                            <span class="validationDescAr text-danger display-none">* this field is required</span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ImageUpload" class="form-label">Upload image:</label>
+                            <input type="file" id="imageInput" class="form-control">
+                            <div id="imagePreview" class="mt-3 row"></div>
+
+                            <span class="validationImage text-danger display-none">* this field is required</span>
                         </div>
                         <div class="mb-2 text-center">
-                            <button class="btn btn-primary" id="save-stain-details-btn" type="submit">
+                            <button class="btn btn-primary btn-submit" id="SaveStainDetailsSectionsbtn" type="button">
                                 Save
                             </button>
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -312,178 +270,197 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            // Initialize Quill editors for add modal
-            const quillEnAdd = new Quill('#editor-en-add', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                },
-                placeholder: 'Enter description in English...'
-            });
+        // Replace the existing JavaScript with this improved version
 
-            const quillArAdd = new Quill('#editor-ar-add', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                },
-                placeholder: 'أدخل الوصف بالعربية...'
-            });
+        var selectedFiles = null;
+        // Create object to store files for each edit modal separately
+        var editModalFiles = {};
 
-            // Store all Quill instances
-            const quillInstances = {
-                add: { en: quillEnAdd, ar: quillArAdd }
-            };
+        // Use event delegation for remove buttons to handle dynamically generated content
+        $(document).on("click", ".remove-Img", function () {
+            const $container = $(this).closest('.image-container');
+            const $preview = $container.closest('[id^="imagePreview-edit-"]');
 
-            // Initialize Quill editors for edit modals
-            @foreach (var item in Model)
-            {
-                    <text>
-                    const quillEnEdit_@(item.Id) = new Quill('#editor-en-edit-@item.Id', {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [
-                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                ['bold', 'italic', 'underline', 'strike'],
-                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                                [{ 'color': [] }, { 'background': [] }],
-                                ['link', 'image'],
-                                ['clean']
-                            ]
-                        }
-                    });
-
-                    const quillArEdit_@(item.Id) = new Quill('#editor-ar-edit-@item.Id', {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [
-                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                ['bold', 'italic', 'underline', 'strike'],
-                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                                [{ 'color': [] }, { 'background': [] }],
-                                ['link', 'image'],
-                                ['clean']
-                            ]
-                        }
-                    });
-
-                    // Set content for editors
-                    quillEnEdit_@(item.Id).root.innerHTML = '@Html.Raw(item.DescriptionEn)';
-                    quillArEdit_@(item.Id).root.innerHTML = '@Html.Raw(item.DescriptionAr)';
-
-                    // Store editors
-                    quillInstances['edit-@item.Id'] = {
-                        en: quillEnEdit_@(item.Id),
-                        ar: quillArEdit_@(item.Id)
-                    };
-                    </text>
+            // Extract item ID from preview div ID
+            const previewId = $preview.attr('id');
+            if (previewId) {
+                const itemId = previewId.replace('imagePreview-edit-', '');
+                // Clear the stored file for this item
+                delete editModalFiles[itemId];
             }
 
-            // Load stains for dropdown
-            function loadStains(selectElementId, selectedId = null) {
-                $.ajax({
-                    url: '@Url.Action("GetAllStains", "Stains")',
-                    type: 'GET',
-                    success: function(data) {
-                        const $select = $(`#${selectElementId}`);
-                        $select.empty().append('<option value="">-- Select Stain --</option>');
+            $container.remove();
+        });
 
-                        // Handle different response formats
-                        const stains = data.$values || data;
+        $(document).ready(function () {
 
-                        $.each(stains, function(index, stain) {
-                            const selected = selectedId && stain.id == selectedId ? 'selected' : '';
-                            $select.append(
-                                `<option value="${stain.id}" ${selected}>${stain.nameEn} / ${stain.nameAr}</option>`
-                            );
+            // Modified image input change handler for single image (ADD modal)
+            $("#imageInput").on("change", function (event) {
+                const imagePreview = $("#imagePreview");
+
+                selectedFiles = event.target.files[0] || null;
+                imagePreview.empty();
+
+                if (selectedFiles) {
+                    const imageContainer = $("<div>").addClass("image-container col-4")
+                        .css({
+                            "position": "relative",
+                            "margin-bottom": "8px"
                         });
+
+                    const img = $("<img>")
+                        .attr("src", URL.createObjectURL(selectedFiles))
+                        .addClass("img-thumbnail")
+                        .css("max-width", "150px");
+
+                    const deleteButton = $("<button>")
+                        .attr("type", "button")
+                        .addClass("btn btn-danger btn-sm")
+                        .css({
+                            "position": "absolute",
+                            "bottom": "0",
+                            "right": "0"
+                        })
+                        .html('<i class="fa-light fa-trash"></i>')
+                        .on("click", function () {
+                            selectedFiles = null;
+                            imageContainer.remove();
+                            $("#imageInput").val('');
+                        });
+
+                    imageContainer.append(img, deleteButton);
+                    imagePreview.append(imageContainer);
+                }
+            });
+
+            // Load stains when page loads (for add modal)
+            loadStrainsForDropdown('#section-select-add');
+
+            // Reload stains when add modal opens
+            $('#add-modal').on('show.bs.modal', function () {
+                loadStrainsForDropdown('#section-select-add');
+            });
+
+            // Load stains with pre-selection when edit modal opens
+            $('[id^="edit-modal-"]').on('show.bs.modal', function () {
+                var modal = $(this);
+                var stainId = modal.data('stain-id'); // Get the stain ID from data attribute
+                var modalId = modal.attr('id').replace('edit-modal-', '');
+                var dropdownSelector = '#section-select-edit-' + modalId;
+
+                // Load stains and pre-select the current stain
+                loadStrainsForDropdown(dropdownSelector, stainId);
+            });
+
+            // Save functionality for add
+            $('#SaveStainDetailsSectionsbtn').click(function () {
+                var formData = new FormData();
+
+                if (!selectedFiles) {
+                    $(".validationImage").removeClass("display-none");
+                } else {
+                    $(".validationImage").addClass("display-none");
+                }
+
+                if (selectedFiles) {
+                    formData.append("images", selectedFiles);
+                }
+                formData.append("imageType", 11);
+
+                $.ajax({
+                    url: '/api/Common/SaveImages',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        submitForm(result.fkey);
                     },
-                    error: function() {
-                        console.error('Failed to load stains');
+                    error: function (xhr, status, error) {
+                        showError('Error saving images: ' + xhr.responseText);
                     }
                 });
+            });
+
+            // Delete functionality
+            $(document).on("click", ".deleteStainDetails", function () {
+                var id = $(this).data('id');
+                var formData = new FormData();
+                formData.append('id', id);
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "StainDetails")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response && response.success) {
+                            location.reload();
+                        } else {
+                            location.reload(); // Still reload even if no JSON response for compatibility
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("An error occurred while deleting stain details");
+                    }
+                });
+            });
+        });
+
+        function submitForm(fkey) {
+            var validation = true;
+            var titleValue = $('#title').val();
+            var titleArValue = $('#titleAr').val();
+            var descValue = $('#desc').val();
+            var descArValue = $('#descAr').val();
+            var selectedStain = $('#section-select-add').val();
+
+            // Validation logic
+            if (titleValue == "") {
+                $(".validationTitle").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationTitle").addClass("display-none");
+            }
+            if (titleArValue == "") {
+                $(".validationTitleAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationTitleAr").addClass("display-none");
+            }
+            if (descValue == "") {
+                $(".validationDesc").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDesc").addClass("display-none");
+            }
+            if (descArValue == "") {
+                $(".validationDescAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDescAr").addClass("display-none");
+            }
+            if (selectedStain == "") {
+                $(".validationStain").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationStain").addClass("display-none");
             }
 
-            // Handle add form submission
-            $('#stain-details-add-form').on('submit', function(e) {
-                e.preventDefault();
-
-                const stainId = $('#section-select-add').val();
-                const titleEn = $('#title-en-add').val();
-                const titleAr = $('#title-ar-add').val();
-                const descEn = quillEnAdd.root.innerHTML;
-                const descAr = quillArAdd.root.innerHTML;
-
-                // Basic validation
-                let isValid = true;
-
-                if (!stainId) {
-                    $('.validationStain').show();
-                    isValid = false;
-                } else {
-                    $('.validationStain').hide();
-                }
-
-                if (!titleEn) {
-                    $('.validationTitle').show();
-                    isValid = false;
-                } else {
-                    $('.validationTitle').hide();
-                }
-
-                if (!titleAr) {
-                    $('.validationTitleAr').show();
-                    isValid = false;
-                } else {
-                    $('.validationTitleAr').hide();
-                }
-
-                if (!descEn || descEn === '<p><br></p>') {
-                    $('.validationDesc').show();
-                    isValid = false;
-                } else {
-                    $('.validationDesc').hide();
-                }
-
-                if (!descAr || descAr === '<p><br></p>') {
-                    $('.validationDescAr').show();
-                    isValid = false;
-                } else {
-                    $('.validationDescAr').hide();
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                const formData = new FormData();
-                formData.append('StainsId', stainId);
-                formData.append('TitleEn', titleEn);
-                formData.append('TitleAr', titleAr);
-                formData.append('DescriptionEn', descEn);
-                formData.append('DescriptionAr', descAr);
-
-                $('#save-stain-details-btn').prop('disabled', true).html('Saving...');
+            if (validation) {
+                var formData = new FormData();
+                formData.append("TitleEn", titleValue);
+                formData.append("TitleAr", titleArValue);
+                formData.append("DescriptionEn", descValue);
+                formData.append("DescriptionAr", descArValue);
+                formData.append("StainsId", selectedStain);
+                formData.append('id', fkey);
 
                 $.ajax({
                     url: '@Url.Action("Add", "StainDetails")',
@@ -491,88 +468,150 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
-                            $('.alert-add-success').removeClass('display-none');
-                            setTimeout(function() {
-                                $('#add-modal').modal('hide');
+                            $(".alert-success").removeClass("display-none");
+                            $(".alert-success").addClass("d-flex");
+
+                            setTimeout(function () {
                                 location.reload();
-                            }, 1500);
+                            }, 1000);
                         } else {
-                            alert(response.message || 'Failed to add stain detail');
+                            alert(response.message || "Failed to add stain details");
                         }
                     },
-                    error: function() {
-                        alert('An error occurred while adding the stain detail');
-                    },
-                    complete: function() {
-                        $('#save-stain-details-btn').prop('disabled', false).html('Save');
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("An error occurred while adding stain details");
                     }
                 });
+            }
+        }
+        // Updated function to load stains for specific dropdown with optional pre-selection
+        function loadStrainsForDropdown(dropdownSelector, selectedStainId = null) {
+            $.ajax({
+                url: '@Url.Action("GetAllStains", "Stains")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $(dropdownSelector).empty();
+                    $(dropdownSelector).append('<option value="">-- Select Section --</option>');
+
+                    // Handle different response formats
+                    var stains = data.$values || data;
+
+                    $.each(stains, function (index, stain) {
+                        var isSelected = selectedStainId && stain.id == selectedStainId ? 'selected' : '';
+                        $(dropdownSelector).append(
+                            '<option value="' + stain.id + '" ' + isSelected + '>' +
+                            stain.nameEn + ' / ' + stain.nameAr + '</option>'
+                        );
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error loading stains: ' + xhr.responseText);
+                    $(dropdownSelector).empty();
+                    $(dropdownSelector).append('<option value="">Error loading sections</option>');
+                }
             });
+        }
 
-            // Handle edit form submission
-            $('.stain-detail-edit-form').on('submit', function(e) {
-                e.preventDefault();
-                const itemId = $(this).data('id');
+        // Updated edit save function
+        function saveEdit(itemId) {
+            var formData = new FormData();
+            var oldSelectedFiles = null;
+            var oldSelectedFilesDiv = $("img").filter(".oldSelectedImg-" + itemId);
 
-                const stainId = $(`#section-select-edit-${itemId}`).val();
-                const titleEn = $(`#title-en-edit-${itemId}`).val();
-                const titleAr = $(`#title-ar-edit-${itemId}`).val();
-                const descEn = quillInstances[`edit-${itemId}`].en.root.innerHTML;
-                const descAr = quillInstances[`edit-${itemId}`].ar.root.innerHTML;
+            // Get single old image src
+            if (oldSelectedFilesDiv.length > 0) {
+                oldSelectedFiles = oldSelectedFilesDiv.eq(0).attr("src");
+            }
 
-                // Basic validation
-                let isValid = true;
+            // Check for image using the item-specific storage
+            if (!editModalFiles[itemId] && !oldSelectedFiles) {
+                $(".validationImage").removeClass("display-none");
+                return; // Don't proceed if no image
+            } else {
+                $(".validationImage").addClass("display-none");
+            }
 
-                if (!stainId) {
-                    $(`#section-select-edit-${itemId}`).siblings('.validationStain').show();
-                    isValid = false;
-                } else {
-                    $(`#section-select-edit-${itemId}`).siblings('.validationStain').hide();
+            // Append single selected file for this specific item
+            if (editModalFiles[itemId]) {
+                formData.append("images", editModalFiles[itemId]);
+            }
+
+            // Append single old image
+            if (oldSelectedFiles) {
+                formData.append("existingImages", oldSelectedFiles);
+            }
+
+            formData.append("imageType", 11);
+            formData.append('fKey', itemId);
+
+            $.ajax({
+                url: '/api/Common/SaveImages',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    editForm(result.fkey);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving images:', xhr.responseText);
+                    alert('Error saving images. Please try again.');
                 }
+            });
+        }
+        function editForm(itemId) {
+            var validation = true;
 
-                if (!titleEn) {
-                    $(`#title-en-edit-${itemId}`).siblings('.validationTitle').show();
-                    isValid = false;
-                } else {
-                    $(`#title-en-edit-${itemId}`).siblings('.validationTitle').hide();
-                }
+            var titleValue = $('#title-edit-' + itemId).val();
+            var titleArValue = $('#titleAr-edit-' + itemId).val();
+            var descValue = $('#desc-edit-' + itemId).val();
+            var descArValue = $('#descAr-edit-' + itemId).val();
+            var selectedStain = $('#section-select-edit-' + itemId).val();
 
-                if (!titleAr) {
-                    $(`#title-ar-edit-${itemId}`).siblings('.validationTitleAr').show();
-                    isValid = false;
-                } else {
-                    $(`#title-ar-edit-${itemId}`).siblings('.validationTitleAr').hide();
-                }
+            // Validation logic
+            if (titleValue == "") {
+                $(".validationTitle").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationTitle").addClass("display-none");
+            }
+            if (titleArValue == "") {
+                $(".validationTitleAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationTitleAr").addClass("display-none");
+            }
+            if (descValue == "") {
+                $(".validationDesc").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDesc").addClass("display-none");
+            }
+            if (descArValue == "") {
+                $(".validationDescAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDescAr").addClass("display-none");
+            }
+            if (selectedStain == "") {
+                $(".validationStain").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationStain").addClass("display-none");
+            }
 
-                if (!descEn || descEn === '<p><br></p>') {
-                    $(`#editor-en-edit-${itemId}`).siblings('.validationDesc').show();
-                    isValid = false;
-                } else {
-                    $(`#editor-en-edit-${itemId}`).siblings('.validationDesc').hide();
-                }
-
-                if (!descAr || descAr === '<p><br></p>') {
-                    $(`#editor-ar-edit-${itemId}`).siblings('.validationDescAr').show();
-                    isValid = false;
-                } else {
-                    $(`#editor-ar-edit-${itemId}`).siblings('.validationDescAr').hide();
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                const formData = new FormData();
-                formData.append('Id', itemId);
-                formData.append('StainsId', stainId);
-                formData.append('TitleEn', titleEn);
-                formData.append('TitleAr', titleAr);
-                formData.append('DescriptionEn', descEn);
-                formData.append('DescriptionAr', descAr);
-
-                $(`.btn-save-edit[data-id="${itemId}"]`).prop('disabled', true).html('Saving...');
+            if (validation) {
+                var formData = new FormData();
+                formData.append('TitleEn', titleValue);
+                formData.append('TitleAr', titleArValue);
+                formData.append('DescriptionEn', descValue);
+                formData.append('DescriptionAr', descArValue);
+                formData.append('id', itemId);
+                formData.append('StainsId', selectedStain);
 
                 $.ajax({
                     url: '@Url.Action("Update", "StainDetails")',
@@ -580,70 +619,81 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
-                            $(`#edit-success-${itemId}`).removeClass('display-none');
-                            setTimeout(function() {
-                                $(`#edit-modal-${itemId}`).modal('hide');
+                            $(".alert-success-edit").removeClass("display-none");
+                            $(".alert-success-edit").addClass("d-flex");
+
+                            setTimeout(function () {
                                 location.reload();
-                            }, 1500);
+                            }, 1000);
                         } else {
-                            alert(response.message || 'Failed to update stain detail');
+                            alert(response.message || "Failed to update stain details");
                         }
                     },
-                    error: function() {
-                        alert('An error occurred while updating the stain detail');
-                    },
-                    complete: function() {
-                        $(`.btn-save-edit[data-id="${itemId}"]`).prop('disabled', false).html('Save Changes');
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("An error occurred while updating stain details");
                     }
                 });
-            });
-
-            // Handle delete confirmation
-            $('.btn-confirm-delete').on('click', function() {
-                const itemId = $(this).data('id');
-
-                $.ajax({
-                    url: '@Url.Action("Delete", "StainDetails")/' + itemId,
-                    type: 'POST',
-                    success: function(response) {
-                        if (response.success) {
-                            $(`#delete-modal-${itemId}`).modal('hide');
-                            location.reload();
-                        } else {
-                            alert(response.message || 'Failed to delete stain detail');
-                        $(`#delete-modal-${itemId}`).modal('hide');
-                        }
-                    },
-                    error: function() {
-                        alert('An error occurred while deleting the stain detail');
-                        $(`#delete-modal-${itemId}`).modal('hide');
-                    }
-                });
-            });
-
-            // Load stains for add modal when it's shown
-            $('#add-modal').on('show.bs.modal', function() {
-                loadStains('section-select-add');
-            });
-
-            // Load stains for edit modals when they're shown
-            @foreach (var item in Model)
-            {
-                    <text>
-                    $('#edit-modal-@item.Id').on('show.bs.modal', function() {
-                        const stainId = $(this).data('stain-id');
-                        loadStains('section-select-edit-@item.Id', stainId);
-                    });
-                    </text>
             }
+        }
 
-            // Hide validation messages when fields are filled
-            $('input, select, textarea').on('input', function() {
-                $(this).siblings('.invalid-feedback').hide();
-            });
-        });
+        function uploadImage(event, itemId) {
+            try {
+                const imagePreview = $("#imagePreview-edit-" + itemId);
+
+                // Store file specifically for this item
+                editModalFiles[itemId] = event.target.files[0] || null;
+
+                // Clear previous preview
+                imagePreview.empty();
+
+                if (editModalFiles[itemId]) {
+                    // Create a container for the image with a delete button
+                    const imageContainer = $("<div>")
+                        .addClass("image-container col-4")
+                        .css({
+                            "position": "relative",
+                            "margin-bottom": "8px"
+                        });
+
+                    // Create an image element for the selected image
+                    const img = $("<img>")
+                        .attr("src", URL.createObjectURL(editModalFiles[itemId]))
+                        .addClass("img-thumbnail")
+                        .css("max-width", "150px")
+                        .on('error', function () {
+                            console.error('Failed to load image preview');
+                            imageContainer.remove();
+                        });
+
+                    // Create a delete button for the image
+                    const deleteButton = $("<button>")
+                        .attr("type", "button")
+                        .addClass("btn btn-danger btn-sm")
+                        .css({
+                            "position": "absolute",
+                            "bottom": "0",
+                            "right": "0"
+                        })
+                        .html('<i class="fa-light fa-trash"></i>')
+                        .on("click", function () {
+                            // Clear the selected file for this specific item
+                            delete editModalFiles[itemId];
+                            imageContainer.remove();
+                            $("#imageInput-edit-" + itemId).val(''); // Clear the file input
+                        });
+
+                    // Append the image and delete button to the container
+                    imageContainer.append(img, deleteButton);
+
+                    // Append the container to the image preview div
+                    imagePreview.append(imageContainer);
+                }
+            } catch (error) {
+                console.error('Error in uploadImage function:', error);
+                alert('Error uploading image. Please try again.');
+            }
+        }
     </script>
-</body>
-</html>

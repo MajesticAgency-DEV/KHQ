@@ -1,4 +1,8 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.DTOs;
+using KHQ.Domain.Entities;
+using KHQ.Domain.ViewModel;
+using KHQ.Portal.Service;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +12,34 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IStainsService _stainsService;
         private readonly IStainDetailsSrv _stainDetailsSrv;
+        private readonly IImageService _imageService;
 
 
-        public StainsController(IStainsService stainsService, IStainDetailsSrv stainDetailsSrv)
+        public StainsController(IStainsService stainsService, IStainDetailsSrv stainDetailsSrv, IImageService imageService)
         {
             _stainsService = stainsService;
             _stainDetailsSrv = stainDetailsSrv;
+            _imageService = imageService;
         }
         public async Task<IActionResult> Index()
         {
             var stains = await _stainsService.GetAllAsync();
+
+            foreach (StainsVM stainVM in stains)
+            {
+                // Initialize PathLink if it's null
+                if (stainVM.ImageLink == null)
+                {
+                    stainVM.ImageLink = "";
+                }
+                var images = await _imageService.GetImagesAsync(stainVM.Id, ImageType.Stains);
+
+                foreach (var image in images)
+                {
+                    stainVM.ImageLink = image.PathLink;
+                }
+            }
+
             return View(stains);
         }
         [HttpGet]
@@ -33,6 +55,18 @@ namespace KHQ.Portal.Controllers
             foreach (var item in stainDetails)
             {
                 item.StainsVM = await _stainsService.GetByIdAsync(item.StainsId);
+
+                // Initialize PathLink if it's null
+                if (item.ImageLink == null)
+                {
+                    item.ImageLink = "";
+                }
+                var images = await _imageService.GetImagesAsync(item.Id, ImageType.StainsDetails);
+
+                foreach (var image in images)
+                {
+                    item.ImageLink = image.PathLink;
+                }
             }
             return View(stainDetails);
         }
@@ -48,6 +82,8 @@ namespace KHQ.Portal.Controllers
             try
             {
                 var result = await _stainsService.DeleteAsync(id);
+                var staindetailsToBeDeleted = await _stainDetailsSrv.GetByStainId(id);
+                var x = staindetailsToBeDeleted == null ? 0 : await _stainDetailsSrv.DeleteAsync(staindetailsToBeDeleted.Id);
                 if (result > 0)
                 {
                     return RedirectToAction(nameof(Index));
