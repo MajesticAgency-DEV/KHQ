@@ -33,6 +33,10 @@ namespace KHQ.Controllers
 
             var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
 
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                        .Where(x => x.ImageType == ImageType.Brands_Cover)
+                        .FirstOrDefaultAsync();
+
             foreach (BrandsDto brands in result)
             {
                 // Initialize PathLink if it's null
@@ -50,6 +54,7 @@ namespace KHQ.Controllers
             brandDtoNew.BrandsDtos = (List<BrandsDto>)result;
             brandDtoNew.Main_Description = bh_result.Description;
             brandDtoNew.Title = bh_result.Title;
+            brandDtoNew.CoverPhoto = coverPhoto.PathLink;
             return brandDtoNew;
         }
 

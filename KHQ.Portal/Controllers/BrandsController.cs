@@ -37,6 +37,11 @@ namespace KHQ.Portal.Controllers
             return View(brandsData);
         }
 
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.Brands_Cover);
+            return View(images);
+        }
         public async Task<IActionResult> GetById(Guid id)
         {
             var brandsData = await _BrandSrv.GetByIdAsync(id);

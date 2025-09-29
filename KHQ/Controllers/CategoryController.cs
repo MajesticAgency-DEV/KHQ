@@ -33,6 +33,10 @@ namespace KHQ.Controllers
 
 			var result = _mapper.Map<IEnumerable<CategoryDto>>(categoryData);
 
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+            .Where(x => x.ImageType == ImageType.Categories_Cover)
+            .FirstOrDefaultAsync();
+
             foreach (CategoryDto cat in result)
             {
                 // Initialize PathLink if it's null
@@ -53,8 +57,9 @@ namespace KHQ.Controllers
 			{
 				CategoriesDtos = result.ToList(),
 				Title = baseHomeDto?.Title,
-				Main_Description = baseHomeDto?.Description
-			};
+				Main_Description = baseHomeDto?.Description,
+				CoverPhoto = coverPhoto.PathLink
+            };
 			return dto;
 		}
 

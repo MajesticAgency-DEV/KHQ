@@ -37,7 +37,7 @@ namespace KHQ.Controllers
                                         .Where(x => x.ImageType == ImageType.AboutUs_Cover)
                                         .FirstOrDefaultAsync();
                 var aboutUsImage = await _unitOfWork.Repository<Image>().Queryable()
-                                        .Where(x => x.F_Key == aboutUsData.Id)
+                                        .Where(x => x.ImageType == ImageType.AboutUs_Page)
                                         .FirstOrDefaultAsync();
 
                 var result = _mapper.Map<AboutUsDto>(aboutUsData);
