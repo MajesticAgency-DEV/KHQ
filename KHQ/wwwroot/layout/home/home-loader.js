@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
         return (
             '<div class="col-lg-3 col-md-6 col-sm-6 m-b30">' +
             '<div class="counter-box site-text-white">' +
-            '<h2 class="counter site-text-secondry">' + number + '</h2>' +
+            '<h2 class="counter site-text-secondry" data-target="' + number + '">1</h2>' +
             '<span>' + name + '</span>' +
             '</div>' +
             '</div>'
@@ -386,6 +386,63 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                     });
                 }).join('');
                 listContainer.innerHTML = html;
+
+                // Animate counters from 1 to target when section is visible
+                try {
+                    var durationMs = 2200;
+                    var ranOnce = false;
+                    function runCounters() {
+                        if (ranOnce) return; ranOnce = true;
+                        var counters = listContainer.querySelectorAll('.counter');
+                        counters.forEach(function (el) {
+                            if (el.getAttribute('data-animated') === '1') return;
+                            el.setAttribute('data-animated', '1');
+                            var target = parseInt(el.getAttribute('data-target') || el.textContent || '0', 10) || 0;
+                            var start = 1;
+                            if (target < start) { el.textContent = String(target); return; }
+                            var startTime = null;
+                            function step(ts) {
+                                if (!startTime) startTime = ts;
+                                var progress = Math.min((ts - startTime) / durationMs, 1);
+                                var current = Math.floor(start + (target - start) * progress);
+                                if (current < start) current = start;
+                                el.textContent = String(current);
+                                if (progress < 1) {
+                                    requestAnimationFrame(step);
+                                } else {
+                                    el.textContent = String(target);
+                                }
+                            }
+                            requestAnimationFrame(step);
+                        });
+                    }
+
+                    if ('IntersectionObserver' in window) {
+                        var io = new IntersectionObserver(function (entries) {
+                            entries.forEach(function (entry) {
+                                if (entry.isIntersecting) {
+                                    runCounters();
+                                    if (io && listContainer) io.unobserve(listContainer);
+                                }
+                            });
+                        }, { threshold: 0.2 });
+                        io.observe(listContainer);
+                    } else {
+                        function isInView(el) {
+                            var rect = el.getBoundingClientRect();
+                            var vh = window.innerHeight || document.documentElement.clientHeight;
+                            return rect.top < vh * 0.8 && rect.bottom > vh * 0.2;
+                        }
+                        function onScroll() {
+                            if (!ranOnce && isInView(listContainer)) {
+                                runCounters();
+                                window.removeEventListener('scroll', onScroll);
+                            }
+                        }
+                        window.addEventListener('scroll', onScroll);
+                        onScroll();
+                    }
+                } catch (_animErr) { }
             })
             .catch(function (err) {
                 if (window && window.console) {
