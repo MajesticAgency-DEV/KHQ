@@ -231,7 +231,6 @@ function submitUpdateForm(fkey){
     // Merge existing + new with updated order
     let all=[...existingPhotos,...newPhotos];
     all.sort((a,b)=>orderedIds.indexOf(a.id)-orderedIds.indexOf(b.id));
-    debugger;
     const productData={
         Id:fkey,
         NameEn:$("#product-name-en").val(),

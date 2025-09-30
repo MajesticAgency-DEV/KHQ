@@ -102,3 +102,88 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 	document.addEventListener("DOMContentLoaded", loadFooterOnce);
 	window.addEventListener("load", loadFooterOnce);
 })();
+
+(function () {
+    // Handle clicking a top-level has-child link
+    document.addEventListener("click", function (e) {
+        const target = e.target.closest(".header-nav .nav > li.has-child > a");
+        if (target) {
+            const li = target.closest("li.has-child");
+            if (li) {
+                // Remove active/nav-active from siblings
+                const siblings = li.parentElement.querySelectorAll(".has-child");
+                siblings.forEach(sib => {
+                    if (sib !== li) {
+                        sib.classList.remove("active", "nav-active");
+                    }
+                });
+                li.classList.add("active");
+            }
+        }
+    });
+
+    // Handle submenu toggle icon
+    document.addEventListener("click", function (e) {
+        const toggleBtn = e.target.closest(".header-nav .nav > li.has-child > .submenu-toogle");
+        if (toggleBtn) {
+            const li = toggleBtn.closest("li.has-child");
+            if (li) {
+                const siblings = li.parentElement.querySelectorAll(".has-child");
+                siblings.forEach(sib => {
+                    if (sib !== li) {
+                        sib.classList.remove("active", "nav-active");
+                    }
+                });
+                li.classList.add("active");
+            }
+        }
+    });
+})();
+
+(function () {
+    function normalizeToFile(href) {
+        if (!href) return "index.html";
+        href = href.toLowerCase();
+
+        // Map "/", "./", "index", "index/" → index.html
+        if (href === "/" || href === "./" || href === "index" || href === "index/") {
+            return "index.html";
+        }
+
+        // Otherwise, get last part after slash
+        const file = href.substring(href.lastIndexOf("/") + 1);
+        return file || "index.html";
+    }
+
+    function setActiveMenuFromUrl() {
+        const path = (window.location.pathname || "").toLowerCase();
+        let currentFile;
+
+        if (path === "/" || path === "" || path.endsWith("/")) {
+            currentFile = "index.html";
+        } else {
+            currentFile = path.substring(path.lastIndexOf("/") + 1);
+        }
+
+        const items = document.querySelectorAll(".header-nav .nav > li.has-child");
+        if (!items.length) return;
+
+        items.forEach(item => item.classList.remove("active", "nav-active"));
+
+        const match = Array.from(items).find(item => {
+            const link = item.querySelector("a");
+            const linkHref = link ? link.getAttribute("href") || "" : "";
+            const hrefFile = normalizeToFile(linkHref);
+            return hrefFile === currentFile;
+        });
+
+        if (match) {
+            match.classList.add("active");
+        }
+    }
+
+    // When header fragment is injected
+    document.addEventListener("header:loaded", setActiveMenuFromUrl);
+    // Also run on full window load
+    window.addEventListener("load", setActiveMenuFromUrl);
+})();
