@@ -1,4 +1,4 @@
-﻿@model List<KHQ.Domain.ViewModel.H_AboutUsVM>
+﻿@model List<KHQ.Domain.ViewModel.WhyChooseUsVM>
 <div class="content">
 
     <!-- Start Content-->
@@ -11,10 +11,10 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
-                            <li class="breadcrumb-item active">About Us sections</li>
+                            <li class="breadcrumb-item active">Why choose us section</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">About Us sections</h4>
+                    <h4 class="page-title">Why choose us section</h4>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                     <div class="card product-box">
                         <div class="card-body">
                             <div class="product-action">
-                                <input value="@item.Id" type="hidden" id="H_AboutUsId-@item.Id" />
+                                <input value="@item.Id" type="hidden" id="WhyChooseId-@item.Id" />
                                 <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
                                         data-bs-target="#edit-modal-@item.Id">
                                     <i class="fa-sharp fa-light fa-pencil"></i>
@@ -60,7 +60,7 @@
                             <div class="product-info">
                                 <div class="row align-items-center">
                                     <div class="col d-flex gap-2">
-                                        <h5 class="font-16 mt-0 sp-line-1 text-dark m-0">@item.PointEn</h5>/ <h5 class="font-16 mt-0 sp-line-1 text-dark m-0">@item.PointAr</h5>
+                                        <h5 class="font-16 mt-0 sp-line-1 text-dark m-0">@item.TitleEn</h5>/ <h5 class="font-16 mt-0 sp-line-1 text-dark m-0">@item.TitleAr</h5>
                                     </div>
                                     <div class="col d-flex gap-2">
                                         <h3 class="m-0">@Html.Raw(item.Icon)</h3>
@@ -80,18 +80,30 @@
                                 <div class="alert alert-success alert-success-edit display-none">
                                     <i class="fa-sharp fa-light fa-circle-check"></i> Section edited successfully.
                                 </div>
-                                <form id="H_AboutUsFormEdit" enctype="multipart/form-data">
+                                <form id="WhyChooseFormEdit" enctype="multipart/form-data">
                                     <div class="mb-3">
-                                        <label for="PointEn-edit-@item.Id" class="form-label">Point in English:</label>
-                                        <input class="form-control" type="text" id="PointEn-edit-@item.Id"
-                                               required="" placeholder="Enter point in english" value="@item.PointEn">
-                                        <span class="validationPointEn text-danger display-none">* this field is required</span>
+                                        <label for="TitleEn-edit-@item.Id" class="form-label">Point in English:</label>
+                                        <input class="form-control" type="text" id="TitleEn-edit-@item.Id"
+                                               required="" placeholder="Enter point in english" value="@item.TitleEn">
+                                        <span class="validationTitleEn text-danger display-none">* this field is required</span>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="PointAr-edit-@item.Id" class="form-label">Point in Arabic:</label>
-                                        <input class="form-control" type="text" id="PointAr-edit-@item.Id"
-                                               required="" placeholder="Enter point in arabic" value="@item.PointAr">
-                                        <span class="validationPointAr text-danger display-none">* this field is required</span>
+                                        <label for="TitleAr-edit-@item.Id" class="form-label">Point in Arabic:</label>
+                                        <input class="form-control" type="text" id="TitleAr-edit-@item.Id"
+                                               required="" placeholder="Enter point in arabic" value="@item.TitleAr">
+                                        <span class="validationTitleAr text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="desc-edit-@item.Id" class="form-label">Description in english:</label>
+                                        <textarea class="form-control" type="text" id="desc-edit-@item.Id"
+                                              required="" placeholder="Enter name of title">@item.DescriptionEn</textarea>
+                                        <span class="validationDesc text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descAr-edit-@item.Id" class="form-label">Description in arabic:</label>
+                                        <textarea class="form-control" type="text" id="descAr-edit-@item.Id"
+                                              required="" placeholder="Enter name of title">@item.DescriptionAr</textarea>
+                                        <span class="validationDescAr text-danger display-none">* this field is required</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="Icon-edit-@item.Id" class="form-label">Icon:</label>
@@ -100,7 +112,7 @@
                                         <span class="validationIcon text-danger display-none">* this field is required</span>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <button class="btn btn-primary btn-submit" id="EditH_AboutUsSectionsbtn-@item.Id"
+                                        <button class="btn btn-primary btn-submit" id="EditWhyChooseSectionsbtn-@item.Id"
                                                 type="button" onclick="saveEdit('@item.Id')">
                                             Save
                                         </button>
@@ -122,7 +134,7 @@
                                     <p class="mt-3 text-white">Are you sure you want to delete?</p>
                                     <button type="button"
                                             data-id="@item.Id"
-                                            class="btn btn-light my-2 deleteH_AboutUs"
+                                            class="btn btn-light my-2 deleteWhyChoose"
                                             data-bs-dismiss="modal">
                                         Continue
                                     </button>
@@ -144,18 +156,30 @@
                 <div class="alert alert-success display-none">
                     <i class="fa-sharp fa-light fa-circle-check"></i> Section added successfully.
                 </div>
-                <form id="H_AboutUsForm" enctype="multipart/form-data">
+                <form id="WhyChooseForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="PointEn" class="form-label">Point in English:</label>
-                        <input class="form-control" type="text" id="PointEn"
-                               required="" placeholder="Enter point in english">
-                        <span class="validationPointEn text-danger display-none">* this field is required</span>
+                        <label for="TitleEn" class="form-label">Title in English:</label>
+                        <input class="form-control" type="text" id="TitleEn"
+                               required="" placeholder="Enter title in english">
+                        <span class="validationTitleEn text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-3">
-                        <label for="PointAr" class="form-label">Point in Arabic:</label>
-                        <input class="form-control" type="text" id="PointAr"
-                               required="" placeholder="Enter point in arabic">
-                        <span class="validationPointAr text-danger display-none">* this field is required</span>
+                        <label for="TitleAr" class="form-label">Title in Arabic:</label>
+                        <input class="form-control" type="text" id="TitleAr"
+                               required="" placeholder="Enter title in arabic">
+                        <span class="validationTitleAr text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc" class="form-label">Description in english:</label>
+                        <textarea class="form-control" type="text" id="desc"
+                                  required="" placeholder="Enter description in english"></textarea>
+                        <span class="validationDesc text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descAr" class="form-label">Description in arabic:</label>
+                        <textarea class="form-control" type="text" id="descAr"
+                                  required="" placeholder="Enter description in arabic"></textarea>
+                        <span class="validationDescAr text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-3">
                         <label for="Icon" class="form-label">Icon:</label>
@@ -164,7 +188,7 @@
                         <span class="validationIcon text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-2 text-center">
-                        <button class="btn btn-primary btn-submit" id="SaveH_AboutUsSectionsbtn"
+                        <button class="btn btn-primary btn-submit" id="SaveWhyChooseSectionsbtn"
                                 type="button">
                             Save
                         </button>
@@ -182,24 +206,26 @@
 
 <script>
     $(document).ready(function () {
-        $('#SaveH_AboutUsSectionsbtn').click(function () {
+        $('#SaveWhyChooseSectionsbtn').click(function () {
             var validation = true;
-            var pointEnValue = $('#PointEn').val();
-            var pointArValue = $('#PointAr').val();
+            var titleEnValue = $('#TitleEn').val();
+            var titleArValue = $('#TitleAr').val();
+            var descValue = $('#desc').val();
+            var descArValue = $('#descAr').val();
             var iconValue = $('#Icon').val();
 
             // Validation logic
-            if (pointEnValue == "") {
-                $(".validationPointEn").removeClass("display-none");
+            if (titleEnValue == "") {
+                $(".validationTitleEn").removeClass("display-none");
                 validation = false;
             } else {
-                $(".validationPointEn").addClass("display-none");
+                $(".validationTitleEn").addClass("display-none");
             }
-            if (pointArValue == "") {
-                $(".validationPointAr").removeClass("display-none");
+            if (titleArValue == "") {
+                $(".validationTitleAr").removeClass("display-none");
                 validation = false;
             } else {
-                $(".validationPointAr").addClass("display-none");
+                $(".validationTitleAr").addClass("display-none");
             }
             if (iconValue == "") {
                 $(".validationIcon").removeClass("display-none");
@@ -207,15 +233,29 @@
             } else {
                 $(".validationIcon").addClass("display-none");
             }
+            if (descValue == "") {
+                $(".validationDesc").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDesc").addClass("display-none");
+            }
+            if (descArValue == "") {
+                $(".validationDescAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDescAr").addClass("display-none");
+            }
 
             if (validation) {
                 var formData = new FormData();
-                formData.append("PointEn", pointEnValue);
-                formData.append("PointAr", pointArValue);
+                formData.append("TitleEn", titleEnValue);
+                formData.append("TitleAr", titleArValue);
+                formData.append("DescriptionEn", descValue);
+                formData.append("DescriptionAr", descArValue);
                 formData.append("Icon", iconValue);
 
                 $.ajax({
-                    url: '@Url.Action("Add", "H_AboutUs")',
+                    url: '@Url.Action("Add", "WhyChooseUs")',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -235,13 +275,13 @@
             }
         });
 
-        $(document).on("click", ".deleteH_AboutUs", function () {
+        $(document).on("click", ".deleteWhyChoose", function () {
             var id = $(this).data('id');
             var formData = new FormData();
             formData.append('id', id);
 
             $.ajax({
-                url: '@Url.Action("Delete", "H_AboutUs")',
+                url: '@Url.Action("Delete", "WhyChooseUs")',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -258,22 +298,24 @@
 
     function saveEdit(itemId) {
             var validation = true;
-            var pointEnValue = $('#PointEn-edit-' + itemId).val();
-            var pointArValue = $('#PointAr-edit-' + itemId).val();
+            var titleEnValue = $('#TitleEn-edit-' + itemId).val();
+            var titleArValue = $('#TitleAr-edit-' + itemId).val();
+            var descValue = $('#desc-edit-' + itemId).val();
+            var descArValue = $('#descAr-edit-' + itemId).val();
             var iconValue = $('#Icon-edit-' + itemId).val();
 
             // Validation logic
-            if (pointEnValue == "") {
-                $(".validationPointEn").removeClass("display-none");
+            if (titleEnValue == "") {
+                $(".validationTitleEn").removeClass("display-none");
                 validation = false;
             } else {
-                $(".validationPointEn").addClass("display-none");
+                $(".validationTitleEn").addClass("display-none");
             }
-            if (pointArValue == "") {
-                $(".validationPointAr").removeClass("display-none");
+            if (titleArValue == "") {
+                $(".validationTitleAr").removeClass("display-none");
                 validation = false;
             } else {
-                $(".validationPointAr").addClass("display-none");
+                $(".validationTitleAr").addClass("display-none");
             }
             if (iconValue == "") {
                 $(".validationIcon").removeClass("display-none");
@@ -281,16 +323,30 @@
             } else {
                 $(".validationIcon").addClass("display-none");
             }
+            if (descValue == "") {
+                $(".validationDesc").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDesc").addClass("display-none");
+            }
+            if (descArValue == "") {
+                $(".validationDescAr").removeClass("display-none");
+                validation = false;
+            } else {
+                $(".validationDescAr").addClass("display-none");
+            }
 
             if (validation) {
                 var formData = new FormData();
-                formData.append("PointEn", pointEnValue);
-                formData.append("PointAr", pointArValue);
+                formData.append("TitleEn", titleEnValue);
+                formData.append("TitleAr", titleArValue);
+                formData.append('DescriptionEn', descValue);
+                formData.append('DescriptionAr', descArValue);
                 formData.append("Icon", iconValue);
                 formData.append('id', itemId);
 
                 $.ajax({
-                    url: '@Url.Action("Update", "H_AboutUs")',
+                    url: '@Url.Action("Update", "WhyChooseUs")',
                     type: 'POST',
                     data: formData,
                     processData: false,
