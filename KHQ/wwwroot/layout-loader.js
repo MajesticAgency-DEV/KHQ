@@ -103,6 +103,82 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 	window.addEventListener("load", loadFooterOnce);
 })();
 
+(function(){
+    function getCookie(name){
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i=0;i<ca.length;i++){
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ)==0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+
+    function currentCulture(){
+        var v = getCookie('.AspNetCore.Culture');
+        if(!v){ return 'en'; }
+        var m = /c=([^\|]+)/.exec(v);
+        return m && m[1] ? m[1] : 'en';
+    }
+
+    var translationsCache = null;
+    function loadTranslations(){
+        if (translationsCache) return Promise.resolve(translationsCache);
+        return fetch('/i18n/translations.json', { credentials: 'same-origin' })
+            .then(function(r){ return r.json(); })
+            .then(function(json){ translationsCache = json || {}; return translationsCache; })
+            .catch(function(){ translationsCache = {}; return translationsCache; });
+    }
+
+    function updateTexts(){
+        var cur = currentCulture();
+        var curEl = document.getElementById('lang-current');
+        if (curEl){ curEl.textContent = cur.toUpperCase(); }
+        //if (cur === 'ar'){
+        //    document.documentElement.setAttribute('dir','rtl');
+        //    document.documentElement.setAttribute('lang','ar');
+        //} else {
+        //    document.documentElement.setAttribute('dir','ltr');
+        //    document.documentElement.setAttribute('lang','en');
+        //}
+
+        loadTranslations().then(function(map){
+            var dict = (map && map[cur]) ? map[cur] : {};
+            var nodes = document.querySelectorAll('[data-i18n-key]');
+            for (var i=0;i<nodes.length;i++){
+                var key = nodes[i].getAttribute('data-i18n-key');
+                if (key && dict[key]){
+                    nodes[i].textContent = dict[key];
+                }
+            }
+        });
+    }
+
+    function attachHandlers(){
+        var options = document.querySelectorAll('.lang-option');
+        for (var i=0;i<options.length;i++){
+            options[i].addEventListener('click', function(e){
+                e.preventDefault();
+                var lang = this.getAttribute('data-lang') || 'en';
+                // Persist culture in cookie and update UI
+                var cookieVal = 'c=' + encodeURIComponent(lang) + '|uic=' + encodeURIComponent(lang);
+                var expires = new Date(Date.now() + 365*24*60*60*1000).toUTCString();
+                document.cookie = '.AspNetCore.Culture=' + cookieVal + '; expires=' + expires + '; path=/';
+                updateTexts();
+                location.reload();
+            });
+        }
+    }
+
+    function initHeaderI18n(){
+        attachHandlers();
+        updateTexts();
+    }
+
+    document.addEventListener('header:loaded', initHeaderI18n);
+})();
+
 (function () {
     // Handle clicking a top-level has-child link
     document.addEventListener("click", function (e) {
