@@ -1,4 +1,5 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.ViewModel;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace KHQ.Portal.Controllers
     public class FAQController : Controller
     {
         private readonly IFaqService _FaqService;
+        private readonly IImageService _imageService;
 
-        public FAQController(IFaqService faqService)
+        public FAQController(IFaqService faqService, IImageService imageService)
         {
             _FaqService = faqService;
+            _imageService = imageService;
         }
         public async Task<IActionResult> Index()
         {
@@ -74,6 +77,11 @@ namespace KHQ.Portal.Controllers
             {
                 return BadRequest();
             }
+        }
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.FAQ_Cover);
+            return View(images);
         }
     }
 }
