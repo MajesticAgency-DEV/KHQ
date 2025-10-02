@@ -76,7 +76,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-success display-none">
-                    <i class="fa-sharp fa-light fa-circle-check"></i> Section update successfully.
+                    <i class="fa-sharp fa-light fa-circle-check"></i> Section saved successfully.
+                </div>
+                <div class="alert alert-danger display-none" id="error-alert">
+                    <i class="fa-sharp fa-light fa-circle-exclamation"></i> <span id="error-message"></span>
                 </div>
                 <h5 class="text-uppercase bg-light p-2">General</h5>
                 <div class="mb-3">
@@ -354,9 +357,9 @@
             contentType: "application/json",
             data: JSON.stringify(productData),
             success: function() {
-            showSuccess(mode, itemId);
+            showSuccess();
             setTimeout(function () {
-                location.reload();
+                window.location.href = "/Product/Index";
             }, 1500);            },
             error: function(xhr) {
                 $("#error-alert").text("Error saving product: " + xhr.responseText);
@@ -511,4 +514,17 @@
     $(document).ready(function () {
         loadCategories();
     });
+
+    // Show success message
+    function showSuccess() {
+        $('.alert-success').removeClass('display-none').addClass('d-flex');
+        $('.alert-danger').addClass('display-none');
+    }
+
+    // Show error message
+    function showError(message) {
+        $('#error-message').text(message);
+        $('.alert-danger').removeClass('display-none').addClass('d-flex');
+        $('.alert-success').addClass('display-none');
+    }
 </script>

@@ -69,11 +69,11 @@
                 <div class="card product-box">
                     <div class="card-body">
                         <div class="product-action">
-                            <button class="btn btn-xs waves-effect waves-light mt-2 mt-md-0" type="button"
-                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-item.Id"
+                                 <button class="btn btn-xs waves-effect waves-light mt-2 mt-md-0" type="button"
+                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-@item.Id"
                                     aria-controls="offcanvasRight" style="background:#ccc">
-                                <i class="fa-light fa-eye text-white"></i>
-                            </button>
+                                    <i class="fa-light fa-eye text-white"></i>
+                                 </button>
                             <a href="/Product/Update/@item.Id" class="btn btn-success btn-xs waves-effect waves-light">
                                 <i class="fa-sharp fa-light fa-pencil"></i>
                             </a>
@@ -100,6 +100,32 @@
                             </div> <!-- end row -->
                         </div> <!-- end product info-->
 
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-@item.Id" aria-labelledby="offcanvasRightLabel">
+                            <div class="offcanvas-header">
+                                <h3 id="offcanvasRightLabel">Name in English: @item.NameEn</h3>
+                                <h3 id="offcanvasRightLabel">Name in Arabic: @item.NameAr</h3>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+
+                            <div class="offcanvas-body">
+                                <h5 class="mt-3">Description in English: @item.DescriptionEn</h5>
+                                <hr />
+                                <h5 class="mt-3">Description in Arabic: @item.DescriptionAr</h5>
+                                <hr />
+                                <h5 class="mt-3">Price: @item.Price</h5>
+                                <hr />
+                                <div class="row row-gap-3">
+                                    <div class="col-12">
+                                        @foreach (var img in item.PathLink)
+                                            {
+                                            <img src="@img" style="width: 100%;" />
+                                            <hr />
+                                            }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
                         <div id="danger-alert-modal-@item.Id" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content modal-filled bg-danger">
