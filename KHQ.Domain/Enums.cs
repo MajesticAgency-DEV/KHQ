@@ -15,6 +15,7 @@
         StainsDetails = 11,
         Brands_Cover = 12,
         Categories_Cover = 13,
+        StainsDetails_Cover = 14,
     }
 
     public enum SectionType

@@ -454,6 +454,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
     });
     function buildBlogCardHtml(stain) {
         var imageSrc = stain && stain.imageLink ? stain.imageLink : '';
+        var id = stain && (stain.id || stain.Id) ? (stain.id || stain.Id) : '';
         var name = stain && stain.name ? stain.name : '';
         var description = stain && stain.description ? stain.description : '';
         return (
@@ -472,7 +473,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             '<h3 class="post-title">' + description + '</h3>' +
             '</div>' +
             '<div class="wt-post-readmore">' +
-            '<a href="blog-post-right-sidebar.html" class="site-button-link site-text-primary">Read More</a>' +
+            '<a href="stainDetails.html?id=' + encodeURIComponent(id) + '" class="site-button-link site-text-primary">Read More</a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -505,6 +506,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 if (!items || !items.length) { listContainer.innerHTML = ''; return; }
                 var html = items.map(function (it) {
                     return buildBlogCardHtml({
+                        id: it.Id || it.id,
                         name: it.Name || it.name,
                         description: it.Description || it.description,
                         imageLink: it.ImageLink || it.imageLink
