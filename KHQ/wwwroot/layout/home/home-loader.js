@@ -26,6 +26,8 @@
                         document.dispatchEvent(new CustomEvent('home:blog-loaded', { detail: { node: node } }));
                     } else if (url.indexOf('about.html') !== -1) {
                         document.dispatchEvent(new CustomEvent('home:about-loaded', { detail: { node: node } }));
+                    } else if (url.indexOf('why-choose.html') !== -1) {
+                        document.dispatchEvent(new CustomEvent('home:why-choose-loaded', { detail: { node: node } }));
                     }
                 } catch (_e) { }
             })
@@ -516,7 +518,55 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 }
             });
     });
+    function buildWhyChooseCard(item) {
+        var icon = item && (item.Icon || item.icon) ? (item.Icon || item.icon) : 'flaticon-clean';
+        var title = item && (item.Title || item.title) ? (item.Title || item.title) : '';
+        var description = item && (item.Description || item.description) ? (item.Description || item.description) : '';
+        return (
+            '<div class="col-lg-3 col-md-6 m-b30">' +
+            '<div class="half-icon-box site-bg-secondry radius-md">' +
+            '<div class="icon-box">' +
+            '<span class="icon-small">' + icon + '</span>' +
+            '<span class="icon-large"><i class="flaticon-clean"></i></span>' +
+            '</div>' +
+            '<div class="icon-content">' +
+            '<h3 class="wt-title site-text-primary">' + title + '</h3>' +
+            '<p>' + description + '</p>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+        );
+    }
 
+    document.addEventListener('home:why-choose-loaded', function (e) {
+        var container = e && e.detail && e.detail.node ? e.detail.node : null;
+        if (!container) return;
+
+        fetch('/api/WhyChooseUs/GetAll', { method: 'GET' })
+            .then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
+            .then(function (payload) {
+                if (!payload) return;
+                try {
+                    var titleEl = container.querySelector('.section-head h2');
+                    var descEl = container.querySelector('.wt-separator-two-part-right p');
+                    var mainTitle = payload.Main_Title || payload.main_Title;
+                    var mainDesc = payload.Main_Description || payload.main_Description;
+                    if (titleEl && mainTitle) titleEl.textContent = mainTitle;
+                    if (descEl && mainDesc) descEl.textContent = mainDesc;
+                } catch (_err) { }
+
+                var listContainer = container.querySelector('.section-content .row.d-flex.justify-content-center');
+                if (!listContainer) return;
+                var items = payload.WhyChooseUs || payload.whyChooseUs || [];
+                var html = Array.isArray(items) ? items.map(buildWhyChooseCard).join('') : '';
+                listContainer.innerHTML = html;
+            })
+            .catch(function (err) {
+                if (window && window.console) {
+                    console.warn('WhyChooseUs GetAll request failed', err && err.status ? err.status : err);
+                }
+            });
+    });
     document.addEventListener('home:about-loaded', function (e) {
         var container = e && e.detail && e.detail.node ? e.detail.node : null;
         if (!container) return;

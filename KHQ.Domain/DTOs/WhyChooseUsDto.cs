@@ -13,4 +13,10 @@ namespace KHQ.Domain.DTOs
         public string Description { get; set; }
         public string Icon { get; set; }
     }
+    public class WhyChooseUsDtoNew
+    {
+        public List<WhyChooseUsDto> WhyChooseUs { get; set; }
+        public string Main_Title { get; set; }
+        public string Main_Description { get; set; }
+    }
 }
