@@ -170,5 +170,11 @@ namespace KHQ.Portal.Controllers
                 return BadRequest();
             }
         }
+
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.Product_Cover);
+            return View(images);
+        }
     }
 }
