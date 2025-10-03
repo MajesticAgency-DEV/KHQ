@@ -163,6 +163,7 @@ namespace KHQ.Portal.Controllers
             var result = await _ProductSrv.DeleteAsync(id);
             if (result > 0)
             {
+
                 return RedirectToAction(nameof(Index));
             }
             else

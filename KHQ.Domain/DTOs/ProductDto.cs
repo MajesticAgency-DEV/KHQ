@@ -15,4 +15,12 @@ namespace KHQ.Domain.DTOs
         public decimal Price { get; set; }
         public ICollection<SubProductDto> SubProducts { get; set; }
     }
+
+    public class ProductDtoNew
+    {
+        public string CoverPhoto { get; set; }
+        public List<string> Categories { get; set; }
+        public List<ProductDto> Products { get; set; }
+
+    }
 }

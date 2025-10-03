@@ -58,6 +58,12 @@ namespace KHQ.Repo.Repositories
             _dbSet.Remove(entity);
         }
 
+        public virtual async Task Delete(List<T> entities)
+        {
+            //await _dbSet.ExecuteDeleteAsync<T>();
+            _dbSet.RemoveRange(entities);
+        }
+
         public virtual IQueryable<T> Queryable()
         {
             return _dbSet.AsQueryable();

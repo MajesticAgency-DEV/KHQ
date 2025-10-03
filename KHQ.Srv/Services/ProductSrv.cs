@@ -82,6 +82,11 @@ namespace KHQ.Srv.Services
             var productToBeUpdated = _mapper.Map<Product>(entity);
             _unitOfWork.Repository<Product>().Update(productToBeUpdated);
             var result = await _unitOfWork.SaveChangesAsync();
+            if(result > 0)
+            {
+                var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == entity.Id).ToListAsync();
+                await _unitOfWork.Repository<Image>().DeleteRange(images);
+            }
             return result;
         }
     }

@@ -23,10 +23,14 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<ProductDto>> GetAll()
+        public async Task<List<ProductDto>> GetAll()
         {
             var productData = await _unitOfWork.Repository<Product>().Queryable().Include(x => x.SubProducts).ToListAsync();
-            var result = _mapper.Map<IEnumerable<ProductDto>>(productData);
+            foreach (var item in productData)
+            {
+                
+            }
+            var result = _mapper.Map<List<ProductDto>>(productData);
             return result;
         }
 

@@ -11,6 +11,7 @@ namespace KHQ.Repo.Repositories
         Task AddRange(List<T> entities);
         void Update(T entity);
         Task Delete(T entity);
+        Task DeleteRange(List<T> entities);
         IQueryable<T> Queryable(); // For LINQ support
         Task<int> SaveChangesAsync();
     }
