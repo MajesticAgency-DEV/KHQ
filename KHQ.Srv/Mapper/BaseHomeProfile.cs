@@ -16,19 +16,11 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
             
-            CreateMap<Brouchures, BrouchuresDto>()
-                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
-
             CreateMap<StainDetails, StainDetailsDto>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
                 CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar"
                 ? (src.TitleAr ?? src.TitleEn)
                 : (src.TitleEn ?? src.TitleAr)));
-
-
 
             CreateMap<AboutUs, AboutUsDto>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
@@ -87,6 +79,18 @@ namespace KHQ.Srv.Mapper
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.NameAr : src.NameEn))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
+
+            CreateMap<FAQ, FAQDto>()
+                .ForMember(dest => dest.Question, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.QuestionAr : src.QuestionEn))
+                .ForMember(dest => dest.Answer, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.AnswerAr : src.AnswerEn));
+
+            CreateMap<Brouchures, BrouchuresDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
+                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
 
