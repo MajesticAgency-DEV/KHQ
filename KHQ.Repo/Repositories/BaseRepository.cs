@@ -58,7 +58,7 @@ namespace KHQ.Repo.Repositories
             _dbSet.Remove(entity);
         }
 
-        public virtual async Task Delete(List<T> entities)
+        public virtual async Task DeleteRange(List<T> entities)
         {
             //await _dbSet.ExecuteDeleteAsync<T>();
             _dbSet.RemoveRange(entities);
