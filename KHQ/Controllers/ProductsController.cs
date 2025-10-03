@@ -2,7 +2,6 @@
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
