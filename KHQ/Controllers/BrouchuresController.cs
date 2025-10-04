@@ -38,5 +38,25 @@ namespace KHQ.Controllers
             var result = _mapper.Map<BrouchuresDto>(brouchuresData);
             return result;
         }
+
+        [HttpGet("Download/{id}")]
+        public async Task<IActionResult> Download(Guid id)
+        {
+            var brouchure = await _unitOfWork.Repository<Brouchures>().GetByIdAsync(id);
+            if (brouchure == null)
+                return NotFound("Brouchure not found.");
+
+            // Get the physical path of the file
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", brouchure.FilePath.TrimStart('/'));
+
+            if (!System.IO.File.Exists(fullPath))
+                return NotFound("File not found on server.");
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(fullPath);
+            var fileName = Path.GetFileName(fullPath);
+
+            // Return file for browser download
+            return File(fileBytes, "application/pdf", fileName);
+        }
     }
 }

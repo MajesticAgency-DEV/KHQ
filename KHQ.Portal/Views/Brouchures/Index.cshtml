@@ -1,0 +1,243 @@
+﻿@model List<KHQ.Domain.ViewModel.BrouchuresVM>
+
+<div class="content">
+    <div class="container-fluid">
+
+        <!-- Page Header -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
+                            <li class="breadcrumb-item active">Brouchures</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Brouchures</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Button -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-end">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#add-modal">
+                            <i class="fa-regular fa-circle-plus"></i> Add New
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brouchures List -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-xl-4">
+                    <div class="card product-box">
+                        <div class="card-body">
+
+                            <div class="product-action">
+                                <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
+                                        data-bs-target="#edit-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs waves-effect waves-light" data-bs-toggle="modal"
+                                        data-bs-target="#delete-modal-@item.Id">
+                                    <i class="fa-sharp fa-light fa-trash"></i>
+                                </button>
+                            </div>
+
+                            <div class="mt-3">
+                                <h5>@item.TitleEn / @item.TitleAr</h5>
+                                <p>@item.DescriptionEn</p>
+                                <p>@item.DescriptionAr</p>
+
+                                @if (!string.IsNullOrEmpty(item.FilePath))
+                                {
+                                    <button class="btn btn-primary btn-sm" onclick="downloadFile('@item.Id')">
+                                        <i class="fa-regular fa-download"></i> Download
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Modal -->
+                <div id="edit-modal-@item.Id" class="modal fade" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <form enctype="multipart/form-data" id="editForm-@item.Id">
+                                    <input type="hidden" id="Id-edit-@item.Id" value="@item.Id" />
+
+                                    <div class="mb-3">
+                                        <label>Title (EN)</label>
+                                        <input class="form-control" id="TitleEn-edit-@item.Id" value="@item.TitleEn" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Title (AR)</label>
+                                        <input class="form-control" id="TitleAr-edit-@item.Id" value="@item.TitleAr" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Description (EN)</label>
+                                        <textarea class="form-control" id="DescriptionEn-edit-@item.Id">@item.DescriptionEn</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Description (AR)</label>
+                                        <textarea class="form-control" id="DescriptionAr-edit-@item.Id">@item.DescriptionAr</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>PDF File (optional)</label>
+                                        <input type="file" class="form-control" id="File-edit-@item.Id" accept="application/pdf" />
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary" onclick="updateBrouchure('@item.Id')">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div id="delete-modal-@item.Id" class="modal fade" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-filled bg-danger">
+                            <div class="modal-body p-4 text-center">
+                                <i class="fa-regular fa-ban text-white font-36"></i>
+                                <h4 class="mt-2 text-white">Confirm Delete?</h4>
+                                <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal" onclick="deleteBrouchure('@item.Id')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div id="add-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="addForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label>Title (EN)</label>
+                        <input class="form-control" type="text" id="TitleEn" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Title (AR)</label>
+                        <input class="form-control" type="text" id="TitleAr" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Description (EN)</label>
+                        <textarea class="form-control" id="DescriptionEn"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Description (AR)</label>
+                        <textarea class="form-control" id="DescriptionAr"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>PDF File</label>
+                        <input class="form-control" type="file" id="File" accept="application/pdf" required />
+                    </div>
+                    <div class="text-center">
+                        <button type="button" id="SaveBrouchureBtn" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Add new brochure
+        $('#SaveBrouchureBtn').click(function () {
+            var formData = new FormData();
+            formData.append("TitleEn", $('#TitleEn').val());
+            formData.append("TitleAr", $('#TitleAr').val());
+            formData.append("DescriptionEn", $('#DescriptionEn').val());
+            formData.append("DescriptionAr", $('#DescriptionAr').val());
+            formData.append("file", $('#File')[0].files[0]);
+
+            $.ajax({
+                url: '@Url.Action("Add", "Brouchures")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    alert("Brochure added successfully");
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        });
+
+        // Update brochure
+        function updateBrouchure(id) {
+            var formData = new FormData();
+            formData.append("Id", id);
+            formData.append("TitleEn", $('#TitleEn-edit-' + id).val());
+            formData.append("TitleAr", $('#TitleAr-edit-' + id).val());
+            formData.append("DescriptionEn", $('#DescriptionEn-edit-' + id).val());
+            formData.append("DescriptionAr", $('#DescriptionAr-edit-' + id).val());
+            var fileInput = $('#File-edit-' + id)[0];
+            if (fileInput.files.length > 0)
+                formData.append("file", fileInput.files[0]);
+
+            $.ajax({
+                url: '@Url.Action("Update", "Brouchures")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    alert("Brochure updated successfully");
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        }
+
+        // Delete brochure
+        function deleteBrouchure(id) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Brouchures")',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    alert("Deleted successfully");
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        }
+
+        // Download brochure
+                function downloadFile(id) {
+            // Create a temporary link
+            var link = document.createElement('a');
+            link.href = '/Brouchures/Download/' + id; // your download API
+            link.download = ''; // Let browser use the filename from the API
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+}
