@@ -24,12 +24,24 @@ namespace KHQ.Portal.Controllers
 
             return View(brouchuresData);
         }
-
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var brouchuresData = await _BrouchuresSrv.GetByIdAsync(id);
-            return View(brouchuresData);
+            var brochure = await _BrouchuresSrv.GetByIdAsync(id);
+            if (brochure == null) return NotFound();
+
+            return Ok(new
+            {
+                brochure.Id,
+                brochure.TitleEn,
+                brochure.TitleAr,
+                brochure.DescriptionEn,
+                brochure.DescriptionAr,
+                FileUrl = Url.Action("Download", "Brouchures", new { id = brochure.Id })
+            });
         }
+
+
 
         [HttpGet]
         public IActionResult Create()
@@ -64,7 +76,7 @@ namespace KHQ.Portal.Controllers
             }
 
             // Save to database using your service
-            brouchuresVM.FilePath = $"/uploads/brouchures/{fileName}";
+            brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             var result = await _BrouchuresSrv.AddAsync(brouchuresVM);
 
             if (result > 0)
@@ -84,19 +96,51 @@ namespace KHQ.Portal.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Update(BrouchuresVM brouchuresVM)
+        [HttpPost("Update")]
+        public async Task<IActionResult> Update([FromForm] BrouchuresVM brouchuresVM, [FromForm] IFormFile file)
         {
-            var result = await _BrouchuresSrv.UpdateAsync(brouchuresVM);
-            if (result > 0)
+            var existing = await _BrouchuresSrv.GetByIdAsync(brouchuresVM.Id);
+            if (existing == null)
+                return NotFound("Brochure not found.");
+
+            // Update file if a new one is uploaded
+            if (file != null && file.Length > 0)
             {
-                return RedirectToAction(nameof(Index));
+                if (!file.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase))
+                    return BadRequest("Only PDF files are allowed.");
+
+                string sharedFolder = Path.Combine(_env.ContentRootPath, "..", "SharedImages");
+                if (!Directory.Exists(sharedFolder))
+                    Directory.CreateDirectory(sharedFolder);
+
+                // Delete old file
+                var oldPath = Path.Combine(Directory.GetCurrentDirectory(), existing.FilePath.TrimStart('/'));
+                if (System.IO.File.Exists(oldPath))
+                    System.IO.File.Delete(oldPath);
+
+                // Save new file
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var filePath = Path.Combine(sharedFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             }
             else
             {
-                return BadRequest();
+                // Keep old file path if no new file
+                brouchuresVM.FilePath = existing.FilePath;
             }
+
+            var result = await _BrouchuresSrv.UpdateAsync(brouchuresVM);
+            if (result > 0)
+                return Ok("Brochure updated successfully.");
+
+            return BadRequest("Error while updating brochure.");
         }
+
 
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -120,6 +164,7 @@ namespace KHQ.Portal.Controllers
         }
 
 
+
         [HttpGet("Download/{id}")]
         public async Task<IActionResult> Download(Guid id)
         {
@@ -128,7 +173,10 @@ namespace KHQ.Portal.Controllers
                 return NotFound("Brouchure not found.");
 
             // Get the physical path of the file
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", brouchure.FilePath.TrimStart('/'));
+            string sharedFolder = Path.Combine(_env.ContentRootPath, "..", "SharedImages");
+            if (!Directory.Exists(sharedFolder))
+                Directory.CreateDirectory(sharedFolder);
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), sharedFolder, brouchure.FilePath.TrimStart('/'));
 
             if (!System.IO.File.Exists(fullPath))
                 return NotFound("File not found on server.");
