@@ -8,5 +8,6 @@
         public string ImageUrl { get; set; }
         public Guid ProductId { get; set; }
         public ProductVM Product { get; set; }
+        public int SortOrder { get; set; } 
     }
 }

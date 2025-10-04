@@ -12,5 +12,6 @@ namespace KHQ.Domain.DTOs
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public Guid ProductId { get; set; }
+        public int SortOrder { get; set; }
     }
 }

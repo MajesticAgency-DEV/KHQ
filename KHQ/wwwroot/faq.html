@@ -257,5 +257,67 @@
     <script src="layout/home/home-loader.js"></script>
     <script src="layout-loader.js"></script>
 
+    <script>
+        (function () {
+            function buildFaqPanelHtml(item, idx) {
+                var q = item && (item.Question || item.question) ? (item.Question || item.question) : '';
+                var a = item && (item.Answer || item.answer) ? (item.Answer || item.answer) : '';
+                var collapseId = 'collapse' + (idx + 1) + '5';
+                var activeClass = idx === 0 ? ' show' : '';
+                var headActive = idx === 0 ? ' acc-actives' : '';
+                return (
+                    '<div class="panel wt-panel">' +
+                    '<div class="acod-head' + headActive + '">' +
+                    '<h4 class="acod-title">' +
+                    '<a data-toggle="collapse" href="#' + collapseId + '" data-parent="#accordion5"' + (idx === 0 ? '' : ' class="collapsed"') + '>' +
+                    q +
+                    '<span class="indicator"><i class="fa fa-plus"></i></span>' +
+                    '</a>' +
+                    '</h4>' +
+                    '</div>' +
+                    '<div id="' + collapseId + '" class="acod-body collapse' + activeClass + '">' +
+                    '<div class="acod-content">' +
+                    '<p>' + a + '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
+                );
+            }
+
+            function initFaq() {
+                fetch('/api/FAQ/GetAll', { method: 'GET' })
+                    .then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
+                    .then(function (payload) {
+                        if (!payload) return;
+                        try {
+                            var cover = document.querySelector('.wt-bnr-inr.overlay-wraper');
+                            var coverPhoto = payload.CoverPhoto || payload.coverPhoto;
+                            if (cover && coverPhoto) {
+                                cover.style.backgroundImage = 'url(' + coverPhoto + ')';
+                            }
+                        } catch (_er) { }
+
+                        try {
+                            var acc = document.querySelector('#accordion5');
+                            var items = payload.FAQs || payload.faQs || [];
+                            if (acc && Array.isArray(items)) {
+                                acc.innerHTML = items.map(buildFaqPanelHtml).join('');
+                            }
+                        } catch (_err2) { }
+                    })
+                    .catch(function (err) {
+                        if (window && window.console) {
+                            console.warn('FAQ GetAll request failed', err && err.status ? err.status : err);
+                        }
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFaq);
+            } else {
+                initFaq();
+            }
+        })();
+    </script>
 </body>
 </html>

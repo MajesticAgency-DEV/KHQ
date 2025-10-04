@@ -233,7 +233,8 @@
             id: photoId,
             file: file,
             descriptionEn: '',
-            descriptionAr: ''
+            descriptionAr: '',
+            sortOrder: uploadedPhotosAdd.length
         });
     }
 
@@ -287,6 +288,9 @@
         });
 
         newTableOrder.forEach(row => tbody.appendChild(row));
+        
+        // Update SortOrder in the uploadedPhotosAdd array
+        updateSortOrder();
     }
 
     // Sync GALLERY order with TABLE order
@@ -302,6 +306,21 @@
         });
 
         newGalleryOrder.forEach(item => galleryContainer.appendChild(item));
+        
+        // Update SortOrder in the uploadedPhotosAdd array
+        updateSortOrder();
+    }
+
+    // Update SortOrder based on current gallery order
+    function updateSortOrder() {
+        const galleryItems = document.querySelectorAll("#sortable-photos-add .photo-item");
+        galleryItems.forEach((item, index) => {
+            const photoId = item.dataset.photoId;
+            const photo = uploadedPhotosAdd.find(p => p.id === photoId);
+            if (photo) {
+                photo.sortOrder = index;
+            }
+        });
     }
 
         function saveProductImagesBeforeSubmit() {
@@ -347,7 +366,7 @@
                 DescriptionEn: p.descriptionEn,
                 DescriptionAr: p.descriptionAr,
                 imageFile: p.file,
-                SortOrder: idx
+                SortOrder: p.sortOrder !== undefined ? p.sortOrder : idx
             }))
         };
 

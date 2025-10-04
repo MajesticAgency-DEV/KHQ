@@ -132,14 +132,20 @@ namespace KHQ.Portal.Controllers
 
                 productData.PathLink = orderedImages.Select(x => x.PathLink).ToList();
 
+                // Sort SubProducts by SortOrder to match the image order
+                var sortedSubProducts = productData.SubProducts.OrderBy(x => x.SortOrder).ToList();
+                
                 // Ensure we do not duplicate the last image if there are fewer images than subproducts
-                var usableCount = Math.Min(productData.SubProducts.Count, orderedImages.Count);
+                var usableCount = Math.Min(sortedSubProducts.Count, orderedImages.Count);
 
-                for (int i = 0; i < productData.SubProducts.Count; i++)
+                for (int i = 0; i < sortedSubProducts.Count; i++)
                 {
-                    var sub = productData.SubProducts[i];
+                    var sub = sortedSubProducts[i];
                     sub.ImageUrl = i < usableCount ? orderedImages[i].PathLink : null;
                 }
+                
+                // Update the original SubProducts collection with the sorted order
+                productData.SubProducts = sortedSubProducts;
             }
 
             return View(productData);
