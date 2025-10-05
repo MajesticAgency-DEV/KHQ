@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 		var addressEl = document.getElementById("footer-address");
 		var emailEl = document.getElementById("footer-email");
 		var phoneEl = document.getElementById("footer-phone");
+		var catList = document.getElementById("footer-categories");
 		if (!addressEl || !emailEl || !phoneEl) return;
 
 		// From here on, we are safe to mark as loaded to avoid duplicate fetch
@@ -75,6 +76,30 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 							console.warn("SocialMedia GetAll request failed", err && err.status ? err.status : err);
 						}
 					});
+
+				// Footer categories
+				if (catList) {
+					fetch("/api/Category/GetAll", { method: "GET" })
+						.then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
+						.then(function (payload) {
+							try {
+								var items = payload.CategoriesDtos || payload.categoriesDtos || [];
+								if (!Array.isArray(items)) items = [];
+								var html = items.map(function (c) {
+									var id = c.Id || c.id;
+									var name = c.Name || c.name || '';
+									var href = id ? ('products.html?categoryId=' + encodeURIComponent(id)) : 'javascript:void(0);';
+									return '<li><a href="' + href + '">' + name + '</a></li>';
+								}).join('');
+								catList.innerHTML = html;
+							} catch (_e) { }
+						})
+						.catch(function (err) {
+							if (window && window.console) {
+								console.warn('Footer Category GetAll failed', err && err.status ? err.status : err);
+							}
+						});
+				}
 
 				var item = Array.isArray(data) && data.length ? data[0] : data || {};
 
