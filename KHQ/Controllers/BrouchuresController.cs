@@ -14,11 +14,13 @@ namespace KHQ.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public BrouchuresController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BrouchuresController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _env = env;
         }
 
         [HttpGet]
@@ -47,7 +49,10 @@ namespace KHQ.Controllers
                 return NotFound("Brouchure not found.");
 
             // Get the physical path of the file
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", brouchure.FilePath.TrimStart('/'));
+            string sharedFolder = Path.Combine(_env.ContentRootPath, "..", "SharedImages");
+            if (!Directory.Exists(sharedFolder))
+                Directory.CreateDirectory(sharedFolder);
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), sharedFolder, brouchure.FilePath.TrimStart('/'));
 
             if (!System.IO.File.Exists(fullPath))
                 return NotFound("File not found on server.");
