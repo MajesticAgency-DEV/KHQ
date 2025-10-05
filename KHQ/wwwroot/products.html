@@ -24,10 +24,8 @@
     <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
     <!-- FONTAWESOME STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="../../css/fontawesome/css/font-awesome.min.css" />
-
     <!-- OWL CAROUSEL STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="../../css/owl.carousel.min.css">
-
     <!-- BOOTSTRAP SLECT BOX STYLE SHEET  -->
     <link rel="stylesheet" type="text/css" href="../../css/bootstrap-select.min.css">
     <!-- MAGNIFIC POPUP STYLE SHEET -->
@@ -42,7 +40,6 @@
     <link rel="stylesheet" class="skin" type="text/css" href="../../css/skin/skin-1.css">
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="../../css/switcher.css">
-
     <!-- BUBBLE STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="../../css/bubbles.css">
 
@@ -53,15 +50,12 @@
 </head>
 
 <body>
-
     <div class="page-wraper">
-
         <!-- HEADER START -->
         <div id="header"></div>
         <!-- HEADER END -->
         <!-- CONTENT START -->
         <div class="page-content">
-
             <!-- INNER PAGE BANNER -->
             <div class="wt-bnr-inr overlay-wraper bg-center" style="background-image:url(images/banner/5.jpg);">
                 <div class="overlay-main site-bg-primary opacity-09"></div>
@@ -72,16 +66,12 @@
                                 <h2 class="site-text-white">Products</h2>
                             </div>
                         </div>
-                        <!-- BREADCRUMB ROW -->
-
                         <div>
                             <ul class="wt-breadcrumb breadcrumb-style-2">
                                 <li><a href="javascript:void(0);">Home</a></li>
                                 <li>Products</li>
                             </ul>
                         </div>
-
-                        <!-- BREADCRUMB ROW END -->
                     </div>
                 </div>
             </div>
@@ -89,27 +79,33 @@
             <!-- PROJECT SECTION START -->
             <div class="section-full p-t120 p-b90 bg-white">
                 <div class="container">
-
-                    <!-- PAGINATION START -->
+                    <!-- BRAND FILTER START -->
                     <div class="filter-wrap work-grid p-b30 text-center">
-                        <ul class="masonry-filter">
-                            <li class="active"><a data-filter="*" href="#">All</a></li>
-                            <li><a data-filter=".cat-1" href="#">Office </a></li>
-                            <li><a data-filter=".cat-2" href="#">House</a></li>
-                            <li><a data-filter=".cat-3" href="#">Appartment </a></li>
+                        <ul id="brand-filter" class="masonry-filter">
+                            <li class="active"><a data-filter="*" href="#">All Brands</a></li>
                         </ul>
                     </div>
-                    <!-- PAGINATION END -->
+                    <!-- BRAND FILTER END -->
+                    <!-- CATEGORY FILTER START -->
+                    <div class="filter-wrap work-grid p-b30 text-center">
+                        <ul id="category-filter" class="masonry-filter">
+                            <li class="active"><a data-filter="*" href="#">All Category</a></li>
+                        </ul>
+                    </div>
+                    <!-- CATEGORY FILTER END -->
                     <!-- PROJECT CONTENT START -->
-                    <div class="masonry-wrap mfp-gallery  row clearfix d-flex justify-content-center flex-wrap" id="product-list">
+                    <div class="masonry-wrap mfp-gallery row clearfix d-flex justify-content-center flex-wrap" id="product-list" style="height:unset !important">
+                    </div>
+                    <!-- NO RESULTS MESSAGE -->
+                    <div id="no-results-message" style="display: none; text-align: center; padding: 60px 20px;">
+                        <i class="fa fa-search" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
+                        <h3 style="color: #666; margin-bottom: 10px;">No Products Found</h3>
+                        <p style="color: #999;">No products match the selected filters. Please try a different combination.</p>
                     </div>
                     <!-- PROJECT CONTENT END -->
                 </div>
             </div>
             <!-- PROJECT SECTION END -->
-
-
-
         </div>
         <!-- CONTENT END -->
         <!-- WHY CHOOSE SECTION START -->
@@ -119,11 +115,10 @@
         <footer class="site-footer footer-large footer-dark text-white footer-style1" id="footer"></footer>
         <!-- FOOTER END -->
         <!-- BUTTON TOP START -->
-        <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
-
+        <button class="scroltop"><span class="fa fa-angle-up relative" id="btn-vibrate"></span></button>
     </div>
 
-    <!-- LOADING AREA START ===== -->
+    <!-- LOADING AREA START -->
     <div class="loading-area">
         <div class="loading-box"></div>
         <div class="loading-pic">
@@ -157,31 +152,123 @@
 
     <script>
         (function () {
+            var $grid = null;
+            var currentBrandFilter = '*';
+            var currentCategoryFilter = '*';
+
+            function sanitizeToClassName(value) {
+                if (!value || typeof value !== 'string') return '';
+                // Remove spaces and special characters, keep only alphanumeric and hyphens
+                return value.trim().toLowerCase()
+                    .replace(/[^\w\s-]/g, '') // Remove special chars except spaces and hyphens
+                    .replace(/\s+/g, '-')      // Replace spaces with hyphens
+                    .replace(/-+/g, '-')       // Replace multiple hyphens with single hyphen
+                    .replace(/^-|-$/g, '');    // Remove leading/trailing hyphens
+            }
+
+            function buildFilterItem(className, displayText) {
+                var safeClass = sanitizeToClassName(className);
+                if (!safeClass) return '';
+                return '<li><a data-filter=".' + safeClass + '" href="#">' + displayText + '</a></li>';
+            }
 
             function buildProductsHtml(item, idx) {
                 var id = item && (item.id || item.Id) ? (item.id || item.Id) : '';
                 var categoryName = item && (item.CategoryName || item.categoryName) ? (item.CategoryName || item.categoryName) : '';
+                var categoryClass = sanitizeToClassName(categoryName);
                 var productName = item && (item.Name || item.name) ? (item.Name || item.name) : '';
+                var brandName = item && (item.BrandName || item.brandName) ? (item.BrandName || item.brandName) : '';
+                var brandClass = sanitizeToClassName(brandName);
 
                 var subProducts = item ? (item.SubProducts || item.subProducts || []) : [];
                 var img = (subProducts.length > 0 && subProducts[0].imageUrl) ? subProducts[0].imageUrl : '';
 
                 return (
-                    '<div class="masonry-item cat-1 col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
+                    '<div class="masonry-item ' + categoryClass + ' ' + brandClass + ' col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
                     '<div class="wt-img-effect project-new-2 radius-md shadow">' +
-                    '<img src="' + img +'" alt="">' +
-                            '<div class="project-new-content">' +
-                    '<span class="project-new-category">' + categoryName +'</span>' +
-                    '<h3 class="wt-title"><a href="productDetails.html?id=' + encodeURIComponent(id) + '">' + productName +'</a></h3>' +
-                                '<a href="productDetails.html?id=' + encodeURIComponent(id) + '" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>' +
-                            '</div>' +
-                        '</div>' +
-                        '</div>'
+                    '<img src="' + img + '" alt="">' +
+                    '<div class="project-new-content">' +
+                    '<span class="project-new-category">' + categoryName + '</span>' +
+                    '<h3 class="wt-title"><a href="productDetails.html?id=' + encodeURIComponent(id) + '">' + productName + '</a></h3>' +
+                    '<a href="productDetails.html?id=' + encodeURIComponent(id) + '" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
                 );
             }
 
+            function initIsotope() {
+                var $container = $('#product-list');
+                if ($container.length && typeof $.fn.isotope !== 'undefined') {
+                    $grid = $container.isotope({
+                        itemSelector: '.masonry-item',
+                        layoutMode: 'fitRows',
+                        percentPosition: true
+                    });
+                }
+            }
+
+            function applyFilters() {
+                if (!$grid) return;
+
+                var filterValue = '*';
+
+                if (currentBrandFilter !== '*' && currentCategoryFilter !== '*') {
+                    filterValue = currentBrandFilter + currentCategoryFilter;
+                } else if (currentBrandFilter !== '*') {
+                    filterValue = currentBrandFilter;
+                } else if (currentCategoryFilter !== '*') {
+                    filterValue = currentCategoryFilter;
+                }
+
+                $grid.isotope({ filter: filterValue });
+
+                // Check if any items are visible after filtering
+                setTimeout(function () {
+                    var visibleItems = $grid.data('isotope').filteredItems.length;
+                    var noResultsMsg = document.getElementById('no-results-message');
+                    var productList = document.getElementById('product-list');
+
+                    if (visibleItems === 0) {
+                        if (noResultsMsg) noResultsMsg.style.display = 'block';
+                        if (productList) productList.style.minHeight = '0';
+                    } else {
+                        if (noResultsMsg) noResultsMsg.style.display = 'none';
+                        if (productList) productList.style.minHeight = 'auto';
+                    }
+                }, 100);
+            }
+
+            function setupFilterListeners() {
+                // Brand filter
+                $(document).on('click', '#brand-filter a', function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+
+                    $('#brand-filter li').removeClass('active');
+                    $this.parent().addClass('active');
+
+                    currentBrandFilter = $this.attr('data-filter');
+                    applyFilters();
+                });
+
+                // Category filter
+                $(document).on('click', '#category-filter a', function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+
+                    $('#category-filter li').removeClass('active');
+                    $this.parent().addClass('active');
+
+                    currentCategoryFilter = $this.attr('data-filter');
+                    applyFilters();
+                });
+            }
+
             function loadProductOnce() {
-                if (loadProductOnce._called) return; loadProductOnce._called = true;
+                if (loadProductOnce._called) return;
+                loadProductOnce._called = true;
+
                 $.ajax({
                     url: "/api/Products/GetAll",
                     method: "GET"
@@ -194,15 +281,18 @@
                         }
                     } catch (_er) { }
 
-
                     try {
                         var pro = document.querySelector('#product-list');
                         var items = payload.Products || payload.products || [];
                         if (pro && Array.isArray(items)) {
                             pro.innerHTML = items.map(buildProductsHtml).join('');
+
+                            // Initialize Isotope after products are loaded
+                            setTimeout(function () {
+                                initIsotope();
+                            }, 100);
                         }
                     } catch (_err2) { }
-
 
                 }).fail(function (xhr) {
                     if (window && window.console) {
@@ -211,16 +301,68 @@
                 });
             }
 
-            if (document.readyState === "complete" || document.readyState === "interactive") {
-                // DOM is ready (or already loaded) — call immediately
-                loadProductOnce();
-            } else {
-                document.addEventListener("DOMContentLoaded", loadProductOnce);
+            function loadBrandsAndCategories() {
+                var brandUl = document.getElementById('brand-filter');
+                var categoryUl = document.getElementById('category-filter');
+
+                // Load Brands
+                $.ajax({ url: '/api/Brands/GetAll', method: 'GET' })
+                    .done(function (payload) {
+                        try {
+                            var list = payload.BrandsDtos || payload.brandsDtos || [];
+                            if (brandUl && Array.isArray(list)) {
+                                var html = '<li class="active"><a data-filter="*" href="#">All Brands</a></li>' +
+                                    list.map(function (b) {
+                                        var name = b.Name || b.name || '';
+                                        return buildFilterItem(name, name);
+                                    }).join('');
+                                brandUl.innerHTML = html;
+                            }
+                        } catch (_e) { }
+                    })
+                    .fail(function (xhr) {
+                        if (console) console.warn('Brands GetAll failed', xhr.status);
+                    });
+
+                // Load Categories
+                $.ajax({ url: '/api/Category/GetAll', method: 'GET' })
+                    .done(function (payload) {
+                        try {
+                            var list = payload.CategoriesDtos || payload.categoriesDtos || [];
+                            if (categoryUl && Array.isArray(list)) {
+                                var html = '<li class="active"><a data-filter="*" href="#">All Category</a></li>' +
+                                    list.map(function (c) {
+                                        var name = (c.Name || c.name || '');
+                                        return buildFilterItem(name, name);
+                                    }).join('');
+                                categoryUl.innerHTML = html;
+                            }
+                        } catch (_e2) { }
+                    })
+                    .fail(function (xhr) {
+                        if (console) console.warn('Category GetAll failed', xhr.status);
+                    });
             }
-            // Fallback: also call on full load in case DOMContentLoaded was missed
-            window.addEventListener("load", loadProductOnce);
+
+            // Initialize everything when DOM is ready
+            function initialize() {
+                setupFilterListeners();
+                loadProductOnce();
+                loadBrandsAndCategories();
+            }
+
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                initialize();
+            } else {
+                document.addEventListener("DOMContentLoaded", initialize);
+            }
+
+            window.addEventListener("load", function () {
+                if (!loadProductOnce._called) {
+                    initialize();
+                }
+            });
         })();
     </script>
-
 </body>
 </html>
