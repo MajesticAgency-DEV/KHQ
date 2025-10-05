@@ -166,10 +166,11 @@
                     .replace(/^-|-$/g, '');    // Remove leading/trailing hyphens
             }
 
-            function buildFilterItem(className, displayText) {
+            function buildFilterItem(className, displayText, id) {
                 var safeClass = sanitizeToClassName(className);
                 if (!safeClass) return '';
-                return '<li><a data-filter=".' + safeClass + '" href="#">' + displayText + '</a></li>';
+                var idAttr = id ? ' data-id="' + id + '"' : '';
+                return '<li' + idAttr + '><a data-filter=".' + safeClass + '" href="#">' + displayText + '</a></li>';
             }
 
             function buildProductsHtml(item, idx) {
@@ -209,7 +210,10 @@
             }
 
             function applyFilters() {
-                if (!$grid) return;
+                if (!$grid) {
+                    initIsotope();
+                    if (!$grid) return;
+                }
 
                 var filterValue = '*';
 
@@ -243,6 +247,7 @@
                 // Brand filter
                 $(document).on('click', '#brand-filter a', function (e) {
                     e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
                     var $this = $(this);
 
                     $('#brand-filter li').removeClass('active');
@@ -255,6 +260,7 @@
                 // Category filter
                 $(document).on('click', '#category-filter a', function (e) {
                     e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
                     var $this = $(this);
 
                     $('#category-filter li').removeClass('active');
@@ -269,8 +275,19 @@
                 if (loadProductOnce._called) return;
                 loadProductOnce._called = true;
 
+                var qs = new URLSearchParams(window.location.search);
+                var categoryId = qs.get('categoryId');
+                var brandId = qs.get('brandId');
+
+                var url = "/api/Products/GetAll";
+                if (categoryId) {
+                    url = "/api/Products/GetByCategory/" + encodeURIComponent(categoryId);
+                } else if (brandId) {
+                    url = "/api/Products/GetByBrand/" + encodeURIComponent(brandId);
+                }
+
                 $.ajax({
-                    url: "/api/Products/GetAll",
+                    url: url,
                     method: "GET"
                 }).done(function (payload) {
                     try {
@@ -283,13 +300,15 @@
 
                     try {
                         var pro = document.querySelector('#product-list');
-                        var items = payload.Products || payload.products || [];
+                        var items = Array.isArray(payload) ? payload : (payload.Products || payload.products || []);
                         if (pro && Array.isArray(items)) {
                             pro.innerHTML = items.map(buildProductsHtml).join('');
 
                             // Initialize Isotope after products are loaded
                             setTimeout(function () {
                                 initIsotope();
+                                // Apply initial filters after Isotope is ready
+                                applyFilters();
                             }, 100);
                         }
                     } catch (_err2) { }
@@ -304,6 +323,9 @@
             function loadBrandsAndCategories() {
                 var brandUl = document.getElementById('brand-filter');
                 var categoryUl = document.getElementById('category-filter');
+                var qs = new URLSearchParams(window.location.search);
+                var categoryIdQS = qs.get('categoryId');
+                var brandIdQS = qs.get('brandId');
 
                 // Load Brands
                 $.ajax({ url: '/api/Brands/GetAll', method: 'GET' })
@@ -314,9 +336,22 @@
                                 var html = '<li class="active"><a data-filter="*" href="#">All Brands</a></li>' +
                                     list.map(function (b) {
                                         var name = b.Name || b.name || '';
-                                        return buildFilterItem(name, name);
+                                        var id = b.Id || b.id;
+                                        return buildFilterItem(name, name, id);
                                     }).join('');
                                 brandUl.innerHTML = html;
+
+                                // Activate brand from query string
+                                if (brandIdQS) {
+                                    var li = brandUl.querySelector('li[data-id="' + CSS.escape(brandIdQS) + '"]');
+                                    if (li) {
+                                        brandUl.querySelectorAll('li').forEach(function (n) { n.classList.remove('active'); });
+                                        li.classList.add('active');
+                                        var a = li.querySelector('a');
+                                        if (a) currentBrandFilter = a.getAttribute('data-filter') || '*';
+                                    }
+                                }
+                                if ($grid) applyFilters();
                             }
                         } catch (_e) { }
                     })
@@ -333,9 +368,22 @@
                                 var html = '<li class="active"><a data-filter="*" href="#">All Category</a></li>' +
                                     list.map(function (c) {
                                         var name = (c.Name || c.name || '');
-                                        return buildFilterItem(name, name);
+                                        var id = c.Id || c.id;
+                                        return buildFilterItem(name, name, id);
                                     }).join('');
                                 categoryUl.innerHTML = html;
+
+                                // Activate category from query string
+                                if (categoryIdQS) {
+                                    var li = categoryUl.querySelector('li[data-id="' + CSS.escape(categoryIdQS) + '"]');
+                                    if (li) {
+                                        categoryUl.querySelectorAll('li').forEach(function (n) { n.classList.remove('active'); });
+                                        li.classList.add('active');
+                                        var a = li.querySelector('a');
+                                        if (a) currentCategoryFilter = a.getAttribute('data-filter') || '*';
+                                    }
+                                }
+                                if ($grid) applyFilters();
                             }
                         } catch (_e2) { }
                     })
@@ -347,8 +395,23 @@
             // Initialize everything when DOM is ready
             function initialize() {
                 setupFilterListeners();
+
+                var params = new URLSearchParams(window.location.search);
+                var hasCategoryOrBrand = !!(params.get('categoryId') || params.get('brandId'));
+
+                if (hasCategoryOrBrand) {
+                    // Hide filter sections when arriving filtered by brand/category
+                    try {
+                        var brandUl = document.getElementById('brand-filter');
+                        if (brandUl && brandUl.parentElement) brandUl.parentElement.style.display = 'none';
+                        var categoryUl = document.getElementById('category-filter');
+                        if (categoryUl && categoryUl.parentElement) categoryUl.parentElement.style.display = 'none';
+                    } catch (_hideErr) { }
+                } else {
+                    loadBrandsAndCategories();
+                }
+
                 loadProductOnce();
-                loadBrandsAndCategories();
             }
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
