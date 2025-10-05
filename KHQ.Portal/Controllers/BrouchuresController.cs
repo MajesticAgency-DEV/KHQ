@@ -21,9 +21,9 @@ namespace KHQ.Portal.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<BrouchuresVM> brouchuresData = await _BrouchuresSrv.GetAllAsync();
-
             return View(brouchuresData);
         }
+
         [HttpGet("Get/{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -41,20 +41,11 @@ namespace KHQ.Portal.Controllers
             });
         }
 
-
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] BrouchuresVM brouchuresVM, [FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Please upload a PDF file.");
-
-            
 
             // Check file type (optional but recommended)
             if (!file.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase))
@@ -76,7 +67,7 @@ namespace KHQ.Portal.Controllers
             }
 
             // Save to database using your service
-            brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
+            brouchuresVM.FilePath = $"/SharedImages/{fileName}";
             var result = await _BrouchuresSrv.AddAsync(brouchuresVM);
 
             if (result > 0)
@@ -88,8 +79,6 @@ namespace KHQ.Portal.Controllers
                 return BadRequest("Error while saving brouchure.");
             }
         }
-
-
 
         [HttpGet]
         public IActionResult Update()
@@ -126,7 +115,7 @@ namespace KHQ.Portal.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
+                brouchuresVM.FilePath = $"/SharedImages/{fileName}";
             }
             else
             {
@@ -140,7 +129,6 @@ namespace KHQ.Portal.Controllers
 
             return BadRequest("Error while updating brochure.");
         }
-
 
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -162,8 +150,6 @@ namespace KHQ.Portal.Controllers
                 return BadRequest();
             }
         }
-
-
 
         [HttpGet("Download/{id}")]
         public async Task<IActionResult> Download(Guid id)
