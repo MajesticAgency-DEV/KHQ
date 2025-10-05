@@ -67,7 +67,7 @@ namespace KHQ.Portal.Controllers
             }
 
             // Save to database using your service
-            brouchuresVM.FilePath = $"/SharedImages/{fileName}";
+            brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             var result = await _BrouchuresSrv.AddAsync(brouchuresVM);
 
             if (result > 0)

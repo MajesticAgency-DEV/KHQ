@@ -2,6 +2,7 @@
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
 using KHQ.Repo.UOW;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace KHQ.Srv.Services
 
         public async Task<BrouchuresVM?> GetByIdAsync(Guid id)
         {
-            var brouchures = await _unitOfWork.Repository<Brouchures>().GetByIdAsync(id);
+            var brouchures = await _unitOfWork.Repository<Brouchures>().Queryable().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return _mapper.Map<BrouchuresVM>(brouchures);
         }
 
