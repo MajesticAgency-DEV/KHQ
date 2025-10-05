@@ -48,9 +48,7 @@
                                 </button>
                             </div>
                             <div class="mt-3">
-                                <h5>@item.TitleEn / @item.TitleAr</h5>
-                                <p>@item.DescriptionEn</p>
-                                <p>@item.DescriptionAr</p>
+                                <h5>@item.FileName</h5>
                                 @if (!string.IsNullOrEmpty(item.FilePath))
                                 {
                                     <button class="btn btn-primary btn-sm" onclick="downloadFile('@item.Id')">
@@ -66,31 +64,6 @@
                                                 <i class="fa-sharp fa-light fa-circle-check"></i> Section edited successfully.
                                             </div>
                                             <form id="BrouchuresFormEdit" enctype="multipart/form-data">
-
-                                                <div class="mb-3">
-                                                    <label for="title-edit-@item.Id" class="form-label">Name in english:</label>
-                                                    <input class="form-control" type="text" id="title-edit-@item.Id"
-                                                           required="" placeholder="Enter name of title" value="@item.TitleEn">
-                                                    <span class="validationTitle text-danger display-none">* this field is required</span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="titleAr-edit-@item.Id" class="form-label">Name in arabic:</label>
-                                                    <input class="form-control" type="text" id="titleAr-edit-@item.Id"
-                                                           required="" placeholder="Enter name of title" value="@item.TitleAr">
-                                                    <span class="validationTitleAr text-danger display-none">* this field is required</span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="desc-edit-@item.Id" class="form-label">Description:</label>
-                                                    <textarea class="form-control" type="text" id="desc-edit-@item.Id"
-                                                          required="" placeholder="Enter name of title">@item.DescriptionEn</textarea>
-                                                    <span class="validationDesc text-danger display-none">* this field is required</span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="descAr-edit-@item.Id" class="form-label">Description:</label>
-                                                    <textarea class="form-control" type="text" id="descAr-edit-@item.Id"
-                                                          required="" placeholder="Enter name of title">@item.DescriptionAr</textarea>
-                                                    <span class="validationDescAr text-danger display-none">* this field is required</span>
-                                                </div>
                                                 <div class="mb-3">
                                                     <label for="FileUploadEdit-@item.Id" class="form-label">Replace PDF (optional):</label>
                                                     <input class="form-control" type="file" id="FileUploadEdit-@item.Id" accept="application/pdf" />
@@ -156,30 +129,6 @@
                 </div>
                 <form id="BrouchuresForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title in english:</label>
-                        <input class="form-control" type="text" id="title"
-                               required="" placeholder="Enter title in english">
-                        <span class="validationTitle text-danger display-none">* this field is required</span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="titleAr" class="form-label">Title in arabic:</label>
-                        <input class="form-control" type="text" id="titleAr"
-                               required="" placeholder="Enter title in arabic">
-                        <span class="validationTitleAr text-danger display-none">* this field is required</span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="desc" class="form-label">Description in english:</label>
-                        <input class="form-control" type="text" id="desc"
-                               required="" placeholder="Enter description in english">
-                        <span class="validationDesc text-danger display-none">* this field is required</span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descAr" class="form-label">Description in arabic:</label>
-                        <input class="form-control" type="text" id="descAr"
-                               required="" placeholder="Enter description in arabic">
-                        <span class="validationDescAr text-danger display-none">* this field is required</span>
-                    </div>
-                    <div class="mb-3">
                         <label for="FileUpload" class="form-label">PDF File</label>
                         <input class="form-control" type="file" id="FileUpload" accept="application/pdf" />
                         <span class="validationFileUpload text-danger display-none">* this field is required</span>
@@ -204,37 +153,9 @@
     $(document).ready(function () {
         $('#SaveBrouchuresSectionsbtn').click(function () {
         var validation = true;
-        var titleValue = $('#title').val();
-        var titleArValue = $('#titleAr').val();
-        var descValue = $('#desc').val();
-        var descArValue = $('#descAr').val();
         var file = $('#FileUpload')[0].files[0];
 
-        // Validation logic
-        if (titleValue == "") {
-            $(".validationTitle").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationTitle").addClass("display-none");
-        }
-        if (titleArValue == "") {
-            $(".validationTitleAr").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationTitleAr").addClass("display-none");
-        }
-        if (descValue == "") {
-            $(".validationDesc").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationDesc").addClass("display-none");
-        }
-        if (descArValue == "") {
-            $(".validationDescAr").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationDescAr").addClass("display-none");
-        }    
+        // Validation logic  
         if (!file) {
         $(".validationFileUpload").removeClass("display-none");
             return;
@@ -244,10 +165,6 @@
 
         if (validation) {
             var formData = new FormData();
-            formData.append("TitleEn", titleValue);
-            formData.append("TitleAr", titleArValue);
-            formData.append("DescriptionEn", descValue);
-            formData.append("DescriptionAr", descArValue);
             formData.append("file", file);
 
             $.ajax({
@@ -294,38 +211,9 @@
 
     function saveEdit(itemId) {
         var validation = true;
-
-        var titleValue = $('#title-edit-' + itemId).val();
-        var titleArValue = $('#titleAr-edit-' + itemId).val();
-        var descValue = $('#desc-edit-' + itemId).val();
-        var descArValue = $('#descAr-edit-' + itemId).val();
         var file = $('#FileUploadEdit-' + itemId)[0].files[0];
 
         // Validation logic
-        if (titleValue == "") {
-            $(".validationTitle").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationTitle").addClass("display-none");
-        }
-        if (titleArValue == "") {
-            $(".validationTitleAr").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationTitleAr").addClass("display-none");
-        }
-        if (descValue == "") {
-            $(".validationDesc").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationDesc").addClass("display-none");
-        }
-        if (descArValue == "") {
-            $(".validationDescAr").removeClass("display-none");
-            validation = false;
-        } else {
-            $(".validationDescAr").addClass("display-none");
-        }
         if (!file) {
         $(".validationFileUpload").removeClass("display-none");
             return;
@@ -335,10 +223,6 @@
 
         if (validation) {
             var formData = new FormData();
-            formData.append('TitleEn', titleValue);
-            formData.append('TitleAr', titleArValue);
-            formData.append('DescriptionEn', descValue);
-            formData.append('DescriptionAr', descArValue);
             formData.append('id', itemId);
             formData.append('file', file);
 

@@ -88,12 +88,6 @@ namespace KHQ.Srv.Mapper
                 .ForMember(dest => dest.Answer, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.AnswerAr : src.AnswerEn));
 
-            CreateMap<Brouchures, BrouchuresDto>()
-                .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.TitleAr : src.TitleEn))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
-                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
-
             CreateMap<SubProduct, SubProductDto>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src =>
                  CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? src.DescriptionAr : src.DescriptionEn));
