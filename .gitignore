@@ -418,3 +418,4 @@ FodyWeavers.xsd
 *.msp
 /KHQ.Portal/wwwroot/images
 /SharedImages
+/KHQ.Portal/appsettings.json
