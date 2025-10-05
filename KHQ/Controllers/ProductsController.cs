@@ -31,18 +31,9 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<List<ProductDto>> GetAll()
+        public async Task<ProductDtoNew> GetAll()
         {
             var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower() ?? "en";
-
-            //List<ProductDto> productDto = new List<ProductDto>();
-            //var data = await _cacheService.GetOrCreateAsync(async () =>
-            //{
-
-            //},
-            //3,
-            //"ProductData"
-            //);
             var products = await _unitOfWork.Repository<Product>().Queryable()
         .Include(p => p.SubProducts)
         .ToListAsync();
@@ -84,9 +75,18 @@ namespace KHQ.Controllers
                     sub.ImageUrl = image?.PathLink;
                 }
             }
+            ProductDtoNew productDtoNew = new ProductDtoNew();
+            productDtoNew.Products = result;
 
-            return result;
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                        .Where(x => x.ImageType == ImageType.Product_Cover)
+                        .FirstOrDefaultAsync();
+            
+            productDtoNew.CoverPhoto = coverPhoto != null ? coverPhoto.PathLink : "";
+
+            return productDtoNew;
         }
+        
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

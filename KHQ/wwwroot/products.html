@@ -101,75 +101,7 @@
                     </div>
                     <!-- PAGINATION END -->
                     <!-- PROJECT CONTENT START -->
-                    <div class="masonry-wrap mfp-gallery  row clearfix d-flex justify-content-center flex-wrap">
-                        <!-- COLUMNS 1 -->
-                        <div class="masonry-item cat-1 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/1.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">Office Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Dell Office Clean</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- COLUMNS 2 -->
-                        <div class="masonry-item cat-2 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/2.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">House Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Riva House Cleaning</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- COLUMNS 3 -->
-                        <div class="masonry-item cat-3 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/3.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">Window Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Window Cleaning</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- COLUMNS 4 -->
-                        <div class="masonry-item cat-1 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/4.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">Apartment Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Houston</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- COLUMNS 5 -->
-                        <div class="masonry-item cat-2 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/5.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">Garden Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Jardin Majorelle</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- COLUMNS 6 -->
-
-                        <div class="masonry-item cat-2 col-xl-4 col-lg-4 col-md-6 m-b30">
-                            <div class="wt-img-effect project-new-2 radius-md shadow">
-                                <img src="images/project/6.jpg" alt="">
-                                <div class="project-new-content">
-                                    <span class="project-new-category">Toilet Cleaning</span>
-                                    <h3 class="wt-title"><a href="javascript:void(0);">Appartment Toilet</a></h3>
-                                    <a href="javascript:void(0);" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="masonry-wrap mfp-gallery  row clearfix d-flex justify-content-center flex-wrap" id="product-list">
                     </div>
                     <!-- PROJECT CONTENT END -->
                 </div>
@@ -225,13 +157,52 @@
 
     <script>
         (function () {
-            function loadAboutOnce() {
-                if (loadAboutOnce._called) return; loadAboutOnce._called = true;
+
+            function buildProductsHtml(item, idx) {
+                var id = item && (item.id || item.Id) ? (item.id || item.Id) : '';
+                var categoryName = item && (item.CategoryName || item.categoryName) ? (item.CategoryName || item.categoryName) : '';
+                var productName = item && (item.Name || item.name) ? (item.Name || item.name) : '';
+
+                var subProducts = item ? (item.SubProducts || item.subProducts || []) : [];
+                var img = (subProducts.length > 0 && subProducts[0].imageUrl) ? subProducts[0].imageUrl : '';
+
+                return (
+                    '<div class="masonry-item cat-1 col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
+                    '<div class="wt-img-effect project-new-2 radius-md shadow">' +
+                    '<img src="' + img +'" alt="">' +
+                            '<div class="project-new-content">' +
+                    '<span class="project-new-category">' + categoryName +'</span>' +
+                    '<h3 class="wt-title"><a href="productDetails.html?id=' + encodeURIComponent(id) + '">' + productName +'</a></h3>' +
+                                '<a href="productDetails.html?id=' + encodeURIComponent(id) + '" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>' +
+                            '</div>' +
+                        '</div>' +
+                        '</div>'
+                );
+            }
+
+            function loadProductOnce() {
+                if (loadProductOnce._called) return; loadProductOnce._called = true;
                 $.ajax({
                     url: "/api/Products/GetAll",
                     method: "GET"
-                }).done(function (data) {
-                    var first = data;
+                }).done(function (payload) {
+                    try {
+                        var cover = document.querySelector('.wt-bnr-inr.overlay-wraper');
+                        var coverPhoto = payload.CoverPhoto || payload.coverPhoto;
+                        if (cover && coverPhoto) {
+                            cover.style.backgroundImage = 'url(' + coverPhoto + ')';
+                        }
+                    } catch (_er) { }
+
+
+                    try {
+                        var pro = document.querySelector('#product-list');
+                        var items = payload.Products || payload.products || [];
+                        if (pro && Array.isArray(items)) {
+                            pro.innerHTML = items.map(buildProductsHtml).join('');
+                        }
+                    } catch (_err2) { }
+
 
                 }).fail(function (xhr) {
                     if (window && window.console) {
@@ -242,12 +213,12 @@
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
                 // DOM is ready (or already loaded) — call immediately
-                loadAboutOnce();
+                loadProductOnce();
             } else {
-                document.addEventListener("DOMContentLoaded", loadAboutOnce);
+                document.addEventListener("DOMContentLoaded", loadProductOnce);
             }
             // Fallback: also call on full load in case DOMContentLoaded was missed
-            window.addEventListener("load", loadAboutOnce);
+            window.addEventListener("load", loadProductOnce);
         })();
     </script>
 
