@@ -114,7 +114,7 @@ namespace KHQ.Portal.Controllers
                 }
 
                 brouchuresVM.FileName = $"{file.FileName}";
-                brouchuresVM.FilePath = $"/SharedImages/{file.FileName}";
+                brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             }
             else
             {

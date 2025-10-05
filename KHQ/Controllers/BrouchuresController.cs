@@ -25,11 +25,18 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IEnumerable<BrouchuresDto>> GetAll()
+        public async Task<BrouchuresDtoNew> GetAll()
         {
             var brouchuresData = await _unitOfWork.Repository<Brouchures>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<BrouchuresDto>>(brouchuresData);
-            return result;
+            var data = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 8).FirstOrDefaultAsync();
+            var b_data = _mapper.Map<BaseHomeDto>(data);
+
+            BrouchuresDtoNew brouchuresDtoNew = new BrouchuresDtoNew();
+            brouchuresDtoNew.BrouchuresDto = brouchuresData;
+            brouchuresDtoNew.Title = b_data.Title;
+            brouchuresDtoNew.Description = b_data.Description;
+
+            return brouchuresDtoNew;
         }
 
         [HttpGet]
