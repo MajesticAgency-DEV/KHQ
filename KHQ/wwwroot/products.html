@@ -94,7 +94,7 @@
                     </div>
                     <!-- CATEGORY FILTER END -->
                     <!-- PROJECT CONTENT START -->
-                    <div class="masonry-wrap mfp-gallery row clearfix d-flex justify-content-center flex-wrap" id="product-list" style="height:unset !important">
+                    <div class="masonry-wrap mfp-gallery row clearfix d-flex justify-content-center flex-wrap" id="product-list-test" style="height:unset !important">
                     </div>
                     <!-- NO RESULTS MESSAGE -->
                     <div id="no-results-message" style="display: none; text-align: center; padding: 60px 20px;">
@@ -139,6 +139,8 @@
     <script src="../../js/counterup.min.js"></script><!-- COUNTERUP JS -->
     <script src="../../js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
     <script src="../../js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <!-- Ensure layouts wait for images -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"></script>
     <script src="../../js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
     <script src="../../js/stellar.min.js"></script><!-- PARALLAX BG IMAGE   -->
     <script src="../../js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
@@ -183,6 +185,12 @@
 
                 var subProducts = item ? (item.SubProducts || item.subProducts || []) : [];
                 var img = (subProducts.length > 0 && subProducts[0].imageUrl) ? subProducts[0].imageUrl : '';
+                // Add a light cache-buster so the browser doesn't reuse a stale image on hard refresh
+                if (img) {
+                    var cacheKey = (item.UpdatedAt || item.updatedAt || id || idx || '').toString();
+                    var sep = img.indexOf('?') === -1 ? '?' : '&';
+                    img = img + sep + 'v=' + encodeURIComponent(cacheKey);
+                }
 
                 return (
                     '<div class="masonry-item ' + categoryClass + ' ' + brandClass + ' col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
@@ -199,13 +207,26 @@
             }
 
             function initIsotope() {
-                var $container = $('#product-list');
+                var $container = $('#product-list-test');
                 if ($container.length && typeof $.fn.isotope !== 'undefined') {
-                    $grid = $container.isotope({
-                        itemSelector: '.masonry-item',
-                        layoutMode: 'fitRows',
-                        percentPosition: true
-                    });
+                    // Wait for images to be fully loaded to avoid zero-height items
+                    if (typeof $container.imagesLoaded === 'function') {
+                        $container.imagesLoaded(function () {
+                            $grid = $container.isotope({
+                                itemSelector: '.masonry-item',
+                                layoutMode: 'fitRows',
+                                percentPosition: true
+                            });
+                        }).always(function () {
+                            if ($grid) { $grid.isotope('layout'); }
+                        });
+                    } else {
+                        $grid = $container.isotope({
+                            itemSelector: '.masonry-item',
+                            layoutMode: 'fitRows',
+                            percentPosition: true
+                        });
+                    }
                 }
             }
 
@@ -231,15 +252,15 @@
                 setTimeout(function () {
                     var visibleItems = $grid.data('isotope').filteredItems.length;
                     var noResultsMsg = document.getElementById('no-results-message');
-                    var productList = document.getElementById('product-list');
+                    var productList = document.getElementById('product-list-test');
 
-                    if (visibleItems === 0) {
-                        if (noResultsMsg) noResultsMsg.style.display = 'block';
-                        if (productList) productList.style.minHeight = '0';
-                    } else {
-                        if (noResultsMsg) noResultsMsg.style.display = 'none';
-                        if (productList) productList.style.minHeight = 'auto';
-                    }
+                    //if (visibleItems === 0) {
+                    //    if (noResultsMsg) noResultsMsg.style.display = 'block';
+                    //    //if (productList) productList.style.minHeight = '0';
+                    //} else {
+                    //    if (noResultsMsg) noResultsMsg.style.display = 'none';
+                    //    //if (productList) productList.style.minHeight = 'auto';
+                    //}
                 }, 100);
             }
 
@@ -299,17 +320,26 @@
                     } catch (_er) { }
 
                     try {
-                        var pro = document.querySelector('#product-list');
+                        var pro = document.querySelector('#product-list-test');
                         var items = Array.isArray(payload) ? payload : (payload.Products || payload.products || []);
                         if (pro && Array.isArray(items)) {
                             pro.innerHTML = items.map(buildProductsHtml).join('');
 
-                            // Initialize Isotope after products are loaded
-                            setTimeout(function () {
-                                initIsotope();
-                                // Apply initial filters after Isotope is ready
-                                applyFilters();
-                            }, 100);
+                            // Initialize Isotope after products are in the DOM and images are loaded
+                            var $container = $('#product-list-test');
+                            if (typeof $container.imagesLoaded === 'function') {
+                                $container.imagesLoaded(function () {
+                                    initIsotope();
+                                    applyFilters();
+                                }).always(function () {
+                                    if ($grid) { $grid.isotope('layout'); }
+                                });
+                            } else {
+                                setTimeout(function () {
+                                    initIsotope();
+                                    applyFilters();
+                                }, 100);
+                            }
                         }
                     } catch (_err2) { }
 

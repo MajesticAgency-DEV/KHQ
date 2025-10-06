@@ -7,6 +7,7 @@ using KHQ.Repo.UOW;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace KHQ.Controllers
 {
@@ -33,7 +34,7 @@ namespace KHQ.Controllers
         [Route("GetAll")]
         public async Task<ProductDtoNew> GetAll()
         {
-            var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower() ?? "en";
+            //var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower() ?? "en";
             var products = await _unitOfWork.Repository<Product>().Queryable()
         .Include(p => p.SubProducts)
         .ToListAsync();
@@ -49,7 +50,7 @@ namespace KHQ.Controllers
                 .Where(b => brandIds.Contains(b.Id))
                 .ToListAsync();
 
-            var result = _mapper.Map<List<ProductDto>>(products, opt => opt.Items["lang"] = lang);
+            var result = _mapper.Map<List<ProductDto>>(products);
 
             // Attach Category & Brand Names + Images
             foreach (var product in result)
@@ -58,11 +59,11 @@ namespace KHQ.Controllers
                 var brand = brands.FirstOrDefault(b => b.Id == products.First(p => p.Id == product.Id).BrandId);
 
                 product.CategoryName = category != null
-                    ? (lang == "ar" ? category.NameAr : category.NameEn)
+                    ? (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? category.NameAr : category.NameEn)
                     : string.Empty;
 
                 product.BrandName = brand != null
-                    ? (lang == "ar" ? brand.NameAr : brand.NameEn)
+                    ? (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? brand.NameAr : brand.NameEn)
                     : string.Empty;
 
                 foreach (var sub in product.SubProducts)

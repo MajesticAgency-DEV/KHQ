@@ -191,21 +191,26 @@ document.addEventListener("DOMContentLoaded", loadLayout);
         if (curEl) { curEl.textContent = cur.toUpperCase(); }
 
         var nav = document.querySelector('.header-nav');
+        var leftSeparators = document.querySelector('.wt-small-separator-outer');
+        var check_list_outer = document.querySelector('.check-list-outer');
 
-        if (cur === 'ar'){
-            document.documentElement.setAttribute('dir','rtl');
-            document.documentElement.setAttribute('lang','ar');
-            if (document.body) document.body.classList.add('rtl');
+        //if (cur === 'ar'){
+        //    document.documentElement.setAttribute('dir','rtl');
+        //    document.documentElement.setAttribute('lang','ar');
+        //    if (document.body) document.body.classList.add('rtl');
 
-            if (nav) {
-                nav.classList.remove('justify-content-end');
-                nav.classList.add('justify-content-start');
-            }
-        } else {
-            document.documentElement.setAttribute('dir','ltr');
-            document.documentElement.setAttribute('lang','en');
-            if (document.body) document.body.classList.remove('rtl');
-        }
+        //    if (nav) {
+        //        nav.classList.remove('justify-content-end');
+        //        nav.classList.add('justify-content-start');
+        //    }
+        //    if (leftSeparators) {
+        //        leftSeparators.classList.add('text-start');
+        //    }
+        //} else {
+        //    document.documentElement.setAttribute('dir','ltr');
+        //    document.documentElement.setAttribute('lang','en');
+        //    if (document.body) document.body.classList.remove('rtl');
+        //}
 
         loadTranslations().then(function(map){
             var dict = (map && map[cur]) ? map[cur] : {};
