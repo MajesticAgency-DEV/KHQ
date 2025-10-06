@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KHQ.Caching;
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
@@ -14,28 +15,35 @@ namespace KHQ.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
 
 
-        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper,ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         [Route("GetAll")]
         public async Task<BrandDtoNew> GetAll()
         {
-            var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
+            var data = await _cacheService.GetOrCreateAsync(async () =>
+            {
+                var brandsData = await _unitOfWork.Repository<Brands>().Queryable().ToListAsync();
 
-            var bh_brandsData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 2).FirstOrDefaultAsync();
-            var bh_result = _mapper.Map<BaseHomeDto>(bh_brandsData);
-
-            var result = _mapper.Map<IEnumerable<BrandsDto>>(brandsData);
-
-            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                var bh_brandsData = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 2).FirstOrDefaultAsync();
+                var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
                         .Where(x => x.ImageType == ImageType.Brands_Cover)
                         .FirstOrDefaultAsync();
+                return new {brands =  brandsData, coverPhoto = coverPhoto , homeData = bh_brandsData};
+            }, 10, "Brands");
+            var bh_result = _mapper.Map<BaseHomeDto>(data.homeData);
+
+            var result = _mapper.Map<IEnumerable<BrandsDto>>(data.brands);
+
+            
 
             foreach (BrandsDto brands in result)
             {
@@ -52,9 +60,9 @@ namespace KHQ.Controllers
             }
             BrandDtoNew brandDtoNew = new BrandDtoNew();
             brandDtoNew.BrandsDtos = (List<BrandsDto>)result;
-            brandDtoNew.Main_Description = bh_result.Description;
-            brandDtoNew.Title = bh_result.Title;
-            brandDtoNew.CoverPhoto = coverPhoto.PathLink;
+            brandDtoNew.Main_Description = bh_result.Description?? "Brands";
+            brandDtoNew.Title = bh_result.Title?? "Brands";
+            brandDtoNew.CoverPhoto = data.coverPhoto == null ? "" : data.coverPhoto.PathLink;
             return brandDtoNew;
         }
 

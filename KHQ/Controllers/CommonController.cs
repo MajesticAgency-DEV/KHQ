@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KHQ.Caching;
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
@@ -15,10 +16,12 @@ namespace KHQ.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CommonController(IUnitOfWork unitOfWork, IMapper mapper) 
+        private readonly ICacheService _cacheService;
+        public CommonController(IUnitOfWork unitOfWork, IMapper mapper , ICacheService cacheService) 
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
@@ -46,6 +49,14 @@ namespace KHQ.Controllers
             var imageData = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == imageType).FirstOrDefaultAsync();
             var result = _mapper.Map<IEnumerable<ImageDto>>(imageData);
             return result;
+        }
+
+        [HttpPost]
+        [Route("ClearCach")]
+        public IActionResult ClearCah()
+        {
+            _cacheService.ClearAll();
+            return Ok();
         }
     }
 }

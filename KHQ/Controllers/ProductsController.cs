@@ -158,7 +158,7 @@ namespace KHQ.Controllers
         [HttpGet("GetByCategory/{categoryId}")]
         public async Task<IActionResult> GetByCategoryId(Guid categoryId)
         {
-            var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower() ?? "en";
+            var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower();
 
             var products = await _unitOfWork.Repository<Product>().Queryable()
                 .AsNoTracking()

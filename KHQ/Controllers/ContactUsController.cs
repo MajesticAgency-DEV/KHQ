@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KHQ.Caching;
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
@@ -14,24 +15,30 @@ namespace KHQ.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
 
-        public ContactUsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ContactUsController(IUnitOfWork unitOfWork, IMapper mapper,ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         [Route("GetAll")]
         public async Task<ContactUsDto> GetAll()
         {
-            var contactUsData = await _unitOfWork.Repository<ContactUs>().Queryable().FirstOrDefaultAsync();
-            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.ContactUs_Cover).FirstOrDefaultAsync();
-
-            var result = _mapper.Map<ContactUsDto>(contactUsData);
+            var data = await _cacheService.GetOrCreateAsync(async () =>
+            {
+                var contactUsData = await _unitOfWork.Repository<ContactUs>().Queryable().FirstOrDefaultAsync();
+                var coverPhoto = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.ContactUs_Cover).FirstOrDefaultAsync();
+                return new {contactUs = contactUsData,coverPhoto = coverPhoto};
+            }, 20 , "ContactUS");
+            
+            var result = _mapper.Map<ContactUsDto>(data.contactUs);
 
             if (result != null)
-                result.CoverPhoto = coverPhoto == null ? "" : coverPhoto.PathLink;
+                result.CoverPhoto = data.coverPhoto == null ? "" : data.coverPhoto.PathLink;
 
             return result;
         }

@@ -28,18 +28,18 @@ namespace KHQ.Controllers
         [Route("GetAll")]
         public async Task<List<SliderDto>> GetAll()
         {
-            _cacheService.ClearAll();
             var slidersData = await _cacheService.GetOrCreateAsync(async () =>
             {
                 var sliderData = await _unitOfWork.Repository<Slider>().Queryable().ToListAsync();
-                var result = _mapper.Map<List<SliderDto>>(sliderData);
-                foreach (var item in result)
-                {
-                    item.Images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == item.Id).OrderBy(x => x.Sort).Select(x => x.PathLink).ToListAsync();
-                }
-                return result;
+                return sliderData;
             }, 5 , "SlidersData");
-            return slidersData; 
+
+            var result = _mapper.Map<List<SliderDto>>(slidersData);
+            foreach (var item in result)
+            {
+                item.Images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.F_Key == item.Id).OrderBy(x => x.Sort).Select(x => x.PathLink).ToListAsync();
+            }
+            return result; 
         }
 
         [HttpGet]

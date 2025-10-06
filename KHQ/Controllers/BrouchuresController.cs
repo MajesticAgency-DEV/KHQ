@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KHQ.Caching;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;
@@ -15,20 +16,27 @@ namespace KHQ.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
+        private readonly ICacheService _cacheService;
 
-        public BrouchuresController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env)
+        public BrouchuresController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _env = env;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         [Route("GetAll")]
         public async Task<IEnumerable<BrouchuresDto>> GetAll()
         {
-            var brouchuresData = await _unitOfWork.Repository<Brouchures>().Queryable().ToListAsync();
-            var result = _mapper.Map<IEnumerable<BrouchuresDto>>(brouchuresData);
+            var data = await _cacheService.GetOrCreateAsync(async () =>
+            {
+                var brouchuresData = await _unitOfWork.Repository<Brouchures>().Queryable().ToListAsync();
+                return brouchuresData;
+            }, 10, "Brouchures");
+
+            var result = _mapper.Map<IEnumerable<BrouchuresDto>>(data);
             return result;
         }
 
