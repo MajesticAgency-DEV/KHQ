@@ -4,6 +4,7 @@ using KHQ.Repo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KHQ.Repo.Migrations
 {
     [DbContext(typeof(KHQDBContext))]
-    partial class KHQDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251005101749_edit brochures")]
+    partial class editbrochures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,13 +121,13 @@ namespace KHQ.Repo.Migrations
                         {
                             Id = "a18be9c0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "28916341-37b3-4eb5-bdbe-d88e8129fa52",
+                            ConcurrencyStamp = "b10300bf-5acf-4b62-9166-5d00d1728ddf",
                             Email = "Admin@KHQ.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "Admin@KHQ.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAELTUi1LE8QoteShGEAFLrgO1kzjcI/rDc++79TiDtASXEQKl+cf03/NboOFfc8u2qA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKrDQ7J8epexpPDLgnRP6Q++jsBtsmck0n7w5verRaIMP80NgCK6OKdEe2+yqLwyrw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -202,10 +205,6 @@ namespace KHQ.Repo.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -664,7 +663,7 @@ namespace KHQ.Repo.Migrations
                         },
                         new
                         {
-                            Id = "5fa121e2-3458-431d-94b0-50d845c5e15f",
+                            Id = "1381c376-a5cb-4cf8-a1a6-4c2269ef3df4",
                             Name = "User",
                             NormalizedName = "User"
                         });

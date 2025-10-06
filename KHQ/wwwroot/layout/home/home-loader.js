@@ -297,6 +297,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
     //});
 
     function buildBrandCardHtml(brand) {
+        var id = brand && (brand.id || brand.Id) ? (brand.id || brand.Id) : '';
         var imageSrc = brand && brand.imageLink ? brand.imageLink : '';
         var name = brand && brand.name ? brand.name : '';
         var description = brand && brand.description ? brand.description : '';
@@ -307,7 +308,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
         if (insta) socials += '<li><a href="' + insta + '" target="_blank" rel="noopener"><i class="fa fa-instagram"></i></a></li>';
         return (
             '<div class="col-xl-4 col-lg-4 col-md-6 m-b30">' +
-            '<div class="wt-team-2 bg-white radius-md">' +
+            '<div class="wt-team-2 bg-white radius-md brand-card" data-brand-id="' + id + '">' +
             '<div class="wt-team-2-content">' +
             '<div class="wt-media">' +
             '<img src="' + imageSrc + '" alt="" />' +
@@ -357,6 +358,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 if (!items || !items.length) { listContainer.innerHTML = ''; return; }
                 var html = items.map(function (it) {
                     return buildBrandCardHtml({
+                        id: it.Id || it.id,
                         name: it.Name || it.name,
                         description: it.Description || it.description,
                         imageLink: it.ImageLink || it.imageLink,
@@ -365,6 +367,18 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                     });
                 }).join('');
                 listContainer.innerHTML = html;
+                try {
+                    listContainer.addEventListener('click', function (ev) {
+                        var target = ev.target;
+                        var card = target.closest && target.closest('.brand-card');
+                        if (card && card.getAttribute) {
+                            var bid = card.getAttribute('data-brand-id');
+                            if (bid) {
+                                window.location.href = 'products.html?brandId=' + encodeURIComponent(bid);
+                            }
+                        }
+                    });
+                } catch (_navErr) { }
             })
             .catch(function (err) {
                 if (window && window.console) {
@@ -373,6 +387,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             });
     });
     function buildCategoryCardHtml(cat) {
+        var id = cat && (cat.id || cat.Id) ? (cat.id || cat.Id) : '';
         var imageSrc = cat && cat.imageLink ? cat.imageLink : '';
         var name = cat && cat.name ? cat.name : '';
         var description = cat && cat.description ? cat.description : '';
@@ -387,7 +402,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             '</div>' +
             '<div class="d-icon-box-content">' +
             '<p>' + description + '</p>' +
-            '<a href="javascript:;" class="site-button-link site-text-primary">Read More</a>' +
+            '<a href="products.html?categoryId=' + encodeURIComponent(id) + '" class="site-button-link site-text-primary">Read More</a>' +
             '</div>' +
             '</div>' +
             '</div>'
@@ -422,6 +437,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 if (!items || !items.length) { if (listContainer) listContainer.innerHTML = ''; return; }
                 var html = items.map(function (it) {
                     return buildCategoryCardHtml({
+                        id: it.Id || it.id,
                         name: it.Name || it.name,
                         description: it.Description || it.description,
                         imageLink: it.ImageLink || it.imageLink

@@ -18,6 +18,7 @@ namespace KHQ.Portal.Controllers
             _BrouchuresSrv = brouchuresSrv;
             _env = env;
         }
+        
         public async Task<IActionResult> Index()
         {
             IEnumerable<BrouchuresVM> brouchuresData = await _BrouchuresSrv.GetAllAsync();
@@ -33,10 +34,6 @@ namespace KHQ.Portal.Controllers
             return Ok(new
             {
                 brochure.Id,
-                brochure.TitleEn,
-                brochure.TitleAr,
-                brochure.DescriptionEn,
-                brochure.DescriptionAr,
                 FileUrl = Url.Action("Download", "Brouchures", new { id = brochure.Id })
             });
         }
@@ -67,6 +64,7 @@ namespace KHQ.Portal.Controllers
             }
 
             // Save to database using your service
+            brouchuresVM.FileName = $"{file.FileName}";
             brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             var result = await _BrouchuresSrv.AddAsync(brouchuresVM);
 
@@ -115,12 +113,14 @@ namespace KHQ.Portal.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                brouchuresVM.FilePath = $"/SharedImages/{fileName}";
+                brouchuresVM.FileName = $"{file.FileName}";
+                brouchuresVM.FilePath = $"/{sharedFolder}/{fileName}";
             }
             else
             {
                 // Keep old file path if no new file
                 brouchuresVM.FilePath = existing.FilePath;
+                brouchuresVM.FileName = existing.FileName;
             }
 
             var result = await _BrouchuresSrv.UpdateAsync(brouchuresVM);

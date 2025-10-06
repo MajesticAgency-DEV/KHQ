@@ -94,28 +94,11 @@
 
                             <div class="col-lg-4 col-md-12 rightSidebar">
                                 <div class="service-side-btn m-b30 site-bg-primary p-a20 text-white">
-                                    <h4 class="wt-title">Brochures</h4>
-                                    <p>View our 2020 financial prospectus brochure for an easy to read guide on all of the services offer.</p>
+                                    <h4 class="wt-title" id="brochure-title"></h4>
+                                    <p id="brochure-description"></p>
 
+                                    <div id="brochure-links"></div>
 
-                                    <div class="wt-icon-box-wraper left ">
-                                        <a href="#" class="btn-block  p-a15 m-tb10">
-                                            <span class="text-black m-r10"><i class="fa fa-file-pdf-o"></i></span>
-                                            <strong class="text-black">Download .PDF</strong>
-                                        </a>
-                                    </div>
-                                    <div class="wt-icon-box-wraper left">
-                                        <a href="#" class="btn-block  p-a15 m-tb10">
-                                            <span class="text-black m-r10"><i class="fa fa-file-word-o"></i></span>
-                                            <strong class="text-black"> Download .DOC</strong>
-                                        </a>
-                                    </div>
-                                    <div class="wt-icon-box-wraper left">
-                                        <a href="#" class="btn-block p-a15 m-t10">
-                                            <span class="text-black m-r10"><i class="fa fa-file-powerpoint-o"></i></span>
-                                            <strong class="text-black">Download .PPT</strong>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
 
@@ -310,6 +293,41 @@
                             console.warn('FAQ GetAll request failed', err && err.status ? err.status : err);
                         }
                     });
+
+                fetch('/api/Brouchures/GetAll', { method: 'GET' })
+                    .then(res => res.ok ? res.json() : Promise.reject(res))
+                    .then(payload => {
+                        if (!payload) return;
+
+                        // Update title and description
+                        document.getElementById('brochure-title').textContent = payload.title || 'Brochures';
+                        document.getElementById('brochure-description').textContent = payload.description || '';
+
+                        // Container for file links
+                        const linksContainer = document.getElementById('brochure-links');
+                        linksContainer.innerHTML = ''; // clear any default content
+
+                        payload.brouchuresDto.forEach(item => {
+                            if (!item.filePath) return;
+                            let icon = 'fa-file-pdf-o';
+
+                            // Create the link block
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'wt-icon-box-wraper left';
+
+                            wrapper.innerHTML = `
+                            <button class="btn-block p-a15 m-tb10" style="border-radius: 50px;border: 0;" onclick="downloadFile('${item.id}')">
+                                <span class="text-black m-r10"><i class="fa ${icon}"></i></span>
+                                <strong class="text-black">Download ${item.fileName}</strong>
+                            </button>
+                        `;
+
+                            linksContainer.appendChild(wrapper);
+                        });
+                    })
+                    .catch(err => {
+                        console.warn('Brouchures GetAll request failed', err && err.status ? err.status : err);
+                    });
             }
 
             if (document.readyState === 'loading') {
@@ -318,6 +336,29 @@
                 initFaq();
             }
         })();
+    </script>
+
+    <script>
+        function downloadFile(id) {
+            $.ajax({
+                url: `/api/Brouchures/Download/${id}`,
+                method: 'GET',
+                xhrFields: { responseType: 'blob' },
+                success: function (data, status, xhr) {
+                    debugger
+                    var filename = "brouchure.pdf";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('filename=') !== -1)
+                        filename = disposition.split('filename=')[1].replace(/"/g, '');
+                    var blob = new Blob([data], { type: 'application/pdf' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                },
+                error: function () { alert("Download failed."); }
+            });
+        }
     </script>
 </body>
 </html>
