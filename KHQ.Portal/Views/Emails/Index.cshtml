@@ -1,0 +1,91 @@
+﻿@model List<KHQ.Domain.ViewModel.EmailsVM>
+<div class="content">
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/">Dashboards / </a></li>
+                            <li class="breadcrumb-item active">Messages section</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Messages section</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+                <div class="col-12">
+                    <div class="card product-box">
+                        <div class="card-body">
+                            <div class="product-info">
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="cardCollpase5" class="collapse show">
+                                                <div class="table-responsive pt-3">
+                                                    <table class="table table-hover table-centered mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Email</th>
+                                                                <th>Phone</th>
+                                                                <th>Subject</th>
+                                                                <th>Message</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model)
+                                                            {
+                                                            <tr>
+                                                                <td>@item.Name</td>
+                                                                <td>@item.SentEmail</td>
+                                                                <td>@item.Phone</td>
+                                                                <td>@item.Subject</td>
+                                                                <td>@item.Message</td>
+                                                            </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table responsive-->
+                                            </div> <!-- collapsed end -->
+                                        </div> <!-- end card-body -->
+                                    </div> <!-- end card-->
+                                </div>
+                            </div>                        
+                        </div>
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+        </div>
+        </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $(document).on("click", ".deleteAboutUs", function () {
+        var id = $(this).data('id');
+        var formData = new FormData();
+        formData.append('id', id);
+
+        $.ajax({
+            url: '@Url.Action("Delete", "AboutUs")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
