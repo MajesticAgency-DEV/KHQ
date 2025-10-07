@@ -12,6 +12,7 @@
         public List<StainsDto> Stains { get; set; }
         public string Main_Title { get; set; }
         public string Main_Description { get; set; }
+        public string CoverPhoto { get; set; }
     }
 
 }

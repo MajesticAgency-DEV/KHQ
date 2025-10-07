@@ -42,6 +42,13 @@ namespace KHQ.Portal.Controllers
 
             return View(stains);
         }
+
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.Stains_Cover);
+            return View(images);
+        }
+
         [HttpGet]
         [Route("GetAllStatin")]
         public async Task<IEnumerable<StainsVM>> GetAllStains()
@@ -131,12 +138,6 @@ namespace KHQ.Portal.Controllers
             {
                 throw ex;
             }
-        }
-
-        public async Task<IActionResult> CoverSection()
-        {
-            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.StainsDetails_Cover);
-            return View(images);
         }
     }
 }

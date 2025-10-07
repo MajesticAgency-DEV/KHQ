@@ -1,4 +1,6 @@
-﻿using KHQ.Domain.ViewModel;
+﻿using KHQ.Domain;
+using KHQ.Domain.ViewModel;
+using KHQ.Portal.Service;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +9,12 @@ namespace KHQ.Portal.Controllers
     public class StainDetailsController : Controller
     {
         private readonly IStainDetailsSrv _stainDetailsSrv;
+        private readonly IImageService _imageService;
 
-        public StainDetailsController(IStainDetailsSrv stainDetailsSrv)
+        public StainDetailsController(IStainDetailsSrv stainDetailsSrv, IImageService imageService)
         {
             _stainDetailsSrv = stainDetailsSrv;
+            _imageService = imageService;
         }
 
         public async Task<IActionResult> Index()
@@ -81,6 +85,12 @@ namespace KHQ.Portal.Controllers
             {
                 return Json(new { success = false, message = "An error occurred while updating stain details" });
             }
+        }
+
+        public async Task<IActionResult> CoverSection()
+        {
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.StainsDetails_Cover);
+            return View(images);
         }
     }
 }

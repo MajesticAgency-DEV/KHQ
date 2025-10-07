@@ -81,9 +81,33 @@
             <!-- BRANDS SECTION START -->
             <div data-include="layout/home/brands.html"></div>
             <!-- BRANDS SECTION  SECTION END -->
-            <!-- OUR BLOG START -->
-            <div data-include="layout/home/blog.html"></div>
-            <!-- OUR BLOG END -->
+            
+            <!-- OUR STAINS START -->
+            <div class="section-full  p-b90 bg-img-section  bg-gray bg-contain bg-bottom-right bg-no-repeat">
+                <div class="container">
+                    <!-- TITLE START-->
+                    <div class="section-head center wt-small-separator-outer text-center section-head-stains">
+                        <div class="wt-small-separator site-text-primary wt-small-separator-stains">
+                            <div></div>
+                        </div>
+                        <h2></h2>
+                    </div>
+                    <!-- TITLE END-->
+                </div>
+                <div class="container">
+                    <div class="section-content">
+                        <!-- carousel 1 SECTION START -->
+                        <div class="section-full bg-gray">
+                            <div class="section-content container">
+                                <div class="owl-carousel gallery-slider2 dark-dotts-line center">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- carousel 1  SECTION END -->
+                    </div>
+                </div>
+            </div>
+            <!-- OUR STAINS END -->
 
             <div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
         </div>
@@ -138,9 +162,92 @@
 
     <!-- REVOLUTION SLIDER SCRIPT FILES -->
     <script src="../js/rev-script-1.js"></script>
-
-
     <script src="../js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
+
+    <script>
+        (function () {
+            function loadStainsOnce() {
+                if (loadStainsOnce._called) return;
+                loadStainsOnce._called = true;
+
+                $.ajax({
+                    url: "/api/Stains/GetAll",
+                    method: "GET"
+                }).done(function (payload) {
+                    try {
+                        // ===== Set Title and Description =====
+                        var titleEl = document.querySelector('.wt-small-separator-stains div');
+                        var apiTitle = payload.Main_Title || payload.main_Title;
+                        if (titleEl && apiTitle) titleEl.textContent = apiTitle;
+
+                        var descEl = document.querySelector('.section-head-stains h2');
+                        var apiDesc = payload.Main_Description || payload.main_Description;
+                        if (descEl && apiDesc) descEl.textContent = apiDesc;
+
+                        // ===== Build Stains Items =====
+                        var stains = payload.Stains || payload.stains;
+                        if (Array.isArray(stains) && stains.length > 0) {
+                            var container = $('.gallery-slider2');
+                            container.empty(); // Clear existing items
+
+                            stains.forEach(function (item) {
+                                var name = item.Name || item.name || "";
+                                var image = item.ImageLink || item.imageLink || "images/default.jpg";
+                                var desc = item.Description || item.description || "images/default.jpg";
+                                var html = `
+                                <div class="item">
+                                    <div class="project-img-effect-1">
+                                        <img src="${image}" alt="${name}" />
+                                        <div class="wt-info bg-white p-a20">
+                                            <h3 class="wt-tilte m-b10 m-t0">
+                                                <a href="javascript:;">${name}</a>
+                                            </h3>
+                                            <p>${desc}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                                container.append(html);
+                            });
+
+                            // ===== Re-initialize Owl Carousel =====
+                            if (container.hasClass('owl-loaded')) {
+                                container.trigger('destroy.owl.carousel'); // remove old instance
+                                container.html(container.find('.owl-stage-outer').html()).removeClass('owl-loaded');
+                            }
+
+                            container.owlCarousel({
+                                loop: true,
+                                margin: 30,
+                                dots: true,
+                                autoplay: true,
+                                autoplayTimeout: 5000,
+                                responsive: {
+                                    0: { items: 1 },
+                                    600: { items: 2 },
+                                    1000: { items: 3 }
+                                }
+                            });
+                        }
+                    } catch (err) {
+                        console.error("Error parsing stains data:", err);
+                    }
+                }).fail(function (xhr) {
+                    console.warn("Stains GetAll request failed:", xhr.status);
+                });
+            }
+
+            // Run when DOM is ready
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                loadStainsOnce();
+            } else {
+                document.addEventListener("DOMContentLoaded", loadStainsOnce);
+            }
+
+            // Fallback for late load
+            window.addEventListener("load", loadStainsOnce);
+        })();
+    </script>
 
 </body>
 </html>

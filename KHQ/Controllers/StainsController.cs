@@ -37,6 +37,10 @@ namespace KHQ.Controllers
             });
             var bh_result = _mapper.Map<BaseHomeDto>(stainsDto.basehome);
             var result = _mapper.Map<List<StainsDto>>(stainsDto.stains);
+
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                            .Where(x => x.ImageType == ImageType.Stains_Cover)
+                            .FirstOrDefaultAsync();
             foreach (var item in result)
             {
                 var images = await _unitOfWork.Repository<Image>().Queryable().Where(x => x.ImageType == ImageType.Stains && x.F_Key == item.Id).ToListAsync();
@@ -49,6 +53,7 @@ namespace KHQ.Controllers
             stain.Stains = result;
             stain.Main_Title = bh_result.Title;
             stain.Main_Description = bh_result.Description;
+            stain.CoverPhoto = coverPhoto.PathLink;
             return stain;
         }
 

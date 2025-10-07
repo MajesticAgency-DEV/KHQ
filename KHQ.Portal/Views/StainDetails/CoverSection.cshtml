@@ -212,7 +212,7 @@ $(document).ready(function () {
         if (selectedFiles) {
             formData.append("images", selectedFiles);
         }
-        formData.append("imageType", 17);
+        formData.append("imageType", 14);
 
         $.ajax({
             url: '/api/Common/SaveImages',
@@ -263,7 +263,7 @@ function saveEdit(itemId) {
         formData.append("existingImages", oldSelectedFiles);
     }
 
-    formData.append("imageType", 17);
+    formData.append("imageType", 14);
     formData.append('fKey', itemId);
 
     $.ajax({
