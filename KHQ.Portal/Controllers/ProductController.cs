@@ -22,7 +22,7 @@ namespace KHQ.Portal.Controllers
             _imageService = imageService;
             _BrandSrv = brandSrv;
         }
-        public async Task<IActionResult> Index(string search = "", string sortBy = "", int page = 1, int pageSize = 8)
+        public async Task<IActionResult> Index(string search = "", string sortBy = "")
         {
             var products = await _ProductSrv.GetAllAsync();
 
@@ -61,20 +61,11 @@ namespace KHQ.Portal.Controllers
                 _ => products
             };
 
-            // 📄 Pagination
-            int totalItems = products.Count();
-            var pagedProducts = products
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            // Pass paging info to view
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            // Preserve search/sort values in ViewBag
             ViewBag.Search = search;
             ViewBag.SortBy = sortBy;
 
-            return View(pagedProducts);
+            return View(products);
         }
 
         public async Task<IActionResult> GetById(Guid id)

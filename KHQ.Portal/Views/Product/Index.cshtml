@@ -151,32 +151,6 @@
         </div>
         <!-- end row-->
 
-<div class="row">
-    <div class="col-12">
-        <ul class="pagination pagination-rounded justify-content-end mb-3">
-            @if (ViewBag.CurrentPage > 1)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="?search=@ViewBag.Search&sortBy=@ViewBag.SortBy&page=@(ViewBag.CurrentPage - 1)">«</a>
-                </li>
-            }
-
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="?search=@ViewBag.Search&sortBy=@ViewBag.SortBy&page=@i">@i</a>
-                </li>
-            }
-
-            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="?search=@ViewBag.Search&sortBy=@ViewBag.SortBy&page=@(ViewBag.CurrentPage + 1)">»</a>
-                </li>
-            }
-        </ul>
-    </div>
-</div>
         <!-- end row-->
 
     </div> <!-- container -->
