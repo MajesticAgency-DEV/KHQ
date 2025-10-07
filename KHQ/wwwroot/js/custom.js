@@ -315,7 +315,8 @@ All JavaScript fuctions Start
 	function gallery_slider2(){
 	jQuery('.gallery-slider2').owlCarousel({
 		loop:true,
-		autoplay:true,
+		autoplay: true,
+		slideTransition: 'linear', // makes it smooth
 		nav:false,
 		dots: true,	
 		margin:30,

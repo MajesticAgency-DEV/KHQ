@@ -29,6 +29,6 @@
         WhyChooseUs = 5 ,
         Stains = 6,
         Statestics = 7,
-        Brochures = 8,
+        BrochuresFAQ = 8,
     }
 }
