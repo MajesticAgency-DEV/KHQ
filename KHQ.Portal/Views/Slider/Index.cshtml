@@ -186,7 +186,9 @@
                             </div>
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h5 class="font-16 mt-0 sp-line-1">@item.Link</h5>
+                                    <h3 class="mt-0 sp-line-1">@item.TitleEn / @item.TitleAr</h3>
+                                    <p class="mt-0 sp-line-1">@item.DescriptionEn / @item.DescriptionAr</p>
+                                    <h5 class="font-16 mt-0 sp-line-1">Link: <a href="@item.Link" target="_blank">@item.Link</a></h5>
                                 </div>
                             </div> <!-- end row -->
                         </div> <!-- end product info-->
@@ -220,42 +222,42 @@
                                 <div class="mb-3">
                     <label for="titleEn-edit-@item.Id" class="form-label">Title English:</label>
                     <input class="form-control link-input" type="text" id="titleEn-edit-@item.Id"
-                           placeholder="Enter Title English">
+                           placeholder="Enter Title English" value="@item.TitleEn">
                     <span class="validationTitleEn text-danger display-none">* Title English is required</span>
                 </div>
 
                                 <div class="mb-3">
                     <label for="titleAr-edit-@item.Id" class="form-label">Title Arabic:</label>
                     <input class="form-control link-input" type="text" id="titleAr-edit-@item.Id"
-                           placeholder="Enter Title Arabic">
+                           placeholder="Enter Title Arabic" value="@item.TitleAr">
                     <span class="validationTitleAr text-danger display-none">* Title Arabic is required</span>
                 </div>
 
                                 <div class="mb-3">
                     <label for="DescriptionEn-edit-@item.Id" class="form-label">Description English:</label>
                     <input class="form-control link-input" type="text" id="DescriptionEn-edit-@item.Id"
-                           placeholder="Enter Description English">
+                           placeholder="Enter Description English" value="@item.DescriptionEn">
                     <span class="validationDescriptionEn text-danger display-none">* Description English is required</span>
                 </div>
 
                                 <div class="mb-3">
                     <label for="DescriptionAr-edit-@item.Id" class="form-label">Description Arabic:</label>
                     <input class="form-control link-input" type="text" id="DescriptionAr-edit-@item.Id"
-                           placeholder="Enter Description Arabic">
+                           placeholder="Enter Description Arabic" value="@item.DescriptionAr">
                     <span class="validationDescriptionAr text-danger display-none">* Description Arabic is required</span>
                 </div>
 
                                 <div class="mb-3">
                     <label for="ButtonTextEn-edit-@item.Id" class="form-label">Button Text English:</label>
                     <input class="form-control link-input" type="text" id="ButtonTextEn-edit-@item.Id"
-                           placeholder="Enter Button Text English">
+                           placeholder="Enter Button Text English" value="@item.ButtonTextEn">
                     <span class="validationButtonTextEn text-danger display-none">* Button Text English is required</span>
                 </div>
 
                                 <div class="mb-3">
                     <label for="ButtonTextAr-edit-@item.Id" class="form-label">Button Text Arabic:</label>
                     <input class="form-control link-input" type="text" id="ButtonTextAr-edit-@item.Id"
-                           placeholder="Enter Button Text Arabic">
+                           placeholder="Enter Button Text Arabic" value="@item.ButtonTextAr">
                     <span class="validationButtonTextAr text-danger display-none">* Button Text Arabic is required</span>
                 </div>
                                 <form action="/upload" class="dropzone" id="photo-dropzone-edit-@item.Id">
