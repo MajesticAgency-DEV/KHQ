@@ -10156,7 +10156,7 @@ textarea.form-control2 {
 
 .wt-team-2 .team-social-center{position:relative;}
 .wt-team-2 .team-social-center ul{list-style: none;margin-bottom:0px;}
-.wt-team-2 .team-social-center ul li{	display:inline-block;	padding-right: 10px;}
+.wt-team-2 .team-social-center ul li{	display:inline-block;}
 .wt-team-2 .team-social-center ul li:last-child{padding-right:0px;}
 .wt-team-2 .team-social-center ul li a{
 	font-size: 16px;
@@ -10170,15 +10170,15 @@ textarea.form-control2 {
 	line-height: 30px;
 	border-radius: 50px;
 }
-.wt-team-2 .team-social-center ul li a:after{
-	position: absolute;
-    right: -10px;
-    content: '';
-    width: 6px;
-    height: 1px;
-    background-color: #1e1e1e;
-    top: 15px;
-}
+	.wt-team-2 .team-social-center ul li a:after {
+		position: absolute;
+		right: -10px;
+		/*content: '';*/
+		width: 6px;
+		height: 1px;
+		background-color: #1e1e1e;
+		top: 15px;
+	}
 .wt-team-2 .team-social-center ul li:last-child a:after{display:none;}
 
 .wt-team-2 .team-social-center ul li a{
