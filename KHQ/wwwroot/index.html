@@ -13,7 +13,7 @@
 
     <!-- FAVICONS ICON -->
     <link rel="icon" href="images/favicon.html" type="image/x-icon" />
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
 
     <!-- PAGE TITLE HERE -->
     <title>Khayrat Al-Qastal</title>
@@ -194,15 +194,17 @@
                                 var name = item.Name || item.name || "";
                                 var image = item.ImageLink || item.imageLink || "images/default.jpg";
                                 var desc = item.Description || item.description || "images/default.jpg";
+                                var href = item.id ? ('stainDetails.html?id=' + encodeURIComponent(item.id)) : 'javascript:void(0);';
                                 var html = `
                                 <div class="item">
                                     <div class="project-img-effect-1">
                                         <img src="${image}" alt="${name}" />
                                         <div class="wt-info bg-white p-a20">
                                             <h3 class="wt-tilte m-b10 m-t0">
-                                                <a href="javascript:;">${name}</a>
+                                                <a href="${href}">${name}</a>
                                             </h3>
                                             <p>${desc}</p>
+                                            <a href="${href}" class="site-button-link site-text-primary">Read More</a>
                                         </div>
                                     </div>
                                 </div>
