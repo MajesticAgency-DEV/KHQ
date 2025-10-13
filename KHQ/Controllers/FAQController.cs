@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KHQ.Caching;
+using KHQ.Srv.Caching;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Repo.UOW;

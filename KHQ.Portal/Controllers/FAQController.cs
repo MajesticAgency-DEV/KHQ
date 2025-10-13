@@ -1,5 +1,6 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IFaqService _FaqService;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public FAQController(IFaqService faqService, IImageService imageService)
+        public FAQController(IFaqService faqService, IImageService imageService,ICacheService cacheService)
         {
             _FaqService = faqService;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -38,6 +41,7 @@ namespace KHQ.Portal.Controllers
             var result = await _FaqService.AddAsync(faqVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -58,6 +62,7 @@ namespace KHQ.Portal.Controllers
             var result = await _FaqService.UpdateAsync(faqVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -71,6 +76,7 @@ namespace KHQ.Portal.Controllers
             var result = await _FaqService.DeleteAsync(id);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

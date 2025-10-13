@@ -1,5 +1,6 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly ICategorySrv _CategorySrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public CategoryController(ICategorySrv categorySrv, IImageService imageService)
+        public CategoryController(ICategorySrv categorySrv, IImageService imageService, ICacheService cacheService)
         {
             _CategorySrv = categorySrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -59,6 +62,7 @@ namespace KHQ.Portal.Controllers
             var result = await _CategorySrv.AddAsync(categoryVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -79,6 +83,7 @@ namespace KHQ.Portal.Controllers
             var result = await _CategorySrv.UpdateAsync(categoryVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -92,6 +97,7 @@ namespace KHQ.Portal.Controllers
             var result = await _CategorySrv.DeleteAsync(id);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

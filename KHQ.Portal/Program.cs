@@ -3,6 +3,7 @@ using KHQ.Portal.Service;
 using KHQ.Repo.Data;
 using KHQ.Repo.Repositories;
 using KHQ.Repo.UOW;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Mapper;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Identity;
@@ -100,6 +101,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBrouchuresSrv, BrouchuresSrv>();
 builder.Services.AddScoped<IEmailsSrv, EmailsSrv>();
 builder.Services.AddScoped<IWhyChooseUsSrv, WhyChooseUsSrv>();
+builder.Services.AddSingleton<ICacheService, CacheService>();
 
 
 

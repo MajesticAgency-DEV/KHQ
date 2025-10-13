@@ -3,6 +3,7 @@ using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
 using KHQ.Portal.Service;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +14,15 @@ namespace KHQ.Portal.Controllers
         private readonly IStainsService _stainsService;
         private readonly IStainDetailsSrv _stainDetailsSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
 
-        public StainsController(IStainsService stainsService, IStainDetailsSrv stainDetailsSrv, IImageService imageService)
+        public StainsController(IStainsService stainsService, IStainDetailsSrv stainDetailsSrv, IImageService imageService, ICacheService cacheService)
         {
             _stainsService = stainsService;
             _stainDetailsSrv = stainDetailsSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -93,6 +96,7 @@ namespace KHQ.Portal.Controllers
                 var x = staindetailsToBeDeleted == null ? 0 : await _stainDetailsSrv.DeleteAsync(staindetailsToBeDeleted.Id);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -112,6 +116,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainsService.AddAsync(stainsVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 return BadRequest();
@@ -130,6 +135,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainsService.UpdateAsync(stainsVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 return BadRequest();

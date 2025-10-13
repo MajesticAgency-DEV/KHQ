@@ -1,4 +1,4 @@
-﻿using KHQ.Caching;
+﻿using KHQ.Srv.Caching;
 using KHQ.Middleware;
 using KHQ.Repo.Data;
 using KHQ.Repo.Repositories;

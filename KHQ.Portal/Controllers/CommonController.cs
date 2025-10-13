@@ -2,6 +2,7 @@
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Repo.UOW;
+using KHQ.Srv.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -16,13 +17,15 @@ namespace KHQ.Portal.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
+        private readonly ICacheService _cacheService;
 
 
-        public CommonController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env)
+        public CommonController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _env = env;
+            _cacheService = cacheService;
         }
 
         [HttpPost("SaveImages")]
@@ -179,6 +182,7 @@ namespace KHQ.Portal.Controllers
 
                 var totalCount = (sortOrder?.ExistingImages.Count ?? existingImagePaths.Count) + newImagesToSave.Count;
 
+                _cacheService.ClearAll();
                 return Ok(new { success = true, count = totalCount, fkey = fKey });
             }
             catch (Exception ex)
@@ -246,7 +250,9 @@ namespace KHQ.Portal.Controllers
             if (System.IO.File.Exists(filePath))
                 System.IO.File.Delete(filePath);
 
-            _unitOfWork.Repository<Image>().Delete(image);
+            await _unitOfWork.Repository<Image>().Delete(image);
+
+            _cacheService.ClearAll();
             await _unitOfWork.SaveChangesAsync();
 
             return Ok(new { success = true });
@@ -275,7 +281,12 @@ namespace KHQ.Portal.Controllers
             }
 
             if (anyDeleted)
+            {
+
+                _cacheService.ClearAll();
                 await _unitOfWork.SaveChangesAsync();
+            }
+                
 
             return anyDeleted;
         }

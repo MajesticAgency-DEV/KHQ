@@ -1,4 +1,5 @@
 ﻿using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly ISocialMediaSrv _SocialMediaSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public SocialMediaController(ISocialMediaSrv socialMediaSrv, IImageService imageService)
+        public SocialMediaController(ISocialMediaSrv socialMediaSrv, IImageService imageService,ICacheService cacheService)
         {
             _SocialMediaSrv = socialMediaSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -37,6 +40,7 @@ namespace KHQ.Portal.Controllers
             var result = await _SocialMediaSrv.AddAsync(socialMedia);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -56,6 +60,7 @@ namespace KHQ.Portal.Controllers
             var result = await _SocialMediaSrv.UpdateAsync(socialMedia);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -69,6 +74,7 @@ namespace KHQ.Portal.Controllers
             var result = await _SocialMediaSrv.DeleteAsync(id);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

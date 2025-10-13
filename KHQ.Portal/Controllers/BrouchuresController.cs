@@ -1,6 +1,7 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,14 @@ namespace KHQ.Portal.Controllers
         private readonly IBrouchuresSrv _BrouchuresSrv;
         private readonly IImageService _imageService;
         private readonly IWebHostEnvironment _env;
+        private readonly ICacheService _cacheService;
 
-        public BrouchuresController(IBrouchuresSrv brouchuresSrv, IImageService imageService, IWebHostEnvironment env)
+        public BrouchuresController(IBrouchuresSrv brouchuresSrv, IImageService imageService, IWebHostEnvironment env, ICacheService cacheService)
         {
             _imageService = imageService;
             _BrouchuresSrv = brouchuresSrv;
             _env = env;
+            _cacheService = cacheService;
         }
         
         public async Task<IActionResult> Index()
@@ -70,6 +73,7 @@ namespace KHQ.Portal.Controllers
 
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -125,7 +129,10 @@ namespace KHQ.Portal.Controllers
 
             var result = await _BrouchuresSrv.UpdateAsync(brouchuresVM);
             if (result > 0)
+            {
+                _cacheService.ClearAll();
                 return Ok("Brochure updated successfully.");
+            }
 
             return BadRequest("Error while updating brochure.");
         }
@@ -138,6 +145,7 @@ namespace KHQ.Portal.Controllers
                 var res = await _imageService.DeleteImagesAsync(id);
                 if (res > 0)
                 {
+                    _cacheService.ClearAll();
                     return Ok();
                 }
                 else

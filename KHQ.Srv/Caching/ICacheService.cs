@@ -1,4 +1,4 @@
-﻿namespace KHQ.Caching
+﻿namespace KHQ.Srv.Caching
 {
     public interface ICacheService
     {

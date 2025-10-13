@@ -1,6 +1,7 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IAboutUsSrv _AboutUsSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public AboutUsController(IAboutUsSrv aboutUsSrv, IImageService imageService)
+        public AboutUsController(IAboutUsSrv aboutUsSrv, IImageService imageService,ICacheService cacheService)
         {
             _AboutUsSrv = aboutUsSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -51,6 +54,7 @@ namespace KHQ.Portal.Controllers
             var result = await _AboutUsSrv.AddAsync(aboutUs);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -64,6 +68,7 @@ namespace KHQ.Portal.Controllers
             var result = await _AboutUsSrv.UpdateAsync(aboutUs);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

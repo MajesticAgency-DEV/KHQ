@@ -2,6 +2,7 @@
 using KHQ.Domain.DTOs;
 using KHQ.Domain.ViewModel;
 using KHQ.Portal.Service;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +14,16 @@ namespace KHQ.Portal.Controllers
         private readonly ICategorySrv _CategorySrv;
         private readonly IBrandSrv _BrandSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
 
-        public ProductController(IProductSrv productSrv, ICategorySrv categorySrv, IImageService imageService, IBrandSrv brandSrv)
+        public ProductController(IProductSrv productSrv, ICategorySrv categorySrv, IImageService imageService, IBrandSrv brandSrv, ICacheService cacheService)
         {
             _ProductSrv = productSrv;
             _CategorySrv = categorySrv;
             _imageService = imageService;
             _BrandSrv = brandSrv;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index(string search = "", string sortBy = "")
         {
@@ -101,6 +104,7 @@ namespace KHQ.Portal.Controllers
             var result = await _ProductSrv.AddAsync(productVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction("Index", "Product");
             }
             else
@@ -147,6 +151,7 @@ namespace KHQ.Portal.Controllers
             var result = await _ProductSrv.UpdateAsync(productVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -160,7 +165,7 @@ namespace KHQ.Portal.Controllers
             var result = await _ProductSrv.DeleteAsync(id);
             if (result > 0)
             {
-
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

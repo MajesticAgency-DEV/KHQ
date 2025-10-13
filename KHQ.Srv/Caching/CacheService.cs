@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Concurrent;
 
-namespace KHQ.Caching
+namespace KHQ.Srv.Caching
 {
     public class CacheService : ICacheService
     {

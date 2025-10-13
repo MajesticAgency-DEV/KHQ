@@ -1,5 +1,6 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly ISliderSrv _sliderSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public SliderController(ISliderSrv sliderSrv, IImageService imageService)
+        public SliderController(ISliderSrv sliderSrv, IImageService imageService, ICacheService cacheService)
         {
             _sliderSrv = sliderSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
 
         public async Task<IActionResult> Index()
@@ -47,6 +50,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _sliderSrv.AddAsync(sliderVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -68,6 +72,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _sliderSrv.UpdateAsync(sliderVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -92,6 +97,7 @@ namespace KHQ.Portal.Controllers
                     var res = await _imageService.DeleteImagesAsync(id);
                     if (res > 0)
                     {
+                        _cacheService.ClearAll();
                         return Ok();
                     }
                     else

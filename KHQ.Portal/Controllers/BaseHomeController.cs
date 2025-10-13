@@ -1,4 +1,5 @@
 ﻿using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace KHQ.Portal.Controllers
     public class BaseHomeController : Controller
     {
         private readonly IBaseHomeService _BaseHomeService;
+        private readonly ICacheService _cacheService;
 
-        public BaseHomeController(IBaseHomeService baseHomeService)
+        public BaseHomeController(IBaseHomeService baseHomeService, ICacheService cacheService)
         {
             _BaseHomeService = baseHomeService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -44,6 +47,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _BaseHomeService.SaveSectionAsync(request);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return Json(new { success = true });
                 }
                 return Json(new { success = false, message = "Failed to save section" });

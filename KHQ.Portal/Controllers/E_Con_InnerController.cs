@@ -1,4 +1,5 @@
 ﻿using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace KHQ.Portal.Controllers
     public class E_Con_InnerController : Controller
     {
         private readonly IEConInnerService _EConInnerService;
+        private readonly ICacheService _cacheService;
 
-        public E_Con_InnerController(IEConInnerService eConInnerService)
+        public E_Con_InnerController(IEConInnerService eConInnerService, ICacheService cacheService)
         {
             _EConInnerService = eConInnerService;
+            _cacheService = cacheService;
         }
         public async Task<IActionResult> Index()
         {
@@ -35,6 +38,7 @@ namespace KHQ.Portal.Controllers
             var result = await _EConInnerService.AddAsync(e_Con_InnerVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -55,6 +59,7 @@ namespace KHQ.Portal.Controllers
             var result = await _EConInnerService.UpdateAsync(e_Con_InnerVM);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -68,6 +73,7 @@ namespace KHQ.Portal.Controllers
             var result = await _EConInnerService.DeleteAsync(id);
             if (result > 0)
             {
+                _cacheService.ClearAll();
                 return RedirectToAction(nameof(Index));
             }
             else

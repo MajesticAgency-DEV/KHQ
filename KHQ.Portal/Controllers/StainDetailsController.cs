@@ -1,6 +1,7 @@
 ﻿using KHQ.Domain;
 using KHQ.Domain.ViewModel;
 using KHQ.Portal.Service;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IStainDetailsSrv _stainDetailsSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public StainDetailsController(IStainDetailsSrv stainDetailsSrv, IImageService imageService)
+        public StainDetailsController(IStainDetailsSrv stainDetailsSrv, IImageService imageService, ICacheService cacheService)
         {
             _stainDetailsSrv = stainDetailsSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
 
         public async Task<IActionResult> Index()
@@ -42,6 +45,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainDetailsSrv.DeleteAsync(id);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return Json(new { success = true, message = "Stain details deleted successfully" });
                 }
                 return Json(new { success = false, message = "Failed to delete stain details" });
@@ -59,6 +63,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainDetailsSrv.AddAsync(stainDetailsVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return Json(new { success = true, message = "Stain details added successfully" });
                 }
                 return Json(new { success = false, message = "Failed to add stain details" });
@@ -77,6 +82,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _stainDetailsSrv.UpdateAsync(stainDetailsVM);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return Json(new { success = true, message = "Stain details updated successfully" });
                 }
                 return Json(new { success = false, message = "Failed to update stain details" });

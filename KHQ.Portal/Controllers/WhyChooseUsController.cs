@@ -1,4 +1,5 @@
 ﻿using KHQ.Domain.ViewModel;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -9,11 +10,13 @@ namespace KHQ.Portal.Controllers
     {
         private readonly IWhyChooseUsSrv _whyChooseUsSrv;
         private readonly IImageService _imageService;
+        private readonly ICacheService _cacheService;
 
-        public WhyChooseUsController(IWhyChooseUsSrv whyChooseUsSrv, IImageService imageService)
+        public WhyChooseUsController(IWhyChooseUsSrv whyChooseUsSrv, IImageService imageService, ICacheService cacheService)
         {
             _whyChooseUsSrv = whyChooseUsSrv;
             _imageService = imageService;
+            _cacheService = cacheService;
         }
 
         public async Task<IActionResult> Index()
@@ -30,6 +33,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _whyChooseUsSrv.AddAsync(whyChooseUs);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -51,6 +55,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _whyChooseUsSrv.UpdateAsync(whyChooseUs);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -72,6 +77,7 @@ namespace KHQ.Portal.Controllers
                 var result = await _whyChooseUsSrv.DeleteAsync(id);
                 if (result > 0)
                 {
+                    _cacheService.ClearAll();
                     return Ok();
                 }
                 else
