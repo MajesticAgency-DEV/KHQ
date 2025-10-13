@@ -67,6 +67,12 @@ i.fa-light.fa-pen-to-square.font-20 {
     max-height: 120px;
 }
 
+.Majestic-lin {
+    color: #6c757d;
+}
+.Majestic-lin:hover {
+    color: #e1251b !important;
+}
 
 
 
