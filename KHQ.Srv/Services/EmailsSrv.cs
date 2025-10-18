@@ -72,37 +72,61 @@ namespace KHQ.Srv.Services
         {
             try
             {
-                // Build email body
                 var body = new StringBuilder();
                 body.AppendLine(dto.Message);
                 body.AppendLine();
                 body.AppendLine($"--");
                 body.AppendLine($"Name: {dto.Name}");
                 body.AppendLine($"Phone: {dto.Phone}");
+                body.AppendLine($"Email: {dto.SentEmail}");
 
-                var mail = new MailMessage
-                {
-                    From = new MailAddress(dto.SentEmail, dto.Name),
-                    Subject = dto.Subject ?? "New Contact Message",
-                    Body = body.ToString(),
-                    IsBodyHtml = false
-                };
+                await SendEmailAsync(
+                    from: "no-reply@khq.com",
+                    to: "admin@khq.com",
+                    subject: dto.Subject ?? "New Contact Message",
+                    body: body.ToString()
+                );
 
-                mail.To.Add("Admin@KHQ.com");
+                // Send confirmation to user
+                var confirmation = new StringBuilder();
+                confirmation.AppendLine($"Dear {dto.Name},");
+                confirmation.AppendLine();
+                confirmation.AppendLine("Thank you for contacting KHQ. We’ve received your message and will get back to you soon.");
+                confirmation.AppendLine();
+                confirmation.AppendLine("Best regards,");
+                confirmation.AppendLine("KHQ Support Team");
 
-                using (var smtp = new SmtpClient("smtp.yourserver.com", 587)) // replace with real SMTP
-                {
-                    smtp.Credentials = new NetworkCredential("your-smtp-username", "your-smtp-password");
-                    smtp.EnableSsl = true;
-
-                    await smtp.SendMailAsync(mail);
-                }
+                await SendEmailAsync(
+                    from: "no-reply@khq.com",
+                    to: dto.SentEmail,
+                    subject: "We received your message",
+                    body: confirmation.ToString()
+                );
             }
             catch (Exception ex)
             {
-                // TODO: Log the exception
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
         }
+
+        private async Task SendEmailAsync(string from, string to, string subject, string body)
+        {
+            var mail = new MailMessage
+            {
+                From = new MailAddress(from, "KHQ Website"),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = false
+            };
+            mail.To.Add(to);
+
+            using (var smtp = new SmtpClient("smtp.yourserver.com", 587))
+            {
+                smtp.Credentials = new NetworkCredential("your-smtp-username", "your-smtp-password");
+                smtp.EnableSsl = true;
+                await smtp.SendMailAsync(mail);
+            }
+        }
+
     }
 }

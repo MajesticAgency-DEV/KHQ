@@ -28,6 +28,7 @@ namespace KHQ.Repo.Data
         public DbSet<WhyChooseUs> WhyChooseUs { get; set; }
         public DbSet<Brouchures> Brouchures { get; set; }
         public DbSet<Emails> Emails { get; set; }
+        public DbSet<EmailSettings> EmailSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

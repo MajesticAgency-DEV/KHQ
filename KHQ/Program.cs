@@ -63,6 +63,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IAboutUsSrv, AboutUsSrv>();
+builder.Services.AddSingleton<IEmailSettingsSRV, EmailSettingsSRV>();
 
 var app = builder.Build();
 

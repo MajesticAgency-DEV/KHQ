@@ -102,6 +102,7 @@ builder.Services.AddScoped<IBrouchuresSrv, BrouchuresSrv>();
 builder.Services.AddScoped<IEmailsSrv, EmailsSrv>();
 builder.Services.AddScoped<IWhyChooseUsSrv, WhyChooseUsSrv>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
+builder.Services.AddSingleton<IEmailSettingsSRV, EmailSettingsSRV>();
 
 
 
