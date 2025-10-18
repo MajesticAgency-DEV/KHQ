@@ -1,122 +1,9 @@
-﻿@model List<string>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
-<style>
-    .content {
-        padding: 30px;
-    }
-
-    .dropzone {
-        border: 3px dashed #6658dd;
-        border-radius: 15px;
-        background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-        .dropzone:hover {
-            border-color: #6658dd;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.2);
-        }
-
-        .dropzone.dz-drag-hover {
-            border-color: #6658dd;
-            background: linear-gradient(135deg, #e8f2ff 0%, #d4e8ff 100%);
-            transform: scale(1.02);
-        }
-
-        .dropzone .dz-message {
-            text-align: center;
-            margin: 2em 0;
-            color: #6658dd;
-            font-size: 1.2em;
-        }
-
-    .photo-order {
-        display: none;
-    }
-
-    .sortable-container {
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
-    .photo-item {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        cursor: grab;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-        .photo-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        .photo-item:active {
-            cursor: grabbing;
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            display: block;
-        }
-
-    .photo-info {
-        padding: 15px;
-    }
-
-    .photo-name {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 5px;
-        font-size: 0.9em;
-    }
-
-    .photo-size {
-        color: #666;
-        font-size: 0.8em;
-    }
-
-    .remove-btn {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background: #f1556c;
-        color: white;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-        .remove-btn:hover {
-            transform: scale(1.1);
-        }
-
-    .drag-ghost {
-        opacity: 0.5;
-        transform: rotate(5deg);
-    }
-</style>
-
+﻿@model List<KHQ.Domain.Entities.Image>
 <div class="content">
+
     <!-- Start Content-->
     <div class="container-fluid">
+
         <!-- start page title -->
         <div class="row">
             <div class="col-12">
@@ -134,419 +21,198 @@
                 </div>
             </div>
         </div>
-        @if (Model.Count() == 0)
-        {
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row justify-content-end">
-                                <div class="col-auto">
-                                    <div class="text-lg-end my-1 my-lg-0">
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#add-modal">
-                                            <i class="fa-regular fa-circle-plus"></i> Add Images
-                                        </button>
-                                    </div>
-                                </div><!-- end col-->
-                            </div> <!-- end row -->
-                        </div>
-                    </div> <!-- end card -->
-                </div> <!-- end col-->
-            </div>
-        }
-        <!-- end row-->
+        <!-- end page title -->
 
+        @if (Model.Count == 0)
+        {
         <div class="row">
             <div class="col-12">
-                <div class="card product-box">
+                <div class="card">
                     <div class="card-body">
-                        <div class="product-action">
-                            <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
-                                    data-bs-target="#edit-modal">
-                                <i class="fa-sharp fa-light fa-pencil"></i>
-                            </button>
-                        </div>
-                        @for (int i = 0; i < Model.Count(); i++)
-                        {
-                            <img src="@Model[i]" alt="product-pic" class="img-fluid">
-                        }
-                    </div>
-                </div> <!-- end card-->
-                <!-- Edit Modal - Fixed to work without itemId -->
-                <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
-                     data-existing-images='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model))'>
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit About Us Images</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="alert alert-success display-none">
-                                    <i class="fa-sharp fa-light fa-circle-check"></i> Images updated successfully.
-                                </div>
-                                <div class="alert alert-danger display-none" id="error-alert-edit">
-                                    <i class="fa-sharp fa-light fa-circle-exclamation"></i> <span class="error-message"></span>
-                                </div>
-                                <form action="/upload" class="dropzone" id="photo-dropzone-edit">
-                                    <div class="dz-message">
-                                        <strong>📁 Drop photos here or click to browse</strong><br>
-                                        <span style="font-size: 0.9em; opacity: 0.7;">Multiple files supported</span>
-                                    </div>
-                                </form>
-                                <!-- Container for existing and new images -->
-                                <div class="sortable-container" id="sortable-photos-edit"></div>
-
-                                <div class="mb-2 text-center">
-                                    <button class="btn btn-primary save-slider-btn" data-mode="edit" type="button">
-                                        Update About Us Images
+                        <div class="row justify-content-end">
+                            <div class="col-auto">
+                                <div class="text-lg-end my-1 my-lg-0">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#add-modal">
+                                        <i class="fa-regular fa-circle-plus"></i> Add New
                                     </button>
                                 </div>
+                            </div><!-- end col-->
+                        </div> <!-- end row -->
+                    </div>
+                </div> <!-- end card -->
+            </div> <!-- end col-->
+        </div>
+        <!-- end row-->   
+        }
+
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12">
+                    <div class="card product-box">
+                        <div class="card-body">
+                            <div class="product-action">
+                                <input value="@item.F_Key" type="hidden" id="CoverSectionId-@item.F_Key" />
+                                <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-bs-toggle="modal"
+                                    data-bs-target="#edit-modal-@item.F_Key">
+                                    <i class="fa-sharp fa-light fa-pencil"></i>
+                                </button>
+                            </div>
+
+                            <div class="bg-light">
+                                <img src="@item.PathLink" alt="pic"
+                                 class="img-fluid" />
+                            </div>
+                        </div>
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+
+                <div id="edit-modal-@item.F_Key" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="alert alert-success alert-success-edit display-none">
+                                    <i class="fa-sharp fa-light fa-circle-check"></i> Section edited successfully.
+                                </div>
+                                <form id="CoverSectionFormEdit" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="imageInput-edit" class="form-label">Upload image:</label>
+                                        <input type="file" id="imageInput-edit-@item.F_Key" class="form-control" onchange="uploadImage(event,'@item.F_Key')">
+
+                                        <div id="imagePreview-edit-@item.F_Key" class="mt-3 row">
+                                            <div class="image-container col-4" style="position: relative; margin-bottom: 8px;">
+                                                <img src="@item.PathLink" class="img-thumbnail oldSelectedImg-@item.F_Key" style="max-width: 150px;">
+                                                <button type="button" class="btn btn-danger btn-sm remove-Img" style="position: absolute; bottom: 0px; right: 2px;"><i class="fa-light fa-trash"></i></button>
+                                            </div>
+                                            
+                                        </div>
+                                        <span class="validationImage text-danger display-none">* this field is required</span>
+                                    </div>
+                                    <div class="mb-2 text-center">
+                                        <button class="btn btn-primary btn-submit" id="EditCoverSectionSectionsbtn-@item.F_Key"
+                                            type="button" onclick="saveEdit('@item.F_Key')">
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> <!-- end col-->
+            }
         </div>
-    </div>
+        </div>
 </div>
 
+<!-- Add modal content -->
 <div id="add-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add About Us Images</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
             <div class="modal-body">
                 <div class="alert alert-success display-none">
-                    <i class="fa-sharp fa-light fa-circle-check"></i> Images saved successfully.
+                    <i class="fa-sharp fa-light fa-circle-check"></i> Section added successfully.
                 </div>
-                <div class="alert alert-danger display-none" id="error-alert-add">
-                    <i class="fa-sharp fa-light fa-circle-exclamation"></i> <span class="error-message"></span>
-                </div>
-                <form action="/upload" class="dropzone" id="photo-dropzone-add">
-                    <div class="dz-message">
-                        <strong>📁 Drop photos here or click to browse</strong><br>
-                        <span style="font-size: 0.9em; opacity: 0.7;">Multiple files supported</span>
+                <form id="CoverSectionForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="ImageUpload" class="form-label">Upload image:</label>
+                        <input type="file" id="imageInput" class="form-control">
+                        <div id="imagePreview" class="mt-3 row"></div>
+
+                        <span class="validationImage text-danger display-none">* this field is required</span>
+                    </div>
+                    <div class="mb-2 text-center">
+                        <button class="btn btn-primary btn-submit" id="SaveCoverSectionSectionsbtn"
+                                type="button">
+                            Save
+                        </button>
                     </div>
                 </form>
 
-                <div class="sortable-container" id="sortable-photos-add"></div>
-
-                <div class="mb-2 text-center">
-                    <button class="btn btn-primary save-slider-btn" data-mode="add" type="button">
-                        Save About Us Images
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
 
 <script>
-    // Disable auto-discover for all elements
-    Dropzone.autoDiscover = false;
+// Replace the existing JavaScript with this improved version
 
-    // Global variables - simplified for aboutus section
-    let uploadedPhotosAdd = [];
-    let uploadedPhotosEdit = [];
-    let existingPhotosEdit = [];
-    let photoCounter = 0;
-    let dropzones = {};
-    let sortables = {};
+var selectedFiles = null;
+// Create object to store files for each edit modal separately
+var editModalFiles = {};
 
-    $(document).ready(function() {
-        console.log('Document ready - initializing dropzones and sortables');
+// Use event delegation for remove buttons to handle dynamically generated content
+$(document).on("click", ".remove-Img", function(){
+    const $container = $(this).closest('.image-container');
+    const $preview = $container.closest('[id^="imagePreview-edit-"]');
+    
+    // Extract item ID from preview div ID
+    const previewId = $preview.attr('id');
+    if (previewId) {
+        const itemId = previewId.replace('imagePreview-edit-', '');
+        // Clear the stored file for this item
+        delete editModalFiles[itemId];
+    }
+    
+    $container.remove();
+});
 
-        // Initialize add modal dropzone and sortable
-        initializeDropzone('add');
-        initializeSortable('add');
+$(document).ready(function () {
+    // Modified image input change handler for single image (ADD modal)
+    $("#imageInput").on("change", function (event) {
+        const imagePreview = $("#imagePreview");
+        
+        selectedFiles = event.target.files[0] || null;
+        imagePreview.empty();
+        
+        if (selectedFiles) {
+            const imageContainer = $("<div>").addClass("image-container col-4")
+                .css({
+                    "position": "relative",
+                    "margin-bottom": "8px"
+                });
+            
+            const img = $("<img>")
+                .attr("src", URL.createObjectURL(selectedFiles))
+                .addClass("img-thumbnail")
+                .css("max-width", "150px");
 
-        // Initialize edit modal dropzone and sortable
-        initializeDropzone('edit');
-        initializeSortable('edit');
-        loadExistingImages();
-
-        console.log('All initializations complete');
-    });
-
-    // Event handler when edit modal is shown - load existing images
-    $('#edit-modal').on('modal.fade.show', function() {
-        console.log('Edit modal shown - loading existing images');
-        loadExistingImages();
-    });
-
-    // Event handler when edit modal is hidden - clear data
-    $('#edit-modal').on('hidden.bs.modal', function() {
-        console.log('Edit modal hidden - clearing data');
-        clearEditModalData();
-    });
-
-    // Load existing images from data attribute
-    function loadExistingImages() {
-        const modalElement = $('#edit-modal');
-        const existingImagesData = modalElement.data('existing-images');
-        console.log('Loading existing images:', existingImagesData);
-
-        // Clear existing photos array
-        existingPhotosEdit = [];
-
-        // Clear the container
-        const container = document.getElementById('sortable-photos-edit');
-        if (container) {
-            container.innerHTML = '';
-        }
-
-        if (existingImagesData && existingImagesData.length > 0) {
-            existingImagesData.forEach((imagePath, index) => {
-                const photoId = `existing-photo-${index}`;
-                const photoItem = createExistingPhotoElement(photoId, imagePath);
-
-                // Store existing photo data
-                existingPhotosEdit.push({
-                    id: photoId,
-                    path: imagePath,
-                    isExisting: true,
-                    element: photoItem
+            const deleteButton = $("<button>")
+                .attr("type", "button")
+                .addClass("btn btn-danger btn-sm")
+                .css({
+                    "position": "absolute",
+                    "bottom": "0",
+                    "right": "0"
+                })
+                .html('<i class="fa-light fa-trash"></i>')
+                .on("click", function () {
+                    selectedFiles = null;
+                    imageContainer.remove();
+                    $("#imageInput").val('');
                 });
 
-                if (container) {
-                    container.appendChild(photoItem);
-                }
-            });
-
-            console.log(`Loaded ${existingImagesData.length} existing images`);
+            imageContainer.append(img, deleteButton);
+            imagePreview.append(imageContainer);
         }
-    }
-
-    // Create existing photo elements
-    function createExistingPhotoElement(photoId, imagePath) {
-        const photoItem = document.createElement('div');
-        photoItem.className = 'photo-item';
-        photoItem.dataset.photoId = photoId;
-        photoItem.style.opacity = '1';
-        photoItem.style.transform = 'translateY(0px)';
-        photoItem.style.transition = '0.3s';
-
-        const fileName = imagePath.split('/').pop() || 'Unknown';
-
-        photoItem.innerHTML = `
-            <div class="photo-order"></div>
-            <div class="remove-btn" onclick="removeExistingPhoto('${photoId}')">×</div>
-            <img src="${imagePath}" alt="${fileName}">
-            <div class="photo-info">
-                <div class="photo-name">${fileName}</div>
-                <div class="photo-size">Existing Image</div>
-            </div>
-        `;
-
-        return photoItem;
-    }
-
-    // Clear edit modal data
-    function clearEditModalData() {
-        existingPhotosEdit = [];
-        uploadedPhotosEdit = [];
-        const container = document.getElementById('sortable-photos-edit');
-        if (container) {
-            container.innerHTML = '';
-        }
-        // Removed the link field clearing since it doesn't exist in edit modal
-        hideValidationErrors($('#edit-modal'));
-    }
-
-    // Clear add modal data when hidden
-    $('#add-modal').on('hidden.bs.modal', function() {
-        uploadedPhotosAdd = [];
-        const container = document.getElementById('sortable-photos-add');
-        if (container) {
-            container.innerHTML = '';
-        }
-        $('#link-add').val('');
-        hideValidationErrors($('#add-modal'));
     });
 
-    // Event handler for save buttons
-    $(document).on('click', '.save-slider-btn', function() {
-        const mode = $(this).data('mode');
-        console.log(`Save button clicked - Mode: ${mode}`);
-        saveImageInDB(mode);
-    });
+    $('#SaveCoverSectionSectionsbtn').click(function () {
+        var formData = new FormData();
 
-    function initializeDropzone(mode) {
-        const dropzoneId = mode === 'add' ? 'photo-dropzone-add' : 'photo-dropzone-edit';
-
-        // Skip if already initialized
-        if (dropzones[mode]) {
-            return;
-        }
-
-        // Check if element exists
-        const element = document.getElementById(dropzoneId);
-        if (!element) {
-            console.log(`Dropzone element not found: ${dropzoneId}`);
-            return;
-        }
-
-        console.log(`Initializing dropzone: ${dropzoneId}`);
-
-        const dropzone = new Dropzone(`#${dropzoneId}`, {
-            url: "/upload",
-            paramName: "photos",
-            maxFilesize: 10,
-            acceptedFiles: "image/*",
-            addRemoveLinks: false,
-            autoProcessQueue: false,
-            parallelUploads: 10,
-            uploadMultiple: true,
-
-            init: function() {
-                this.on("addedfile", function(file) {
-                    this.removeFile(file);
-                    addPhotoToGallery(file, mode);
-                });
-
-                this.on("error", function(file, message) {
-                    alert("Upload error: " + message);
-                });
-            }
-        });
-
-        dropzones[mode] = dropzone;
-        console.log(`Dropzone initialized successfully: ${dropzoneId}`);
-    }
-
-    function initializeSortable(mode) {
-        const containerId = mode === 'add' ? 'sortable-photos-add' : 'sortable-photos-edit';
-
-        // Skip if already initialized
-        if (sortables[mode]) {
-            console.log(`Sortable already initialized: ${containerId}`);
-            return;
-        }
-
-        const container = document.getElementById(containerId);
-        if (!container) {
-            console.log(`Sortable container not found: ${containerId}`);
-            return;
-        }
-
-        console.log(`Initializing sortable: ${containerId}`);
-
-        const sortable = new Sortable(container, {
-            animation: 150,
-            ghostClass: 'drag-ghost',
-            onEnd: function(evt) {
-                updatePhotoOrder(mode);
-                updateOrderNumbers(mode);
-            }
-        });
-
-        sortables[mode] = sortable;
-        console.log(`Sortable initialized successfully: ${containerId}`);
-    }
-
-    function addPhotoToGallery(file, mode) {
-        photoCounter++;
-        const photoId = 'photo-' + photoCounter;
-        const containerId = mode === 'add' ? 'sortable-photos-add' : 'sortable-photos-edit';
-
-        console.log(`Adding photo to gallery - Mode: ${mode}, Container: ${containerId}`);
-
-        const photoItem = document.createElement('div');
-        photoItem.className = 'photo-item';
-        photoItem.dataset.photoId = photoId;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            photoItem.innerHTML = `
-                <div class="photo-order"></div>
-                <div class="remove-btn" onclick="removePhoto('${photoId}', '${mode}')">×</div>
-                <img src="${e.target.result}" alt="${file.name}">
-                <div class="photo-info">
-                    <div class="photo-name">${file.name}</div>
-                    <div class="photo-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                </div>
-            `;
-        };
-        reader.readAsDataURL(file);
-
-        // Store photo data
-        const photoData = {
-            id: photoId,
-            file: file,
-            element: photoItem,
-            isExisting: false
-        };
-
-        if (mode === 'add') {
-            uploadedPhotosAdd.push(photoData);
-            console.log(`Photo added to add mode. Total photos: ${uploadedPhotosAdd.length}`);
+        if (!selectedFiles) {
+            $(".validationImage").removeClass("display-none");
         } else {
-            uploadedPhotosEdit.push(photoData);
-            console.log(`Photo added to edit mode. Total photos: ${uploadedPhotosEdit.length}`);
+            $(".validationImage").addClass("display-none");
         }
 
-        // Add to gallery
-        const container = document.getElementById(containerId);
-        if (container) {
-            container.appendChild(photoItem);
-            console.log(`Photo element added to container: ${containerId}`);
-
-            // Add entrance animation
-            setTimeout(() => {
-                photoItem.style.opacity = '0';
-                photoItem.style.transform = 'translateY(20px)';
-                photoItem.style.transition = 'all 0.3s ease';
-
-                setTimeout(() => {
-                    photoItem.style.opacity = '1';
-                    photoItem.style.transform = 'translateY(0)';
-                }, 50);
-            }, 50);
-        } else {
-            console.error(`Container not found: ${containerId}`);
-        }
-    }
-
-    function saveImageInDB(mode) {
-        let newPhotos = mode === 'add' ? uploadedPhotosAdd : uploadedPhotosEdit;
-        let existingPhotos = mode === 'edit' ? existingPhotosEdit : [];
-
-        // For add mode, we must have photos
-        if (mode === 'add' && newPhotos.length === 0) {
-            showError('Please add at least one photo', mode);
-            return;
-        }
-
-        // For edit mode, check if we have any photos at all (existing or new)
-        if (mode === 'edit' && newPhotos.length === 0 && existingPhotos.length === 0) {
-            showError('Please add at least one photo', mode);
-            return;
-        }
-
-        const formData = new FormData();
-
-        // Add new photos to FormData
-        newPhotos.forEach((photo) => {
-            formData.append('images', photo.file);
-        });
-
-        // Add aboutus identifier (you can use a fixed GUID for aboutus or empty GUID)
-        if (mode === 'edit') {
-            // Get complete sort order information including both existing and new images
-            const sortOrderData = getCompleteSortOrder();
-            if (sortOrderData) {
-                formData.append('sortOrderData', JSON.stringify(sortOrderData));
-            }
-        } else {
-            formData.append('fKey', '00000000-0000-0000-0000-000000000000'); // Empty GUID for add mode
+        if (selectedFiles) {
+            formData.append("images", selectedFiles);
         }
         formData.append("imageType", 1);
 
@@ -557,257 +223,127 @@
             processData: false,
             contentType: false,
             success: function (result) {
-                showSuccess(mode);
+                $(".alert-success").removeClass("display-none");
+                $(".alert-success").addClass("d-flex");
+
                 setTimeout(function () {
                     location.reload();
-                }, 1500);
+                }, 1000);
             },
             error: function (xhr, status, error) {
-                showError('Error saving images: ' + xhr.responseText, mode);
+                showError('Error saving images: ' + xhr.responseText);
             }
         });
+    });
+});
+
+function saveEdit(itemId) {
+    var formData = new FormData();
+    var oldSelectedFiles = null;
+    var oldSelectedFilesDiv = $("img").filter(".oldSelectedImg-" + itemId);
+
+    // Get single old image src
+    if (oldSelectedFilesDiv.length > 0) {
+        oldSelectedFiles = oldSelectedFilesDiv.eq(0).attr("src");
     }
 
-    function getCompleteSortOrder() {
-        const container = document.getElementById('sortable-photos-edit');
-        if (!container) return null;
+    // Check for image using the item-specific storage
+    if (!editModalFiles[itemId] && !oldSelectedFiles) {
+        $(".validationImage").removeClass("display-none");
+        return; // Don't proceed if no image
+    } else {
+        $(".validationImage").addClass("display-none");
+    }
 
-        const photoElements = container.querySelectorAll('.photo-item');
-        const sortOrderData = {
-            existingImages: [],
-            newImageOrder: []
-        };
+    // Append single selected file for this specific item
+    if (editModalFiles[itemId]) {
+        formData.append("images", editModalFiles[itemId]);
+    }
+    
+    // Append single old image
+    if (oldSelectedFiles) {
+        formData.append("existingImages", oldSelectedFiles);
+    }
 
-        photoElements.forEach((element, index) => {
-            const photoId = element.dataset.photoId;
+    formData.append("imageType", 1);
+    formData.append('fKey', itemId);
 
-            // Check if this is an existing photo
-            const existingPhoto = existingPhotosEdit.find(p => p.id === photoId);
-            if (existingPhoto && existingPhoto.isExisting) {
-                sortOrderData.existingImages.push({
-                    path: existingPhoto.path,
-                    sortOrder: index
+    $.ajax({
+        url: '/api/Common/SaveImages',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+                $(".alert-success-edit").removeClass("display-none");
+                $(".alert-success-edit").addClass("d-flex");
+
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error saving images:', xhr.responseText);
+            alert('Error saving images. Please try again.');
+        }
+    });
+}
+
+function uploadImage(event, itemId) {
+    try {
+        const imagePreview = $("#imagePreview-edit-" + itemId);
+        
+        // Store file specifically for this item
+        editModalFiles[itemId] = event.target.files[0] || null;
+        
+        // Clear previous preview
+        imagePreview.empty();
+
+        if (editModalFiles[itemId]) {
+            // Create a container for the image with a delete button
+            const imageContainer = $("<div>")
+                .addClass("image-container col-4")
+                .css({
+                    "position": "relative",
+                    "margin-bottom": "8px"
                 });
-            } else {
-                // This is a new photo
-                const newPhoto = uploadedPhotosEdit.find(p => p.id === photoId);
-                if (newPhoto) {
-                    sortOrderData.newImageOrder.push({
-                        photoId: photoId,
-                        sortOrder: index
-                    });
-                }
-            }
-        });
+            
+            // Create an image element for the selected image
+            const img = $("<img>")
+                .attr("src", URL.createObjectURL(editModalFiles[itemId]))
+                .addClass("img-thumbnail")
+                .css("max-width", "150px")
+                .on('error', function() {
+                    console.error('Failed to load image preview');
+                    imageContainer.remove();
+                });
 
-        return sortOrderData;
-    }
+            // Create a delete button for the image
+            const deleteButton = $("<button>")
+                .attr("type", "button")
+                .addClass("btn btn-danger btn-sm")
+                .css({
+                    "position": "absolute",
+                    "bottom": "0",
+                    "right": "0"
+                })
+                .html('<i class="fa-light fa-trash"></i>')
+                .on("click", function () {
+                    // Clear the selected file for this specific item
+                    delete editModalFiles[itemId];
+                    imageContainer.remove();
+                    $("#imageInput-edit-" + itemId).val(''); // Clear the file input
+                });
 
-    function submitForm(fkey, mode) {
-        if (!validateForm(mode)) {
-            return;
+            // Append the image and delete button to the container
+            imageContainer.append(img, deleteButton);
+
+            // Append the container to the image preview div
+            imagePreview.append(imageContainer);
         }
-
-        const linkInputId = mode === 'add' ? 'link-add' : 'link-edit';
-        const formData = new FormData();
-
-        // Use the fkey returned from SaveImages API
-        formData.append('Id', fkey);
-        formData.append('Link', $(`#${linkInputId}`).val());
-
-        // Use the same endpoint for both add and edit, or adjust URLs as needed
-        const url = mode === 'add' ? '/Slider/Add' : '/Slider/Update';
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                showSuccess(mode);
-                setTimeout(function () {
-                    location.reload();
-                }, 1500);
-            },
-            error: function (xhr, status, error) {
-                showError('Error saving section: ' + xhr.responseText, mode);
-            }
-        });
+    } catch (error) {
+        console.error('Error in uploadImage function:', error);
+        alert('Error uploading image. Please try again.');
     }
-
-    function updatePhotoOrder(mode) {
-        const containerId = mode === 'add' ? 'sortable-photos-add' : 'sortable-photos-edit';
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        const photoElements = container.querySelectorAll('.photo-item');
-        const newOrderNew = [];
-        const newOrderExisting = [];
-
-        let currentPhotos = mode === 'add' ? uploadedPhotosAdd : uploadedPhotosEdit;
-        let existingPhotos = mode === 'edit' ? existingPhotosEdit : [];
-
-        photoElements.forEach((element, index) => {
-            const photoId = element.dataset.photoId;
-
-            // Check in uploaded photos first
-            let photo = currentPhotos.find(p => p.id === photoId);
-            if (photo) {
-                photo.sortOrder = index; // Add sort order tracking
-                newOrderNew.push(photo);
-            } else {
-                // Check in existing photos
-                photo = existingPhotos.find(p => p.id === photoId);
-                if (photo) {
-                    photo.sortOrder = index; // Add sort order tracking
-                    newOrderExisting.push(photo);
-                }
-            }
-        });
-
-        if (mode === 'add') {
-            uploadedPhotosAdd = newOrderNew;
-        } else {
-            uploadedPhotosEdit = newOrderNew;
-            existingPhotosEdit = newOrderExisting;
-        }
-
-        console.log(`Photo order updated for ${mode} mode`);
-    }
-
-    function updateOrderNumbers(mode) {
-        const containerId = mode === 'add' ? 'sortable-photos-add' : 'sortable-photos-edit';
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        const photoElements = container.querySelectorAll('.photo-item');
-        photoElements.forEach((element, index) => {
-            const orderElement = element.querySelector('.photo-order');
-            if (orderElement) {
-                orderElement.textContent = index + 1;
-            }
-        });
-    }
-
-    function removePhoto(photoId, mode) {
-        let currentPhotos = mode === 'add' ? uploadedPhotosAdd : uploadedPhotosEdit;
-
-        // Remove from array
-        const filteredPhotos = currentPhotos.filter(photo => photo.id !== photoId);
-
-        if (mode === 'add') {
-            uploadedPhotosAdd = filteredPhotos;
-        } else {
-            uploadedPhotosEdit = filteredPhotos;
-        }
-
-        // Remove from DOM with animation
-        const element = document.querySelector(`[data-photo-id="${photoId}"]`);
-        if (element) {
-            element.style.transition = 'all 0.3s ease';
-            element.style.opacity = '0';
-            element.style.transform = 'scale(0.8)';
-
-            setTimeout(() => {
-                element.remove();
-                updateOrderNumbers(mode);
-            }, 300);
-        }
-    }
-
-    // Remove existing photo function
-    function removeExistingPhoto(photoId) {
-        // Remove from existing photos array
-        existingPhotosEdit = existingPhotosEdit.filter(photo => photo.id !== photoId);
-
-        const photoItem = document.querySelector(`[data-photo-id="${photoId}"]`);
-        if (photoItem) {
-            photoItem.style.transition = 'all 0.3s ease';
-            photoItem.style.opacity = '0';
-            photoItem.style.transform = 'scale(0.8)';
-
-            setTimeout(() => {
-                photoItem.remove();
-                updateOrderNumbers('edit');
-            }, 300);
-        }
-    }
-
-    function validateForm(mode) {
-        const linkInputId = mode === 'add' ? 'link-add' : 'link-edit';
-        const modalId = mode === 'add' ? '#add-modal' : '#edit-modal';
-        const modal = $(modalId);
-
-        let isValid = true;
-        hideValidationErrors(modal);
-
-        const linkValue = $(`#${linkInputId}`).val();
-        console.log(`Validating form - Mode: ${mode}, Link: ${linkValue}`);
-
-        if (!linkValue || linkValue.trim() === '') {
-            modal.find('.validationLink').removeClass('display-none');
-            isValid = false;
-            console.log('Validation failed: Link is required');
-        }
-
-        return isValid;
-    }
-
-    function hideValidationErrors(modal) {
-        modal.find('.text-danger').addClass('display-none');
-        modal.find('.alert-success').addClass('display-none');
-        modal.find('.alert-danger').addClass('display-none');
-    }
-
-    function showSuccess(mode) {
-        const modalId = mode === 'add' ? '#add-modal' : '#edit-modal';
-        const modal = $(modalId);
-        modal.find('.alert-success').removeClass('display-none').addClass('d-flex');
-        modal.find('.alert-danger').addClass('display-none');
-        console.log(`Success shown for mode: ${mode}`);
-    }
-
-    function showError(message, mode) {
-        const modalId = mode === 'add' ? '#add-modal' : '#edit-modal';
-        const modal = $(modalId);
-        modal.find('.error-message').text(message);
-        modal.find('.alert-danger').removeClass('display-none').addClass('d-flex');
-        modal.find('.alert-success').addClass('display-none');
-        console.log(`Error shown for mode: ${mode}, message: ${message}`);
-    }
-
-    // Delete functionality
-    $(document).on("click", ".deleteSlider", function () {
-        var id = $(this).data('id'); // This will be 'aboutus'
-        var formData = new FormData();
-        formData.append('id', id);
-
-        $.ajax({
-            url: '@Url.Action("Delete", "Slider")',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function () {
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    });
-
-    // Drag visual feedback
-    document.addEventListener('dragstart', function(e) {
-        if (e.target.closest('.photo-item')) {
-            e.target.closest('.photo-item').style.cursor = 'grabbing';
-        }
-    });
-
-    document.addEventListener('dragend', function(e) {
-        if (e.target.closest('.photo-item')) {
-            e.target.closest('.photo-item').style.cursor = 'grab';
-        }
-    });
+}
 </script>

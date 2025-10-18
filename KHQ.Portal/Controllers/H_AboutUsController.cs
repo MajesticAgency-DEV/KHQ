@@ -27,13 +27,7 @@ namespace KHQ.Portal.Controllers
         }
         public async Task<IActionResult> Images()
         {
-            var h_AboutUsData_images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Home);
-            List<string> images = new List<string>();
-
-            foreach (var item in h_AboutUsData_images.OrderBy(x => x.Sort))
-            {
-                images.Add(item.PathLink);
-            }
+            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Home);
             return View(images);
         }
         public async Task<IActionResult> GetById(Guid id)

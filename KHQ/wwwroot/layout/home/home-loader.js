@@ -332,30 +332,37 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
         var container = e && e.detail && e.detail.node ? e.detail.node : null;
         if (!container) return;
 
-        // Fetch API data
         fetch('/api/Brands/GetAll', { method: 'GET' })
             .then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
             .then(function (payload) {
                 if (!payload) return;
-                // Title and description
+
                 try {
                     var titleEl = container.querySelector('.section-head h2');
                     var apiTitle = payload.title || payload.Title;
                     if (titleEl && apiTitle) titleEl.textContent = apiTitle;
+
                     var descEl = container.querySelector('.wt-separator-two-part-right p');
                     var apiDesc = payload.main_Description || payload.Main_Description;
                     if (descEl && apiDesc) descEl.textContent = apiDesc;
+
                     var brandCover = $(".bg-section");
                     if (brandCover)
                         brandCover.css("background-image", "url(" + payload.coverPhoto + ")");
-
                 } catch (_err) { }
 
-                // List of brands
                 var listContainer = container.querySelector('.row.justify-content-center');
                 if (!listContainer) return;
-                var items = Array.isArray(payload.brandsDtos) ? payload.brandsDtos : (payload.BrandsDtos || []);
-                if (!items || !items.length) { listContainer.innerHTML = ''; return; }
+
+                var items = Array.isArray(payload.brandsDtos)
+                    ? payload.brandsDtos
+                    : (payload.BrandsDtos || []);
+
+                if (!items || !items.length) {
+                    listContainer.innerHTML = '';
+                    return;
+                }
+
                 var html = items.map(function (it) {
                     return buildBrandCardHtml({
                         id: it.Id || it.id,
@@ -366,19 +373,27 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                         instaLink: it.InstaLink || it.instaLink
                     });
                 }).join('');
+
                 listContainer.innerHTML = html;
-                try {
-                    listContainer.addEventListener('click', function (ev) {
-                        var target = ev.target;
-                        var card = target.closest && target.closest('.brand-card');
-                        if (card && card.getAttribute) {
-                            var bid = card.getAttribute('data-brand-id');
-                            if (bid) {
-                                window.location.href = 'products.html?brandId=' + encodeURIComponent(bid);
-                            }
-                        }
+
+                // ✅ Prevent product redirect when clicking on social links
+                listContainer.querySelectorAll('.team-social-bar a').forEach(function (a) {
+                    a.addEventListener('click', function (ev) {
+                        ev.stopPropagation(); // Stop click bubbling up to the card
                     });
-                } catch (_navErr) { }
+                });
+
+                // ✅ Navigate only when clicking on the brand card (not socials)
+                listContainer.addEventListener('click', function (ev) {
+                    var target = ev.target;
+                    var card = target.closest && target.closest('.brand-card');
+                    if (card && card.getAttribute) {
+                        var bid = card.getAttribute('data-brand-id');
+                        if (bid) {
+                            window.location.href = 'products.html?brandId=' + encodeURIComponent(bid);
+                        }
+                    }
+                });
             })
             .catch(function (err) {
                 if (window && window.console) {
@@ -386,6 +401,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 }
             });
     });
+
     function buildCategoryCardHtml(cat) {
         var id = cat && (cat.id || cat.Id) ? (cat.id || cat.Id) : '';
         var imageSrc = cat && cat.imageLink ? cat.imageLink : '';
