@@ -25,7 +25,7 @@ namespace KHQ.Portal.Controllers
             _BrandSrv = brandSrv;
             _cacheService = cacheService;
         }
-        public async Task<IActionResult> Index(string search = "", string sortBy = "")
+        public async Task<IActionResult> Index(string search = "", string sortBy = "AToZ")
         {
             var products = await _ProductSrv.GetAllAsync();
 
@@ -57,8 +57,8 @@ namespace KHQ.Portal.Controllers
             // ↕️ Sorting
             products = sortBy switch
             {
-                "PriceLow" => products.OrderBy(p => p.Price).ToList(),
-                "PriceHigh" => products.OrderByDescending(p => p.Price).ToList(),
+                "PriceLow" => products.OrderBy(p => p.Capacity).ToList(),
+                "PriceHigh" => products.OrderByDescending(p => p.Capacity).ToList(),
                 "AToZ" => products.OrderBy(p => p.NameEn).ToList(),       
                 "ZToA" => products.OrderByDescending(p => p.NameEn).ToList(),
                 _ => products

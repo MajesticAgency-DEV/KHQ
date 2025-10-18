@@ -11,8 +11,8 @@
     <meta name="description" content="" />
 
     <!-- FAVICONS ICON -->
-    <link rel="icon" href="images/favicon.html" type="image/x-icon" />
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <link rel="icon" href="images/khayrat-alqastal-icon-white.png" type="image/x-icon" />
+     <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
 
     <!-- PAGE TITLE HERE -->
     <title>Khayrat Al-Qastal</title>
@@ -105,9 +105,12 @@
                         </div>
                     </div>
 
-                    <div class="sing-project-detail m-b30">
-                        <h3 class="m-t0 m-b30">Project Description</h3>
-                        <p></p>
+                    <div class="sing-project-detail m-b30" style="display:grid">
+                        <h3 class="m-t0 m-b30" id="productName">Project Description</h3>
+                        <span class="site-text-primary" data-i18n-key="Brands" >Brands:  <span style="color: #595959" id="brandsName"></span></span>
+                        <span class="site-text-primary">Category:  <span style="color: #595959" id="categoryName"></span></span>
+                        <span class="site-text-primary">Capacity / Weight:  <span style="color: #595959" id="capacity"></span></span>
+                        <span class="site-text-primary">Description:  <span style="color: #595959" id="description"></span></span>
 
                     </div>
                 </div>
@@ -252,7 +255,11 @@
                         var image = (subProducts.length > 0 && subProducts[0].imageUrl) ? subProducts[0].imageUrl : '';
                         var bgEl = $(".bg-section");
                         // set main product description and cover image
-                        setHtml('.sing-project-detail p', description);
+                        setHtml('.sing-project-detail #description', description);
+                        setHtml('.sing-project-detail #productName', data.name);
+                        setHtml('.sing-project-detail span #brandsName', data.brandName);
+                        setHtml('.sing-project-detail #categoryName', data.categoryName);
+                        setHtml('.sing-project-detail #capacity', data.capacity);
                         if (image) {
                             $(".wt-post-media img").attr("src", image);
                             bgEl.css("background-image", "url(" + image + ")");
@@ -263,21 +270,24 @@
                         container.empty(); // clear old slides
 
                         // loop over subProducts
-                        subProducts.forEach(function (sp) {
+                        subProducts.forEach(function (sp, index) {
                             var spImage = sp.imageUrl || sp.ImageUrl || '';
                             var spName = sp.description || sp.Description || 'Untitled';
 
-                            var itemHtml = `
-                            <div class="item">
-                                <div class="project-img-effect-1">
-                                    <img src="${spImage}" alt="${spName}" />
-                                    <div class="wt-info bg-white p-a20">
-                                        <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">${spName}</a></h3>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                            container.append(itemHtml);
+                            if (index != 0) {
+                                var itemHtml = `
+    <div class="item">
+        <div class="project-img-effect-1">
+            <img src="${spImage}" alt="${spName}" />
+            <div class="wt-info bg-white p-a20">
+                <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">${spName}</a></h3>
+            </div>
+        </div>
+    </div>
+`;
+                                container.append(itemHtml);
+                            }
+                            
                         });
 
                         // reinitialize owl carousel after adding new items

@@ -52,7 +52,7 @@ namespace KHQ.Srv.Services
                         NameAr = p.NameAr,
                         DescriptionEn = p.DescriptionEn,
                         DescriptionAr = p.DescriptionAr,
-                        Price = p.Price,
+                        Capacity = p.Capacity,
                         BrandId = p.BrandId,
                         CategoryId = p.CategoryId,
                         SubProducts = p.SubProducts.Select(sp => new SubProduct

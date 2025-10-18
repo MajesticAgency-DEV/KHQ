@@ -5,15 +5,13 @@ Version: 1.0
 ==========================
 */
 
-
-
 /*======================================
 1. GENERAL 
 ======================================*/
 
 body {
 	background-color: #FFF;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 400;
 	color: #595959;
 	padding: 0px;
@@ -183,11 +181,11 @@ h4,
 h5,
 h6 {
 	margin-bottom: 15px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 400;
 	line-height: 1.1;
 }
-.title-style-2{font-family: 'DINNextLTArabic-Bold', 'Heebo';}
+.title-style-2{font-family: 'dinnextltarabic-medium', 'Heebo';}
 
 h1 a,
 h2 a,
@@ -271,7 +269,7 @@ h6 {
 	content: attr(data-title);
 	color: #1e1e1e;
 	opacity:0.1;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-size: 200px;
 	line-height:100px;
 	text-transform:uppercase;
@@ -1189,7 +1187,7 @@ ol.list-num-count.list-outline-none>li:before {
 .bg-orange-light2{background-color:#feede7;}
 .bg-transparent {	background-color: transparent;}
 .site-bg-primary {
-	background-color: #2e2c74;
+	/*background-color: #2e2c74;*/
 }
 .site-bg-dark {	background-color: #1e1e1e;}
 .site-bg-secondry {	background-color: #fff000 ;}
@@ -2326,7 +2324,7 @@ border-radius: 50px;
 	margin: 1px 0px;
 	font-weight: 600;
 	letter-spacing: 1px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	padding: 5px 20px;
 	border-radius: 50px;
 	border: 1px solid #ddd;
@@ -2402,7 +2400,7 @@ border-radius: 50px;
 
 .masonry-filter.link-style>li a {
 	font-size: 22px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 }
 
 .masonry-filter.link-style.white>li:after {
@@ -2536,7 +2534,7 @@ border-radius: 50px;
 	overflow: hidden;
 }
 
-.wt-small-separator{font-family: 'DINNextLTArabic-Bold', 'Heebo';font-size: 20px;line-height: 20px;margin-bottom: 25px;position: relative;display: inline-block;font-weight: 600;}
+.wt-small-separator{font-family: 'dinnextltarabic-medium', 'Heebo';font-size: 20px;line-height: 20px;margin-bottom: 25px;position: relative;display: inline-block;font-weight: 600;}
 .wt-small-separator div{display:inline-block;}
 
 @media only screen and (max-width:767px){
@@ -3254,21 +3252,21 @@ div.sep-leaf-left:before{	display:none;}
 .testimonial-1 .testimonial-info{padding:0px;}
 
 .testimonial-1 .testimonial-text{padding: 20px 0px 0px 0px; position: relative; z-index: 1; display: flex;}
-.testimonial-1 .testimonial-text p{margin-bottom: 0px; font-family: 'DINNextLTArabic-Bold', 'Heebo'; font-size: 18px; font-style: italic; font-weight: 400;}
+.testimonial-1 .testimonial-text p{margin-bottom: 0px; font-family: 'dinnextltarabic-medium', 'Heebo'; font-size: 18px; font-style: italic; font-weight: 400;}
 .testimonial-1 .testimonial-text i{	font-size: 80px;color: #842e91;line-height: 80px;margin-right: 30px; opacity:0.2;}
 
 
 .testimonial-1 .testimonial-detail{padding: 0px;display: flex;align-items: center;}
 .testimonial-1 .testimonial-pic-block{margin-right:30px;}
 
-.testimonial-1 .testimonial-name {padding-right: 0px; display: block; font-size: 30px; font-weight: 900; font-family: 'DINNextLTArabic-Bold', 'Heebo'; margin-bottom: 10px; color: #000;}
+.testimonial-1 .testimonial-name {padding-right: 0px; display: block; font-size: 30px; font-weight: 900; font-family: 'dinnextltarabic-medium', 'Heebo'; margin-bottom: 10px; color: #000;}
 .testimonial-1 .testimonial-name::after {    display:none;}
 
 .testimonial-1 .testimonial-position {
 	display: block;
 	font-size: 15px;
 	line-height: 18px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	color: #842e91;
 }
 
@@ -3279,7 +3277,7 @@ div.sep-leaf-left:before{	display:none;}
 
 
 .testimonial-1-outer .hilite-large-title{position: absolute;    right: -1px;    bottom: -20px;    z-index: 1;}
-.testimonial-1-outer .hilite-large-title span {	font-size: 120px;	line-height: 100px;	color:#fff;	opacity: 1;	font-family: 'DINNextLTArabic-Bold', 'Heebo';	display: block;
+.testimonial-1-outer .hilite-large-title span {	font-size: 120px;	line-height: 100px;	color:#fff;	opacity: 1;	font-family: 'dinnextltarabic-medium', 'Heebo';	display: block;
 	text-transform: uppercase;	font-weight: 500;	letter-spacing: -2px;}
 
 .testimonial-1-content.owl-carousel .owl-dots{margin-top: 40px; text-align: left; margin-left: 50px;}
@@ -3320,21 +3318,21 @@ div.sep-leaf-left:before{	display:none;}
 .testimonial-2 .testimonial-info{padding:0px;}
 
 .testimonial-2 .testimonial-text{padding: 20px 0px 0px 0px; position: relative; z-index: 1; display: flex;}
-.testimonial-2 .testimonial-text p{margin-bottom: 0px; font-family: 'DINNextLTArabic-Bold', 'Heebo'; font-size: 18px; font-style: italic; font-weight: 400;}
+.testimonial-2 .testimonial-text p{margin-bottom: 0px; font-family: 'dinnextltarabic-medium', 'Heebo'; font-size: 18px; font-style: italic; font-weight: 400;}
 .testimonial-2 .testimonial-text i{	font-size: 80px;color: #842e91;line-height: 80px;margin-right: 30px; opacity:0.2;}
 
 
 .testimonial-2 .testimonial-detail{padding: 0px;display: flex;align-items: center;}
 .testimonial-2 .testimonial-pic-block{margin-right:30px;}
 
-.testimonial-2 .testimonial-name {padding-right: 0px; display: block; font-size: 30px; font-weight: 900; font-family: 'DINNextLTArabic-Bold', 'Heebo'; margin-bottom: 10px; color: #000;}
+.testimonial-2 .testimonial-name {padding-right: 0px; display: block; font-size: 30px; font-weight: 900; font-family: 'dinnextltarabic-medium', 'Heebo'; margin-bottom: 10px; color: #000;}
 .testimonial-2 .testimonial-name::after {    display:none;}
 
 .testimonial-2 .testimonial-position {
 	display: block;
 	font-size: 15px;
 	line-height: 18px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-style: italic;
 	color: #842e91;
 }
@@ -3346,7 +3344,7 @@ div.sep-leaf-left:before{	display:none;}
 
 
 .testimonial-2-outer .hilite-large-title{position: absolute;    right: -1px;    bottom: -20px;    z-index: 1;}
-.testimonial-2-outer .hilite-large-title span {	font-size: 120px;	line-height: 100px;	color:#fff;	opacity: 1;	font-family: 'DINNextLTArabic-Bold', 'Heebo';	display: block;
+.testimonial-2-outer .hilite-large-title span {	font-size: 120px;	line-height: 100px;	color:#fff;	opacity: 1;	font-family: 'dinnextltarabic-medium', 'Heebo';	display: block;
 	text-transform: uppercase;	font-weight: 500;	letter-spacing: -2px;}
 
 .testimonial-2-content.owl-carousel .owl-dots{margin-top: 40px;}
@@ -4031,7 +4029,7 @@ div.sep-leaf-left:before{	display:none;}
 	position: relative;
 	display: inline-block;
 	font-size: 16px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 700;
 }
 
@@ -4625,7 +4623,7 @@ overflow: hidden;
 	font-weight: 600;
 	font-size: 16px;
 	line-height: 16px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 }
 
 .recent-posts-entry .wt-post-info .post-title {
@@ -4925,7 +4923,7 @@ blockquote p {
 	font-size: 20px;
 	line-height: 26px;
 	padding-left: 0px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 700;
 	margin-top: 15px;
 }
@@ -5755,7 +5753,7 @@ position: relative;}
     font-weight: 600;
     color: #842e91;
     position: relative;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 }
 
 @media only screen and (max-width:991px){
@@ -6158,7 +6156,7 @@ position: relative;}
 	font-size: 32px;
 	line-height:32px;
 	color:#111;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 300;
 }
 .header-info .icon-content{
@@ -6301,7 +6299,7 @@ position: relative;}
 	position: relative;
 	margin: -10px 0px;
 	padding: 10px 0px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 }
 
 .header-nav .nav>li>a {
@@ -6839,7 +6837,7 @@ opacity:0;}
 .header-style-4 .header-nav .nav > li > a:before{display:none;}
 }
 
-.header-style-4 .header-nav-request{float:right;color: #fff; font-family: 'DINNextLTArabic-Bold', 'Heebo'; font-size:22px; font-weight:700;}
+.header-style-4 .header-nav-request{float:right;color: #fff; font-family: 'dinnextltarabic-medium', 'Heebo'; font-size:22px; font-weight:700;}
 .header-style-4 .header-nav-request a{background-color:#842e91;display: block;color:#fff; text-transform:uppercase; padding: 8px 10px;}
 
 @media only screen and (max-width: 540px){
@@ -7035,7 +7033,7 @@ border-top: 1px solid rgba(255, 255, 255, 0.2);border-bottom: 1px solid rgba(255
 .header-style-2 #search .search-btn {border:none;	background:none;	padding:0px 0px 0px 15px;}
 .header-style-2 #search .search-btn i{font-size:18px;}
 
-.header-style-2 .header-nav-request{float:right;color: #000; font-family: 'DINNextLTArabic-Bold', 'Heebo'; font-size:22px; font-weight:700;}
+.header-style-2 .header-nav-request{float:right;color: #000; font-family: 'dinnextltarabic-medium', 'Heebo'; font-size:22px; font-weight:700;}
 .header-style-2 .header-nav-request a{background-color:#842e91;display: block;color:#fff; text-transform:uppercase; padding: 8px 10px;}
 
 
@@ -7969,7 +7967,7 @@ margin: 0px 2px;}
 .site-footer {overflow:hidden; position:relative;}
 
 .site-footer .widget-title {
-    font-family: 'DINNextLTArabic-Bold', 'Heebo';
+    font-family: 'dinnextltarabic-medium', 'Heebo';
     color: #fff000;
     font-weight: 500;
     font-size: 24px;
@@ -9321,7 +9319,7 @@ Spin circle
 /*-----------effect-link--------*/
 
 .site-button-link {	position: relative;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-size:18px;
 	line-height:18px;
 }
@@ -9643,7 +9641,7 @@ Spin circle
 	line-height: 150px;
 	font-weight: 900;
 	color:#842e91;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 }
 .error-full-page-inner-info h4 {
 	font-size: 50px;
@@ -9905,7 +9903,7 @@ textarea.form-control2 {
 }
 
 .site-list-style-one li{
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	color: #1e1e1e;
 	font-size: 24px;
 	position: relative;
@@ -9918,7 +9916,7 @@ textarea.form-control2 {
 }
 
 .site-list-style-one.icon-style li{
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	color: #1e1e1e;
 	font-size: 16px;
 	position: relative;
@@ -9978,7 +9976,7 @@ textarea.form-control2 {
 }
 
 .site-list-style-two li{
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	color: #1e1e1e;
 	font-size: 18px;
 	position: relative;
@@ -10064,7 +10062,7 @@ textarea.form-control2 {
 .wt-team-1 .team-name{margin-bottom:25px;}
 .wt-team-1 .team-name a:hover{	color:#842e91;}
 
-.wt-team-1 .team-position{	font-size: 18px; line-height: 24px; display: block; font-weight: 600; font-family: 'DINNextLTArabic-Bold', 'Heebo'; margin-bottom:15px;}
+.wt-team-1 .team-position{	font-size: 18px; line-height: 24px; display: block; font-weight: 600; font-family: 'dinnextltarabic-medium', 'Heebo'; margin-bottom:15px;}
 
 @media only screen and (max-width:540px){
 	.wt-team-1 .team-position{font-size:14px;}
@@ -10077,7 +10075,7 @@ textarea.form-control2 {
 .wt-team-1 .team-social-center ul li:last-child{padding-right:0px;}
 .wt-team-1 .team-social-center ul li a{
 	font-size: 20px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 500;
 	position: relative;
 	width: 40px;
@@ -10153,7 +10151,7 @@ textarea.form-control2 {
 
 .wt-team-2 .team-name{margin-bottom:25px;}
 .wt-team-2 .team-name a:hover{	color:#842e91;}
-.wt-team-2 .team-position{	font-size: 18px; line-height: 24px; display: block; font-weight: 600; font-family: 'DINNextLTArabic-Bold', 'Heebo'; margin-bottom:15px;}
+.wt-team-2 .team-position{	font-size: 18px; line-height: 24px; display: block; font-weight: 600; font-family: 'dinnextltarabic-medium', 'Heebo'; margin-bottom:15px;}
 
 
 .wt-team-2 .team-social-center{position:relative;}
@@ -10162,7 +10160,7 @@ textarea.form-control2 {
 .wt-team-2 .team-social-center ul li:last-child{padding-right:0px;}
 .wt-team-2 .team-social-center ul li a{
 	font-size: 16px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 500;
 	position: relative;
 	width: 30px;
@@ -10405,7 +10403,7 @@ ol.commentlist li .star-rating{
     font-size: 76px;
     display: block;
     line-height: 76px;
-    font-family: 'DINNextLTArabic-Bold', 'Heebo';
+    font-family: 'dinnextltarabic-medium', 'Heebo';
     font-weight: 900;
 	position:relative;
 }
@@ -10420,7 +10418,7 @@ ol.commentlist li .star-rating{
 
 .foud-year span{
 	position: absolute;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight: 700;
 	font-size: 16px;
 	line-height: 18px;
@@ -10593,7 +10591,7 @@ transition: all 0.5s ease-in-out;
 	line-height: 80px;	
 	font-weight:900;
 	color: rgba(0, 24, 146, 0.2);
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	
 	-webkit-transition: all 0.5s linear;
 	-moz-transition: all 0.5s linear;
@@ -10730,7 +10728,7 @@ transition: all 0.5s ease-in-out;
 .slider-number-wraper .tp-tab-number{
 	color:#fff;
 	font-size:16px;
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	font-weight:900;
 	font-style:italic;
 }
@@ -11075,7 +11073,7 @@ transition: all 0.5s ease-in-out;
 
 /*----Service Detail---*/
 .service-provide-info .list-exp li{
-	font-family: 'DINNextLTArabic-Bold', 'Heebo';
+	font-family: 'dinnextltarabic-medium', 'Heebo';
 	color: #1e1e1e;
 	font-size: 18px;
 	font-weight: 500;

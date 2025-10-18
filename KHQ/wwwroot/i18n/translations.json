@@ -8,7 +8,8 @@
     "FAQ": "FAQ",
     "Contactus": "Contact us",
     "AboutCompany": "About Company",
-    "ViewAll": "View all information"
+    "ViewAll": "Read More",
+    "Copyright": "Copyright ©,<script>document.write(new Date().getFullYear())</script><strong>Khayrat Al-Qastal For DetergentI ndustry Co.</strong> All rights reserved."
   },
   "ar": {
     "Home": "الصفحة الرئيسية",
@@ -19,6 +20,7 @@
     "FAQ": "التعليمات",
     "Contactus": "اتصل بنا",
     "AboutCompany": "نبذة عن الشركة",
-    "ViewAll": "عرض كافة المعلومات"
+    "ViewAll": "اقرأ المزيد",
+    "Copyright" : "حقوق النشر @ 2025 شركة خيرات القسطل لصناعة المنظفات. جميع الحقوق محفوظة."
   }
 }

@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             '</div>' +
             '<div class="d-icon-box-content">' +
             '<p>' + description + '</p>' +
-            '<a href="products.html?categoryId=' + encodeURIComponent(id) + '" class="site-button-link site-text-primary">Read More</a>' +
+            '<a href="products.html?categoryId=' + encodeURIComponent(id) + '" class="site-button-link site-text-primary">Explore Now</a>' +
             '</div>' +
             '</div>' +
             '</div>'

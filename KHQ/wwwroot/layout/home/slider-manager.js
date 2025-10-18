@@ -231,7 +231,7 @@ class SliderManager {
                             white-space: normal;
                             font-weight: 900;
                             color:#fff;
-                            border-width:0px; font-family: 'DINNextLTArabic-Bold', 'Heebo';">${this.escapeHtml(slideData.title)}</div>
+                            border-width:0px; font-family: 'dinnextltarabic-medium', 'Heebo';">${this.escapeHtml(slideData.title)}</div>
 
                 <!-- LAYER NR. 4 [ for paragraph] -->
                 <div class="tp-caption  tp-resizeme layer_5"
@@ -257,7 +257,7 @@ class SliderManager {
                      style="z-index: 11;
                             font-weight: 300;
                             color:#fff;
-                            border-width:0px;font-family: 'DINNextLTArabic-Bold', 'Heebo';">
+                            border-width:0px;font-family: 'dinnextltarabic-medium', 'Heebo';">
                     ${this.escapeHtml(slideData.description)}
                 </div>
 

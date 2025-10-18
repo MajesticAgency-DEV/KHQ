@@ -79,24 +79,24 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 
 				fetch("/api/ContactUs/GetAll", { method: "GET" })
 					.then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
-					.then(function (data) {
-						var itemContactUs = Array.isArray(data) && data.length ? data[0] : data || {};
-
+					.then(function (response) {
+                        var itemContactUs = Array.isArray(response) && response.length ? response[0] : response || {};
+                        var itemSocialMedia = Array.isArray(data) && data.length ? data[0] : data || {};
 						// Address
 						if (itemContactUs.companyLocation) {
-							addressEl.textContent = itemContactUs.companyLocation;
+                            addressEl.textContent = itemSocialMedia.address;
 						}
 
 						// Email
 						if (itemContactUs.email) {
-							emailEl.textContent = itemContactUs.email;
+                            emailEl.textContent = itemSocialMedia.email;
 							//emailEl.href = "mailto:" + itemContactUs.email;
 						}
 
 						// Phone
 						if (itemContactUs.phoneNumber) {
 							var tel = itemContactUs.phoneNumber.replace(/\s+/g, "");
-							phoneEl.textContent = itemContactUs.phoneNumber;
+                            phoneEl.textContent = itemSocialMedia.phoneNumber;
 							//phoneEl.href = "tel:" + tel;
 						}
 					})

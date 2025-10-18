@@ -123,8 +123,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label>Price <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" id="product-price">
+                    <label>
+                        Capacity / Weight <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="product-price"> 
                     <span class="text-danger validation-error" id="error-price"></span>
                 </div>
             </div>
@@ -359,7 +361,7 @@
             NameAr: $("#product-name-ar").val(),
             DescriptionEn: $("#product-description-en").val(),
             DescriptionAr: $("#product-description-ar").val(),
-            Price: $("#product-price").val(),
+            Capacity: $("#product-price").val(),
             CategoryId: $("#product-category").val(),
             BrandId: $("#product-brand").val(),
             SubProducts: uploadedPhotosAdd.map((p, idx) => ({
@@ -393,7 +395,7 @@
             nameAr: $("#product-name-ar").val(),
             descriptionEn: $("#product-description-en").val(),
             descriptionAr: $("#product-description-ar").val(),
-            price: $("#product-price").val(),
+            Capacity: $("#product-price").val(),
             categoryId: $("#product-category").val(),
             brandId: $("#product-brand").val(),
             subProducts: uploadedPhotosAdd.map(p => ({
@@ -448,9 +450,9 @@
         }
 
         // Price
-        const price = $("#product-price").val();
-        if (!price || parseFloat(price) <= 0) {
-            $("#error-price").text("Price must be greater than 0.");
+        const Capacity = $("#product-price").val();
+        if (!Capacity || parseFloat(Capacity) <= 0) {
+            $("#error-price").text("Capacity is required.");
             isValid = false;
         }
 

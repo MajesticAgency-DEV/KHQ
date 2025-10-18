@@ -51,8 +51,8 @@
                     <span class="text-danger validation-error" id="error-description-ar"></span>
                 </div>
                 <div class="mb-3">
-                    <label>Price *</label>
-                    <input type="number" id="product-price" class="form-control" value="@Model.Price"/>
+                    <label> Capacity / Weight  *</label>
+                    <input type="text" id="product-price" class="form-control" value="@Model.Capacity"/>
                     <span class="text-danger validation-error" id="error-price"></span>
                 </div>
             </div>
@@ -346,7 +346,7 @@ function submitUpdateForm(){
         NameAr: $("#product-name-ar").val(),
         DescriptionEn: $("#product-description-en").val(),
         DescriptionAr: $("#product-description-ar").val(),
-        Price: $("#product-price").val(),
+        Capacity: $("#product-price").val(),
         CategoryId: $("#product-category").val(),
         BrandId: $("#product-brand").val(),
         SubProducts: subProducts,
