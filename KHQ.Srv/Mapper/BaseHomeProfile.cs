@@ -129,6 +129,9 @@ namespace KHQ.Srv.Mapper
             CreateMap<ContactUs, ContactUsVM>().ReverseMap();
             CreateMap<ContactUsVM, ContactUs>().ReverseMap();
 
+            CreateMap<EmailSettings, EmailSettingsVM>().ReverseMap();
+            CreateMap<EmailSettingsVM, EmailSettings>().ReverseMap();
+
             CreateMap<ContactUs, ContactUsDto>().ReverseMap();
             CreateMap<ContactUsDto, ContactUs>().ReverseMap();
 

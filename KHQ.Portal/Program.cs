@@ -16,7 +16,16 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<KHQDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions =>
+        {
+            // ? Enables automatic retry on transient errors
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,             // Retry up to 5 times
+                maxRetryDelay: TimeSpan.FromSeconds(10), // Wait up to 10 sec between retries
+                errorNumbersToAdd: null       // Use default transient errors
+            );
+        }));
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
@@ -101,8 +110,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBrouchuresSrv, BrouchuresSrv>();
 builder.Services.AddScoped<IEmailsSrv, EmailsSrv>();
 builder.Services.AddScoped<IWhyChooseUsSrv, WhyChooseUsSrv>();
+builder.Services.AddScoped<IEmailSettingsSRV, EmailSettingsSRV>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
-builder.Services.AddSingleton<IEmailSettingsSRV, EmailSettingsSRV>();
 
 
 
