@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace KHQ.Srv.Services
 {
@@ -17,11 +19,13 @@ namespace KHQ.Srv.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public EmailsSrv(IUnitOfWork unitOfWork, IMapper mapper)
+        public EmailsSrv(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<int> AddAsync(EmailsDto entity)
@@ -72,6 +76,17 @@ namespace KHQ.Srv.Services
         {
             try
             {
+
+                var emailSettings = await _unitOfWork.Repository<EmailSettings>().Queryable().ToListAsync();
+                EmailSettings settings = new EmailSettings();
+                foreach (var item in emailSettings)
+                {
+                    settings.Regards = item.Regards;
+                    settings.Email = item.Email;
+                    settings.Body = item.Body;
+                    settings.SupportTeam = item.SupportTeam;
+                    settings.Subject = item.Subject;
+                }
                 var body = new StringBuilder();
                 body.AppendLine(dto.Message);
                 body.AppendLine();
@@ -81,8 +96,8 @@ namespace KHQ.Srv.Services
                 body.AppendLine($"Email: {dto.SentEmail}");
 
                 await SendEmailAsync(
-                    from: "no-reply@khq.com",
-                    to: "admin@khq.com",
+                    from: _configuration["EmailFrom"],
+                    to: _configuration["EmailTo"],
                     subject: dto.Subject ?? "New Contact Message",
                     body: body.ToString()
                 );
@@ -91,15 +106,15 @@ namespace KHQ.Srv.Services
                 var confirmation = new StringBuilder();
                 confirmation.AppendLine($"Dear {dto.Name},");
                 confirmation.AppendLine();
-                confirmation.AppendLine("Thank you for contacting KHQ. We’ve received your message and will get back to you soon.");
+                confirmation.AppendLine(settings.Body);
                 confirmation.AppendLine();
-                confirmation.AppendLine("Best regards,");
-                confirmation.AppendLine("KHQ Support Team");
+                confirmation.AppendLine(settings.Regards);
+                confirmation.AppendLine(settings.SupportTeam);
 
                 await SendEmailAsync(
-                    from: "no-reply@khq.com",
+                    from: settings.Email,
                     to: dto.SentEmail,
-                    subject: "We received your message",
+                    subject: settings.Subject,
                     body: confirmation.ToString()
                 );
             }
@@ -113,7 +128,7 @@ namespace KHQ.Srv.Services
         {
             var mail = new MailMessage
             {
-                From = new MailAddress(from, "KHQ Website"),
+                From = new MailAddress(from, _configuration["DisplayName"]),
                 Subject = subject,
                 Body = body,
                 IsBodyHtml = false
@@ -122,7 +137,7 @@ namespace KHQ.Srv.Services
 
             using (var smtp = new SmtpClient("smtp.yourserver.com", 587))
             {
-                smtp.Credentials = new NetworkCredential("your-smtp-username", "your-smtp-password");
+                smtp.Credentials = new NetworkCredential(_configuration["EmailUserName"], _configuration["EmailPassword"]);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(mail);
             }
