@@ -12,7 +12,7 @@
 
     <!-- FAVICONS ICON -->
     <link rel="icon" href="images/khayrat-alqastal-icon-white.png" type="image/x-icon" />
-     <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
 
     <!-- PAGE TITLE HERE -->
     <title>Khayrat Al-Qastal</title>
@@ -68,15 +68,15 @@
                     <div class="wt-bnr-inr-entry">
                         <div class="banner-title-outer">
                             <div class="banner-title-name">
-                                <h2 class="site-text-white">Stains</h2>
+                                <h2 class="site-text-white" data-i18n-key="Stains">Stains</h2>
                             </div>
                         </div>
                         <!-- BREADCRUMB ROW -->
 
                         <div>
                             <ul class="wt-breadcrumb breadcrumb-style-2">
-                                <li><a href="index.html">Home</a></li>
-                                <li>Stains</li>
+                                <li><a href="/" data-i18n-key="Home">Home</a></li>
+                                <li data-i18n-key="Stains">Stains</li>
                             </ul>
                         </div>
 
@@ -124,130 +124,130 @@
 
     </div>
 
-        <!-- LOADING AREA START ===== -->
-        <div class="loading-area">
-            <div class="loading-box"></div>
-            <div class="loading-pic">
-                <h4>Loading</h4>
-                <div class="drop-container">
-                    <div class="drop"></div>
-                </div>
+    <!-- LOADING AREA START ===== -->
+    <div class="loading-area">
+        <div class="loading-box"></div>
+        <div class="loading-pic">
+            <h4>Loading</h4>
+            <div class="drop-container">
+                <div class="drop"></div>
             </div>
         </div>
-        <!-- LOADING AREA  END ====== -->
-        <!-- JAVASCRIPT  FILES ========================================= -->
-        <script src="../../js/jquery-2.2.0.min.js"></script><!-- JQUERY.MIN JS -->
-        <script src="../../js/popper.min.js"></script><!-- POPPER.MIN JS -->
-        <script src="../../js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
-        <script src="../../js/bootstrap-select.min.js"></script><!-- Form js -->
-        <script src="../../js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
-        <script src="../../js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
-        <script src="../../js/counterup.min.js"></script><!-- COUNTERUP JS -->
-        <script src="../../js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
-        <script src="../../js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
-        <script src="../../js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
-        <script src="../../js/stellar.min.js"></script><!-- PARALLAX BG IMAGE   -->
-        <script src="../../js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
-        <script src="../../js/jquery.bootstrap-touchspin.js"></script><!-- FORM JS -->
-        <script src="../../js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
-        <script src="../../js/jquery.bgscroll.js"></script><!-- BACKGROUND SCROLL -->
-        <script src="../../js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
+    </div>
+    <!-- LOADING AREA  END ====== -->
+    <!-- JAVASCRIPT  FILES ========================================= -->
+    <script src="../../js/jquery-2.2.0.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="../../js/popper.min.js"></script><!-- POPPER.MIN JS -->
+    <script src="../../js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="../../js/bootstrap-select.min.js"></script><!-- Form js -->
+    <script src="../../js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
+    <script src="../../js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
+    <script src="../../js/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="../../js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
+    <script src="../../js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="../../js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
+    <script src="../../js/stellar.min.js"></script><!-- PARALLAX BG IMAGE   -->
+    <script src="../../js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
+    <script src="../../js/jquery.bootstrap-touchspin.js"></script><!-- FORM JS -->
+    <script src="../../js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="../../js/jquery.bgscroll.js"></script><!-- BACKGROUND SCROLL -->
+    <script src="../../js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
 
-        <script src="layout/home/home-loader.js"></script>
-        <script src="layout-loader.js"></script>
+    <script src="layout/home/home-loader.js"></script>
+    <script src="layout-loader.js"></script>
 
-        <script>
-            (function () {
-                function loadStainsOnce() {
-                    if (loadStainsOnce._called) return;
-                    loadStainsOnce._called = true;
+    <script>
+        (function () {
+            function loadStainsOnce() {
+                if (loadStainsOnce._called) return;
+                loadStainsOnce._called = true;
 
-                    $.ajax({
-                        url: "/api/Stains/GetAll",
-                        method: "GET"
-                    }).done(function (payload) {
-                        try {
-                            // ===== Set Title and Description =====
-                            var titleEl = document.querySelector('.wt-small-separator-stains div');
-                            var apiTitle = payload.Main_Title || payload.main_Title;
-                            if (titleEl && apiTitle) titleEl.textContent = apiTitle;
+                $.ajax({
+                    url: "/api/Stains/GetAll",
+                    method: "GET"
+                }).done(function (payload) {
+                    try {
+                        // ===== Set Title and Description =====
+                        var titleEl = document.querySelector('.wt-small-separator-stains div');
+                        var apiTitle = payload.Main_Title || payload.main_Title;
+                        if (titleEl && apiTitle) titleEl.textContent = apiTitle;
 
-                            var descEl = document.querySelector('.section-head-stains h2');
-                            var apiDesc = payload.Main_Description || payload.main_Description;
-                            if (descEl && apiDesc) descEl.textContent = apiDesc;
+                        var descEl = document.querySelector('.section-head-stains h2');
+                        var apiDesc = payload.Main_Description || payload.main_Description;
+                        if (descEl && apiDesc) descEl.textContent = apiDesc;
 
 
-                            var $bgEl = $(".bg-section");
-                            if (payload && typeof payload.coverPhoto === "string" && payload.coverPhoto.trim() !== "") {
-                                $bgEl.css("background-image", "url(" + payload.coverPhoto + ")");
-                            }
+                        var $bgEl = $(".bg-section");
+                        if (payload && typeof payload.coverPhoto === "string" && payload.coverPhoto.trim() !== "") {
+                            $bgEl.css("background-image", "url(" + payload.coverPhoto + ")");
+                        }
 
-                            // ===== Build Stains Items =====
-                            var stains = payload.Stains || payload.stains;
-                            if (Array.isArray(stains) && stains.length > 0) {
-                                var container = $('.gallery-slider2');
-                                container.empty(); // Clear existing items
+                        // ===== Build Stains Items =====
+                        var stains = payload.Stains || payload.stains;
+                        if (Array.isArray(stains) && stains.length > 0) {
+                            var container = $('.gallery-slider2');
+                            container.empty(); // Clear existing items
 
-                                stains.forEach(function (item) {
-                                    var name = item.Name || item.name || "";
-                                    var image = item.ImageLink || item.imageLink || "images/default.jpg";
-                                    var desc = item.Description || item.description || "images/default.jpg";
-                                    var href = item.id ? ('stainDetails.html?id=' + encodeURIComponent(item.id)) : 'javascript:void(0);';                                  
-                                    var html = `
-                                            <div class="item">
-                                                <div class="project-img-effect-1">
-                                                    <img src="${image}" alt="${name}" />
-                                                    <div class="wt-info bg-white p-a20">
-                                                        <h3 class="wt-tilte m-b10 m-t0">
-                                                            <a href="${href}">${name}</a>
-                                                        </h3>
-                                                        <p>${desc}</p>
-                                                        <a href="${href}" class="site-button-link site-text-primary">Read More</a>
+                            stains.forEach(function (item) {
+                                var name = item.Name || item.name || "";
+                                var image = item.ImageLink || item.imageLink || "images/default.jpg";
+                                var desc = item.Description || item.description || "images/default.jpg";
+                                var href = item.id ? ('stainDetails.html?id=' + encodeURIComponent(item.id)) : 'javascript:void(0);';
+                                var html = `
+                                                <div class="item">
+                                                    <div class="project-img-effect-1">
+                                                        <img src="${image}" alt="${name}" />
+                                                        <div class="wt-info bg-white p-a20">
+                                                            <h3 class="wt-tilte m-b10 m-t0">
+                                                                <a href="${href}">${name}</a>
+                                                            </h3>
+                                                            <p>${desc}</p>
+                                                            <a href="${href}" class="site-button-link site-text-primary">Read More</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        `;
-                                    container.append(html);
-                                });
+                                            `;
+                                container.append(html);
+                            });
 
-                                // ===== Re-initialize Owl Carousel =====
-                                if (container.hasClass('owl-loaded')) {
-                                    container.trigger('destroy.owl.carousel'); // remove old instance
-                                    container.html(container.find('.owl-stage-outer').html()).removeClass('owl-loaded');
-                                }
-
-                                container.owlCarousel({
-                                    loop: true,
-                                    margin: 30,
-                                    dots: true,
-                                    autoplay: true,
-                                    autoplayTimeout: 5000,
-                                    responsive: {
-                                        0: { items: 1 },
-                                        600: { items: 2 },
-                                        1000: { items: 3 }
-                                    }
-                                });
+                            // ===== Re-initialize Owl Carousel =====
+                            if (container.hasClass('owl-loaded')) {
+                                container.trigger('destroy.owl.carousel'); // remove old instance
+                                container.html(container.find('.owl-stage-outer').html()).removeClass('owl-loaded');
                             }
-                        } catch (err) {
-                            console.error("Error parsing stains data:", err);
+
+                            container.owlCarousel({
+                                loop: true,
+                                margin: 30,
+                                dots: true,
+                                autoplay: true,
+                                autoplayTimeout: 5000,
+                                responsive: {
+                                    0: { items: 1 },
+                                    600: { items: 2 },
+                                    1000: { items: 3 }
+                                }
+                            });
                         }
-                    }).fail(function (xhr) {
-                        console.warn("Stains GetAll request failed:", xhr.status);
-                    });
-                }
+                    } catch (err) {
+                        console.error("Error parsing stains data:", err);
+                    }
+                }).fail(function (xhr) {
+                    console.warn("Stains GetAll request failed:", xhr.status);
+                });
+            }
 
-                // Run when DOM is ready
-                if (document.readyState === "complete" || document.readyState === "interactive") {
-                    loadStainsOnce();
-                } else {
-                    document.addEventListener("DOMContentLoaded", loadStainsOnce);
-                }
+            // Run when DOM is ready
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                loadStainsOnce();
+            } else {
+                document.addEventListener("DOMContentLoaded", loadStainsOnce);
+            }
 
-                // Fallback for late load
-                window.addEventListener("load", loadStainsOnce);
-            })();
-        </script>
+            // Fallback for late load
+            window.addEventListener("load", loadStainsOnce);
+        })();
+    </script>
 
 </body>
 </html>

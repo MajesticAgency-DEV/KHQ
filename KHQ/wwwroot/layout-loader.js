@@ -178,11 +178,10 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 
     var translationsCache = null;
     function loadTranslations(){
-        if (translationsCache) return Promise.resolve(translationsCache);
+        //if (translationsCache) return Promise.resolve(translationsCache);
         return fetch('/i18n/translations.json', { credentials: 'same-origin' })
             .then(function(r){ return r.json(); })
-            .then(function(json){ translationsCache = json || {}; return translationsCache; })
-            .catch(function(){ translationsCache = {}; return translationsCache; });
+            .then(function(json){ translationsCache = json || {}; return translationsCache; });
     }
 
     function updateTexts(){
