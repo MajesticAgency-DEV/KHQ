@@ -10,7 +10,7 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item">>Dashboards /</li>
+                            <li class="breadcrumb-item">Dashboards /</li>
                             <li class="breadcrumb-item">About us page / </li>
                             <li class="breadcrumb-item active">Overview</li>
                         </ol>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <!-- end page title -->
-        @if (Model.Count == 0 || Model == null)
+        @if (Model.Count < 2 || Model == null)
         {
         <div class="row">
             <div class="col-12">

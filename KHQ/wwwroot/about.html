@@ -125,6 +125,44 @@
                 </div>
             </div>
             <!-- ABOUT ONE SECTION END -->
+            <!-- ABOUT TWO SECTION START -->
+            <div class="section-full p-b90 bg-no-repeat bg-no-repeat bg-bottom-center bg-gray-light" style="">
+                <div class="about-section-one">
+                    <div class="container">
+                        <div class="section-content">
+                            <div class="row justify-content-center d-flex">
+
+                                <div class="col-lg-6 col-md-12 m-b30">
+                                    <div class="about-section-two-right">
+                                        <!-- TITLE START-->
+                                        <div class="left wt-small-separator-outer">
+                                            <!--<div class="wt-small-separator site-text-primary">
+                                                <div data-i18n-key="AboutCompany">AboutCompany</div>
+
+                                            </div>-->
+                                            <h2></h2>
+                                            <p></p>
+                                        </div>
+                                        <!-- TITLE END-->
+
+                                        <!--<ul class="site-list-style-two">
+                                            <li><div class="check-list-outer"><span><i class="flaticon-checked"></i></span></div></li>
+                                        </ul>-->
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 m-b30">
+                                    <div class="about-clean-one">
+                                        <div class="about-clean-one-media"><img src="" alt="" class="radius-md"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ABOUT TWO SECTION END -->
 
 
         </div>
@@ -179,32 +217,42 @@
                     url: "/api/AboutUs/GetAll",
                     method: "GET"
                 }).done(function (data) {
-                    var first = data;
-                    var $titleEl = $(".about-section-two-right .left h2");
-                    var $descEl = $(".about-section-two-right .left p");
+                    // Handle the new array structure from GetAll method
+                    var first = Array.isArray(data) && data.length > 0 ? data[0] : data;
+                    var second = Array.isArray(data) && data.length > 1 ? data[1] : null;
+                    
+                    // First section (image left, content right)
+                    var $titleEl1 = $(".about-section-one .about-section-two-right .left h2").first();
+                    var $descEl1 = $(".about-section-one .about-section-two-right .left p").first();
                     var $bgEl = $(".bg-section");
-                    var $points = $(".site-list-style-two");
-                    var $aboutImg = $(".about-clean-one-media img");
+                    var $points1 = $(".about-section-one .site-list-style-two").first();
+                    var $aboutImg1 = $(".about-section-one .about-clean-one-media img").first();
 
+                    // Second section (content left, image right)
+                    var $titleEl2 = $(".about-section-one .about-section-two-right .left h2").last();
+                    var $descEl2 = $(".about-section-one .about-section-two-right .left p").last();
+                    var $points2 = $(".about-section-one .site-list-style-two").last();
+                    var $aboutImg2 = $(".about-section-one .about-clean-one-media img").last();
+
+                    // Populate first section
                     if (first && typeof first.title === "string") {
-                        $titleEl.text(first.title);
+                        $titleEl1.text(first.title);
                     }
                     if (first && typeof first.description === "string") {
-                        $descEl.text(first.description);
+                        $descEl1.text(first.description);
                     }
                     if (first && typeof first.coverPhoto === "string" && first.coverPhoto.trim() !== "") {
                         $bgEl.css("background-image", "url(" + first.coverPhoto + ")");
                     }
                     if (first?.aboutUsImage) {
-                        $aboutImg.attr("src", first.aboutUsImage);
+                        $aboutImg1.attr("src", first.aboutUsImage);
                     }
-                    $points.empty(); // remove any static <li> items
+                    $points1.empty(); // remove any static <li> items
                     if (Array.isArray(first.h_AboutUsDto)) {
                         first.h_AboutUsDto.forEach(function (item) {
                             if (item && typeof item.point === "string") {
-                                // If you want to use the icon, you can also use item.icon here.
                                 var iconClass = item.icon ? item.icon : "flaticon-checked";
-                                $points.append(
+                                $points1.append(
                                     '<li>' +
                                     '<div class="check-list-outer">' +
                                     '<span><i class="flaticon-checked"></i></span> ' +
@@ -214,6 +262,38 @@
                                 );
                             }
                         });
+                    }
+
+                    // Populate second section if data exists
+                    if (second) {
+                        if (second && typeof second.title === "string") {
+                            $titleEl2.text(second.title);
+                        }
+                        if (second && typeof second.description === "string") {
+                            $descEl2.text(second.description);
+                        }
+                        if (second?.aboutUsImage) {
+                            $aboutImg2.attr("src", second.aboutUsImage);
+                        }
+                        //$points2.empty(); // remove any static <li> items
+                        //if (Array.isArray(second.h_AboutUsDto)) {
+                        //    second.h_AboutUsDto.forEach(function (item) {
+                        //        if (item && typeof item.point === "string") {
+                        //            var iconClass = item.icon ? item.icon : "flaticon-checked";
+                        //            $points2.append(
+                        //                '<li>' +
+                        //                '<div class="check-list-outer">' +
+                        //                '<span><i class="flaticon-checked"></i></span> ' +
+                        //                $('<div/>').text(item.point).html() + // safe text
+                        //                '</div>' +
+                        //                '</li>'
+                        //            );
+                        //        }
+                        //    });
+                        //}
+                    } else {
+                        // Hide second section if no second data
+                        $(".about-section-one").last().hide();
                     }
 
                 }).fail(function (xhr) {

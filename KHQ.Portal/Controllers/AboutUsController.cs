@@ -1,4 +1,5 @@
 ﻿using KHQ.Domain;
+using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
 using KHQ.Srv.Caching;
@@ -21,10 +22,20 @@ namespace KHQ.Portal.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AboutUsVM> aboutUsData = await _AboutUsSrv.GetAllAsync();
-            var images = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Page);
-            if (images.Count() > 0) 
-                aboutUsData.FirstOrDefault().ImageLink = images.FirstOrDefault().PathLink;
+            List<AboutUsVM> aboutUsData = _AboutUsSrv.GetAllAsync().Result.ToList();
+            var aboutUsImages = await _imageService.GetImagesByImageTypeAsync(ImageType.AboutUs_Page);
+
+            // Assign points and images sequentially
+            for (int i = 0; i < aboutUsData.Count(); i++)
+            {
+                var item = aboutUsData[i];
+
+                // Assign image sequentially
+                if (i < aboutUsImages.Count)
+                    item.ImageLink = aboutUsImages[i].PathLink;
+                else
+                    item.ImageLink = string.Empty;
+            }
             return View(aboutUsData);
         }
         public async Task<IActionResult> CoverSection()

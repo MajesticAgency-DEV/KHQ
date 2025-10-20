@@ -27,29 +27,46 @@ namespace KHQ.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<AboutUsDto> GetAll()
+        public async Task<List<AboutUsDto>> GetAll()
         {
             var aboutUs = await _cacheService.GetOrCreateAsync(async () =>
             {
-                var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().FirstOrDefaultAsync();
+                var aboutUsData = await _unitOfWork.Repository<AboutUs>().Queryable().ToListAsync();
                 var points = await _unitOfWork.Repository<H_AboutUs>().Queryable().ToListAsync();
                 var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
                                         .Where(x => x.ImageType == ImageType.AboutUs_Cover)
                                         .FirstOrDefaultAsync();
-                var aboutUsImage = await _unitOfWork.Repository<Image>().Queryable()
+                var aboutUsImages = await _unitOfWork.Repository<Image>().Queryable()
                                         .Where(x => x.ImageType == ImageType.AboutUs_Page)
-                                        .FirstOrDefaultAsync();
+                                        .OrderBy(x => x.Id)
+                                        .ToListAsync();
 
-                var result = _mapper.Map<AboutUsDto>(aboutUsData);
-                result.H_AboutUsDto = _mapper.Map<IEnumerable<H_AboutUsDto>>(points);
-                result.CoverPhoto = coverPhoto?.PathLink ?? "";
-                result.AboutUsImage = aboutUsImage?.PathLink ?? "";
+                var result = _mapper.Map<List<AboutUsDto>>(aboutUsData);
+
+                // Assign points and images sequentially
+                for (int i = 0; i < result.Count; i++)
+                {
+                    var item = result[i];
+
+                    // Assign all H_AboutUs points
+                    item.H_AboutUsDto = _mapper.Map<IEnumerable<H_AboutUsDto>>(points);
+
+                    // Assign same cover photo for all
+                    item.CoverPhoto = coverPhoto?.PathLink ?? string.Empty;
+
+                    // Assign image sequentially
+                    if (i < aboutUsImages.Count)
+                        item.AboutUsImage = aboutUsImages[i].PathLink;
+                    else
+                        item.AboutUsImage = string.Empty;
+                }
 
                 return result;
-            }, 3,"AboutUs_All");
+            }, 3, "AboutUs_All");
 
             return aboutUs;
         }
+
 
         [HttpGet]
         [Route("GetById/{id}")]
