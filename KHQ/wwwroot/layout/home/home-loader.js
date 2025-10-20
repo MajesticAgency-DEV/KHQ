@@ -46,21 +46,24 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
 
             var slides = container.querySelectorAll('.rev_slider ul li[data-index]');
 
-            // Get references to both template slides
-            var template1 = slides[0]; // First slide (rs-901)
-            var template2 = slides[1]; // Second slide (rs-902)
+            // Get references to all 5 template slides
+            var template1 = slides[0]; // First slide (rs-901) - Template 1
+            var template2 = slides[1]; // Second slide (rs-902) - Template 2
+            var template3 = slides[2]; // Third slide (rs-903) - Template 1
+            var template4 = slides[3]; // Fourth slide (rs-904) - Template 2
+            var template5 = slides[4]; // Fifth slide (rs-905) - Template 1
 
-            if (!template1 || !template2) {
-                console.warn('Both slider templates are required');
+            if (!template1 || !template2 || !template3 || !template4 || !template5) {
+                console.warn('All 5 slider templates are required');
                 return;
             }
 
-            // Clear existing slides beyond the templates
+            // Clear existing slides beyond the 5 templates
             var slideContainer = container.querySelector('.rev_slider ul');
             if (slideContainer) {
-                // Remove any extra slides beyond the two templates
+                // Remove any extra slides beyond the 5 templates
                 var allSlides = slideContainer.querySelectorAll('li[data-index]');
-                for (var i = 2; i < allSlides.length; i++) {
+                for (var i = 5; i < allSlides.length; i++) {
                     allSlides[i].remove();
                 }
             }
@@ -73,16 +76,20 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 var buttonText = slider.ButtonText || slider.buttonText || '';
                 var link = slider.Link || slider.link || '';
 
-                // Determine which template to use (alternating)
-                var useTemplate1 = index >= 2 ? true : (index % 2 === 0);
-                var templateSlide = useTemplate1 ? template1 : template2;
-
+                // Determine which template to use based on the pattern:
+                // Slide 1: Template 1, Slide 2: Template 2, Slide 3: Template 1, Slide 4: Template 2, Slide 5: Template 1
+                var useTemplate1;
                 var currentSlide;
-
-                if (index < 2) {
-                    // Use existing template slides for first two items
+                
+                if (index < 5) {
+                    // Use existing template slides for first 5 items
                     currentSlide = slides[index];
+                    useTemplate1 = (index === 0 || index === 2 || index === 4); // 1st, 3rd, 5th slides use Template 1
                 } else {
+                    // For additional slides beyond 5, alternate starting with Template 1
+                    useTemplate1 = (index % 2 === 0);
+                    var templateSlide = useTemplate1 ? template1 : template2;
+                    
                     // Deep clone
                     var newSlide = templateSlide.cloneNode(true);
                     newSlide.removeAttribute('id'); // avoid duplicate IDs if present
@@ -93,6 +100,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                     newSlide.setAttribute('data-param1', (index + 1).toString());
 
                     slideContainer.appendChild(newSlide);
+                    currentSlide = newSlide;
                 }
 
                 // Apply the slider data to the current slide
@@ -107,8 +115,12 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             });
 
             // Hide unused template slides if we have fewer items than templates
-            if (items.length === 1) {
-                template2.style.display = 'none';
+            if (items.length < 5) {
+                for (var i = items.length; i < 5; i++) {
+                    if (slides[i]) {
+                        slides[i].style.display = 'none';
+                    }
+                }
             }
 
         } catch (_err) {
