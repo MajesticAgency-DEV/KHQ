@@ -463,7 +463,11 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                 if (!listContainer) listContainer = container.querySelector('.row.justify-content-center.d-flex');
                 var items = Array.isArray(payload) ? payload : (payload.categoriesDtos || payload.CategoriesDtos || []);
                 if (!items || !items.length) { if (listContainer) listContainer.innerHTML = ''; return; }
-                var html = items.map(function (it) {
+                
+                // Limit to only 3 categories
+                var limitedItems = items.slice(0, 3);
+                
+                var html = limitedItems.map(function (it) {
                     return buildCategoryCardHtml({
                         id: it.Id || it.id,
                         name: it.Name || it.name,
