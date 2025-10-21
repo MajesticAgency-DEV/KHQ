@@ -12,7 +12,7 @@
 
     <!-- FAVICONS ICON -->
     <link rel="icon" href="images/khayrat-alqastal-icon-white.png" type="image/x-icon" />
-     <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/khayrat-alqastal-icon-white.png" />
 
     <!-- PAGE TITLE HERE -->
     <title>Khayrat Al-Qastal</title>
@@ -69,15 +69,16 @@
                     <div class="wt-bnr-inr-entry">
                         <div class="banner-title-outer">
                             <div class="banner-title-name">
-                                <h2 class="site-text-white">Product Details</h2>
+                                <h2 class="site-text-white" data-i18n-key="ProductDetails">Product Details</h2>
                             </div>
                         </div>
                         <!-- BREADCRUMB ROW -->
 
                         <div>
                             <ul class="wt-breadcrumb breadcrumb-style-2">
-                                <li><a href="index.html">Home</a></li>
-                                <li>Product Details</li>
+                                <li><a href="index.html" data-i18n-key="Home">Home</a></li>
+                                <li data-i18n-key="ProductDetails">Product Details</li>
+                                <li id="productName"></li>
                             </ul>
                         </div>
 
@@ -106,105 +107,130 @@
                     </div>
 
                     <div class="sing-project-detail m-b30" style="display:grid">
-                        <h3 class="m-t0 m-b30" id="productName">Project Description</h3>
-                        <span class="site-text-primary" data-i18n-key="Brands" >Brands:  <span style="color: #595959" id="brandsName"></span></span>
-                        <span class="site-text-primary">Category:  <span style="color: #595959" id="categoryName"></span></span>
-                        <span class="site-text-primary">Capacity / Weight:  <span style="color: #595959" id="capacity"></span></span>
-                        <span class="site-text-primary">Description:  <span style="color: #595959" id="description"></span></span>
+                        <h3 class="m-t0 m-b30" id="productName">Product Name</h3>
+                        <div class="row">
+                            <div class="col-2">
+                                <span class="site-text-primary" data-i18n-key="Brand">
+                                    Brand:
+                                </span>
+                                <span class="site-text-primary">:</span>
+                            </div>
+                            <span class="col-10" style="color: #595959" id="brandsName"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <span class="site-text-primary" data-i18n-key="Category">Category  </span>
+                                <span class="site-text-primary">:</span>
+                            </div>
+                            <span class="col-10" style="color: #595959" id="categoryName"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <span class="site-text-primary" data-i18n-key="Capacity">Capacity / Weight  </span>
+                                <span class="site-text-primary">:</span>
+                            </div>
+                            <span class="col-10" style="color: #595959" id="capacity"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                <span class="site-text-primary" data-i18n-key="Description">Description  </span>
+                                <span class="site-text-primary">:</span>
+                            </div>
+                            <span class="col-10" style="color: #595959" id="description"></span>
+                        </div>
+                    </div>
+                    <!-- WHY CHOOSE SECTION END -->
+                </div>
+                <!-- GALLERY SECTION END -->
+                <!-- carousel 1 SECTION START -->
+                <div class="section-full p-t120 p-b120 bg-gray">
+
+                    <div class="section-content container">
+
+                        <div class="owl-carousel gallery-slider2 dark-dotts-line center">
+
+                            <!--<div class="item">
+                                <div class="project-img-effect-1">
+                                    <img src="images/project/landscap/1.jpg" alt="" />
+                                    <div class="wt-info  bg-white p-a20">
+                                        <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">Bathroom Cleaning</a></h3>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="project-img-effect-1">
+                                    <img src="images/project/landscap/2.jpg" alt="" />
+                                    <div class="wt-info  bg-white p-a20">
+                                        <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">Apartment Cleaning</a></h3>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="project-img-effect-1">
+                                    <img src="images/project/landscap/3.jpg" alt="" />
+                                    <div class="wt-info  bg-white p-a20">
+                                        <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">Window Cleaning</a></h3>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="project-img-effect-1">
+                                    <img src="images/project/landscap/4.jpg" alt="" />
+                                    <div class="wt-info  bg-white p-a20">
+                                        <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">House Cleaning</a></h3>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="project-img-effect-1">
+                                    <img src="images/project/landscap/5.jpg" alt="" />
+                                    <div class="wt-info bg-white p-a20">
+                                        <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">Office Cleaning</a></h3>
+                                    </div>
+
+                                </div>
+                            </div>-->
+
+                        </div>
 
                     </div>
-                </div>
-                <!-- WHY CHOOSE SECTION END -->
-            </div>
-            <!-- GALLERY SECTION END -->
-            <!-- carousel 1 SECTION START -->
-            <div class="section-full p-t120 p-b120 bg-gray">
-
-                <div class="section-content container">
-
-                    <div class="owl-carousel gallery-slider2 dark-dotts-line center">
-
-                        <div class="item">
-                            <div class="project-img-effect-1">
-                                <img src="images/project/landscap/1.jpg" alt="" />
-                                <div class="wt-info  bg-white p-a20">
-                                    <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">Bathroom Cleaning</a></h3>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="project-img-effect-1">
-                                <img src="images/project/landscap/2.jpg" alt="" />
-                                <div class="wt-info  bg-white p-a20">
-                                    <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">Apartment Cleaning</a></h3>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="project-img-effect-1">
-                                <img src="images/project/landscap/3.jpg" alt="" />
-                                <div class="wt-info  bg-white p-a20">
-                                    <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">Window Cleaning</a></h3>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="project-img-effect-1">
-                                <img src="images/project/landscap/4.jpg" alt="" />
-                                <div class="wt-info  bg-white p-a20">
-                                    <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">House Cleaning</a></h3>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="project-img-effect-1">
-                                <img src="images/project/landscap/5.jpg" alt="" />
-                                <div class="wt-info bg-white p-a20">
-                                    <h3 class="wt-tilte  m-b10 m-t0"><a href="javascript:;">Office Cleaning</a></h3>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
 
                 </div>
+                <!-- carousel 1  SECTION END -->
 
             </div>
-            <!-- carousel 1  SECTION END -->
+            <!-- CONTENT END -->
+            <!-- WHY CHOOSE SECTION START -->
+            <div data-include="layout/home/why-choose.html"></div>
+            <!-- WHY CHOOSE SECTION END -->
+            <!-- FOOTER START -->
+            <footer class="site-footer footer-large footer-dark text-white footer-style1" id="footer"></footer>
+            <!-- FOOTER END -->
+            <!-- BUTTON TOP START -->
+            <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
 
         </div>
-        <!-- CONTENT END -->
-        <!-- WHY CHOOSE SECTION START -->
-        <div data-include="layout/home/why-choose.html"></div>
-        <!-- WHY CHOOSE SECTION END -->
-        <!-- FOOTER START -->
-        <footer class="site-footer footer-large footer-dark text-white footer-style1" id="footer"></footer>
-        <!-- FOOTER END -->
-        <!-- BUTTON TOP START -->
-        <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
 
-    </div>
-
-    <!-- LOADING AREA START ===== -->
-    <div class="loading-area">
-        <div class="loading-box"></div>
-        <div class="loading-pic">
-            <h4>Loading</h4>
-            <div class="drop-container">
-                <div class="drop"></div>
+        <!-- LOADING AREA START ===== -->
+        <div class="loading-area">
+            <div class="loading-box"></div>
+            <div class="loading-pic">
+                <h4>Loading</h4>
+                <div class="drop-container">
+                    <div class="drop"></div>
+                </div>
             </div>
         </div>
+        <!-- LOADING AREA  END ====== -->
     </div>
-    <!-- LOADING AREA  END ====== -->
     <!-- JAVASCRIPT  FILES ========================================= -->
     <script src="../../js/jquery-2.2.0.min.js"></script><!-- JQUERY.MIN JS -->
     <script src="../../js/popper.min.js"></script><!-- POPPER.MIN JS -->
@@ -255,11 +281,12 @@
                         var image = (subProducts.length > 0 && subProducts[0].imageUrl) ? subProducts[0].imageUrl : '';
                         var bgEl = $(".bg-section");
                         // set main product description and cover image
-                        setHtml('.sing-project-detail #description', description);
-                        setHtml('.sing-project-detail #productName', data.name);
-                        setHtml('.sing-project-detail span #brandsName', data.brandName);
-                        setHtml('.sing-project-detail #categoryName', data.categoryName);
-                        setHtml('.sing-project-detail #capacity', data.capacity);
+                        setHtml('#description', description);
+                        setHtml('#productName', data.name);
+                        setHtml('#brandsName', data.brandName);
+
+                        setHtml('#categoryName', data.categoryName);
+                        setHtml('#capacity', data.capacity);
                         if (image) {
                             $(".wt-post-media img").attr("src", image);
                             bgEl.css("background-image", "url(" + image + ")");
@@ -276,18 +303,18 @@
 
                             if (index != 0) {
                                 var itemHtml = `
-    <div class="item">
-        <div class="project-img-effect-1">
-            <img src="${spImage}" alt="${spName}" />
-            <div class="wt-info bg-white p-a20">
-                <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">${spName}</a></h3>
-            </div>
-        </div>
-    </div>
+                                                <div class="item">
+                                                    <div class="project-img-effect-1">
+                                                        <img src="${spImage}" alt="${spName}" />
+                                                        <div class="wt-info bg-white p-a20">
+                                                            <h3 class="wt-tilte m-b10 m-t0"><a href="javascript:;">${spName}</a></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
 `;
                                 container.append(itemHtml);
                             }
-                            
+
                         });
 
                         // reinitialize owl carousel after adding new items

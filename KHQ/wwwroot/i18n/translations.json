@@ -26,6 +26,11 @@
     "AddressInfo": "Address info",
     "AR": "Arabic",
     "EN": "انجليزي",
+    "Brand": "Brand",
+    "Category": "Category",
+    "Capacity": "Capacity / Weight",
+    "Description": "Description",
+    "ProductDetails": "Product Details",
     "Copyright": "Copyright ©,<script>document.write(new Date().getFullYear())</script><strong>Khayrat Al-Qastal For DetergentI ndustry Co.</strong> All rights reserved."
   },
   "ar": {
@@ -56,6 +61,11 @@
     "AddressInfo": "العنوان",
     "AR": "عربي",
     "EN": "English",
+    "Brand": "العلامة التجارية",
+    "Category": "الفئة",
+    "Capacity": "السعة / الوزن",
+    "Description": "تفاصيل المنتج",
+    "ProductDetails": "تفاصيل المنتج",
     "Copyright": "حقوق النشر @ 2025 شركة خيرات القسطل لصناعة المنظفات. جميع الحقوق محفوظة."
   }
 }

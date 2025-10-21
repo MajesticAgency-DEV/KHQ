@@ -1802,9 +1802,9 @@ ol.list-num-count.list-outline-none>li:before {
 
 .site-button-secondry:active,
 .site-button-secondry:hover,
-.active>.site-button-secondry {
-	background-color:#ededed;
-	color:#111;
+.active > .site-button-secondry {
+	background-color: #ededed;
+	color: #842e91;
 }
 
 
@@ -8983,7 +8983,10 @@ ol.commentlist li::after {
 .rev-btn.white .site-button-secondry:hover {background-color: #000;   color: #fff !important;}
 
 .rev-btn .site-button-secondry{padding: 15px 40px !important; letter-spacing: 1px; line-height:normal !important}
-.rev-btn .site-button-secondry:hover {background-color: #000;   color: #fff !important;}
+	.rev-btn .site-button-secondry:hover {
+		background-color: #842e91;
+		color: #fff !important;
+	}
 
 /*----revolution slider dotts style end----*/
 

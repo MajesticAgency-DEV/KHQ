@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
             '<div class="half-icon-box site-bg-secondry radius-md">' +
             '<div class="icon-box">' +
             '<span class="icon-small">' + icon + '</span>' +
-            '<span class="icon-large"><i class="flaticon-clean"></i></span>' +
+            '<span class="icon-large">' + icon + '</span>' +
             '</div>' +
             '<div class="icon-content">' +
             '<h3 class="wt-title site-text-primary">' + title + '</h3>' +
