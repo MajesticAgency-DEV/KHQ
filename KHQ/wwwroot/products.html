@@ -193,7 +193,7 @@
                 }
 
                 return (
-                    '<div class="masonry-item ' + categoryClass + ' ' + brandClass + ' col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
+                    '<a href="productDetails.html?id= ' + encodeURIComponent(id) + '"><div class="masonry-item ' + categoryClass + ' ' + brandClass + ' col-xl-4 col-lg-4 col-md-6 m-b30"> ' +
                     '<div class="wt-img-effect project-new-2 radius-md shadow">' +
                     '<img src="' + img + '" alt="">' +
                     '<div class="project-new-content">' +
@@ -203,7 +203,7 @@
                     '<a href="productDetails.html?id=' + encodeURIComponent(id) + '" class="project-link site-bg-primary"><i class="flaticon-right"></i></a>' +
                     '</div>' +
                     '</div>' +
-                    '</div>'
+                    '</div></a>'
                 );
             }
 
