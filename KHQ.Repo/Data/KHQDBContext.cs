@@ -59,10 +59,10 @@ namespace KHQ.Repo.Data
                 Id = ADMIN_ID,
                 UserName = "admin",
                 NormalizedUserName = "admin",
-                Email = "Admin@KHQ.com",
-                NormalizedEmail = "Admin@KHQ.com",
+                Email = "info@kh-alqastal.com",
+                NormalizedEmail = "info@kh-alqastal.com",
                 EmailConfirmed = false,
-                PasswordHash = hasher.HashPassword(null, "Admin@123"),
+                PasswordHash = hasher.HashPassword(null, "KhAlqastal@123"),
                 SecurityStamp = string.Empty
             });
 
