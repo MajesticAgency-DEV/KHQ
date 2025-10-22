@@ -255,13 +255,13 @@
                     var noResultsMsg = document.getElementById('no-results-message');
                     var productList = document.getElementById('product-list-test');
 
-                    //if (visibleItems === 0) {
-                    //    if (noResultsMsg) noResultsMsg.style.display = 'block';
-                    //    //if (productList) productList.style.minHeight = '0';
-                    //} else {
-                    //    if (noResultsMsg) noResultsMsg.style.display = 'none';
-                    //    //if (productList) productList.style.minHeight = 'auto';
-                    //}
+                    if (visibleItems === 0) {
+                        if (noResultsMsg) noResultsMsg.style.display = 'block';
+                        //if (productList) productList.style.minHeight = '0';
+                    } else {
+                        if (noResultsMsg) noResultsMsg.style.display = 'none';
+                        //if (productList) productList.style.minHeight = 'auto';
+                    }
                 }, 100);
             }
 
