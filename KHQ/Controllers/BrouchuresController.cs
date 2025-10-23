@@ -31,7 +31,7 @@ namespace KHQ.Controllers
         public async Task<BrouchuresDtoNew> GetAll()
         {
             var brouchuresData = await _unitOfWork.Repository<Brouchures>().Queryable().ToListAsync();
-            var data = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 8).FirstOrDefaultAsync();
+            var data = await _unitOfWork.Repository<BaseHome>().Queryable().Where(x => x.SectionType == 4).FirstOrDefaultAsync();
             var b_data = _mapper.Map<BaseHomeDto>(data);
 
             BrouchuresDtoNew brouchuresDtoNew = new BrouchuresDtoNew();
