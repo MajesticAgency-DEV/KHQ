@@ -87,7 +87,39 @@
             </div>
             <!-- INNER PAGE BANNER END -->
             <!-- BRANDS SECTION START -->
-            <div data-include="layout/home/brands.html"></div>
+            <div class="section-full p-t120 p-b90 bg-gray">
+
+                <div class="container">
+                    <div class="wt-separator-two-part">
+                        <div class="row wt-separator-two-part-row">
+                            <div class="col-lg-6 col-md-6 wt-separator-two-part-left">
+                                <!-- TITLE START-->
+                                <div class="section-head left wt-small-separator-outer">
+                                    <div class="wt-small-separator site-text-primary">
+                                        <div data-i18n-key="OurBrands">OurBrands</div>
+                                    </div>
+                                    <h2></h2>
+                                </div>
+                                <!-- TITLE END-->
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 wt-separator-two-part-right text-left">
+                                <p> </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <div class="wt-team-2-outer">
+                            <div class="row justify-content-center">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>  
             <!-- BRANDS SECTION  SECTION END -->
 
 
@@ -137,14 +169,71 @@
     <script src="layout-loader.js"></script>
     <script>
         (function () {
-            function loadAboutOnce() {
-                if (loadAboutOnce._called) return; loadAboutOnce._called = true;
+            function loadBrandsOnce() {
+                if (loadBrandsOnce._called) return; loadBrandsOnce._called = true;
                 $.ajax({
                     url: "/api/Brands/GetAll",
                     method: "GET"
-                }).done(function (data) {
-                    var first = data;
+                }).done(function (payload) {
+                    if (!payload) return;
 
+                    try {
+                        var titleEl = document.querySelector('.section-head h2');
+                        var apiTitle = payload.title || payload.Title;
+                        if (titleEl && apiTitle) titleEl.textContent = apiTitle;
+
+                        var descEl = document.querySelector('.wt-separator-two-part-right p');
+                        var apiDesc = payload.main_Description || payload.Main_Description;
+                        if (descEl && apiDesc) descEl.textContent = apiDesc;
+
+                        var brandCover = $(".bg-section");
+                        if (brandCover)
+                            brandCover.css("background-image", "url(" + payload.coverPhoto + ")");
+                    } catch (_err) { }
+
+                    var listContainer = document.querySelector('.row.justify-content-center');
+                    if (!listContainer) return;
+
+                    var items = Array.isArray(payload.brandsDtos)
+                        ? payload.brandsDtos
+                        : (payload.BrandsDtos || []);
+
+                    if (!items || !items.length) {
+                        listContainer.innerHTML = '';
+                        return;
+                    }
+
+                    var html = items.map(function (it) {
+                        return buildBrandCardHtml({
+                            id: it.Id || it.id,
+                            name: it.Name || it.name,
+                            description: it.Description || it.description,
+                            imageLink: it.ImageLink || it.imageLink,
+                            faceLink: it.FaceLink || it.faceLink,
+                            instaLink: it.InstaLink || it.instaLink
+                        });
+                    }).join('');
+
+                    listContainer.innerHTML = html;
+
+                    // ✅ Prevent product redirect when clicking on social links
+                    listContainer.querySelectorAll('.team-social-bar a').forEach(function (a) {
+                        a.addEventListener('click', function (ev) {
+                            ev.stopPropagation(); // Stop click bubbling up to the card
+                        });
+                    });
+
+                    // ✅ Navigate only when clicking on the brand card (not socials)
+                    listContainer.addEventListener('click', function (ev) {
+                        var target = ev.target;
+                        var card = target.closest && target.closest('.brand-card');
+                        if (card && card.getAttribute) {
+                            var bid = card.getAttribute('data-brand-id');
+                            if (bid) {
+                                window.location.href = 'products.html?brandId=' + encodeURIComponent(bid);
+                            }
+                        }
+                    });
                 }).fail(function (xhr) {
                     if (window && window.console) {
                         console.warn("AboutUs GetAll request failed", xhr.status);
@@ -154,13 +243,45 @@
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
                 // DOM is ready (or already loaded) — call immediately
-                loadAboutOnce();
+                loadBrandsOnce();
             } else {
-                document.addEventListener("DOMContentLoaded", loadAboutOnce);
+                document.addEventListener("DOMContentLoaded", loadBrandsOnce);
             }
             // Fallback: also call on full load in case DOMContentLoaded was missed
-            window.addEventListener("load", loadAboutOnce);
+            window.addEventListener("load", loadBrandsOnce);
         })();
+
+        function buildBrandCardHtml(brand) {
+            var id = brand && (brand.id || brand.Id) ? (brand.id || brand.Id) : '';
+            var imageSrc = brand && brand.imageLink ? brand.imageLink : '';
+            var name = brand && brand.name ? brand.name : '';
+            var description = brand && brand.description ? brand.description : '';
+            var face = brand && brand.faceLink ? brand.faceLink : '';
+            var insta = brand && brand.instaLink ? brand.instaLink : '';
+            var socials = '';
+            if (face) socials += '<li><a href="' + face + '" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a></li>';
+            if (insta) socials += '<li><a href="' + insta + '" target="_blank" rel="noopener"><i class="fa fa-instagram"></i></a></li>';
+            return (
+                '<div class="col-xl-4 col-lg-4 col-md-6 m-b30">' +
+                '<div class="wt-team-2 bg-white radius-md brand-card" data-brand-id="' + id + '">' +
+                '<div class="wt-team-2-content">' +
+                '<div class="wt-media">' +
+                '<img src="' + imageSrc + '" alt="" />' +
+                '</div>' +
+                '<div class="wt-info">' +
+                '<div class="team-detail">' +
+                '<span class="title-style-2 team-position site-text-primary">' + description + '</span>' +
+                '<h3 class="m-t0 team-name">' + name + '</h3>' +
+                '</div>' +
+                '<div class="team-social-center">' +
+                '<ul class="team-social-bar">' + socials + '</ul>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+        }
     </script>
 </body>
 </html>

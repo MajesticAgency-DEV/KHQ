@@ -375,7 +375,8 @@ document.addEventListener('DOMContentLoaded', loadHomeSections);
                     return;
                 }
 
-                var html = items.map(function (it) {
+                var limitedItems = items.slice(0, 3);
+                var html = limitedItems.map(function (it) {
                     return buildBrandCardHtml({
                         id: it.Id || it.id,
                         name: it.Name || it.name,
