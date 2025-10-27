@@ -15,6 +15,14 @@ html {
     }
 }
 
+.all-btn {
+    background-color: #1BBCE8 !important;
+}
+
+    .all-btn:hover {
+        background-color: #842e91 !important;
+    }
+
 html {
   position: relative;
   min-height: 100%;

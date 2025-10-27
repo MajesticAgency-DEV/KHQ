@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using KHQ.Srv.Caching;
 using KHQ.Domain;
 using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
+using KHQ.Domain.ViewModel;
 using KHQ.Repo.UOW;
+using KHQ.Srv.Caching;
 using KHQ.Srv.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +78,7 @@ namespace KHQ.Controllers
                 }
             }
             ProductDtoNew productDtoNew = new ProductDtoNew();
-            productDtoNew.Products = result;
+            productDtoNew.Products = result.OrderBy(x => x.Name).ToList();
 
             var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
                         .Where(x => x.ImageType == ImageType.Product_Cover)
@@ -156,9 +157,10 @@ namespace KHQ.Controllers
             return Ok(productDto);
         }
 
-        [HttpGet("GetByCategory/{categoryId}")]
+        [HttpGet("GetByCategoryId/{categoryId}")]
         public async Task<IActionResult> GetByCategoryId(Guid categoryId)
         {
+            ProductDtoNew productbyBrand = new ProductDtoNew();
             var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower();
 
             var products = await _unitOfWork.Repository<Product>().Queryable()
@@ -166,17 +168,27 @@ namespace KHQ.Controllers
                 .Include(p => p.SubProducts)
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
-
-            if (!products.Any())
-                return Ok(new List<ProductDto>());
-
-            // Collect all brandIds for lookup
-            var brandIds = products.Select(p => p.BrandId).Distinct().ToList();
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                        .Where(x => x.ImageType == ImageType.Categories_Cover)
+                        .FirstOrDefaultAsync();
+            productbyBrand.CoverPhoto = coverPhoto.PathLink;
 
             var categories = await _unitOfWork.Repository<Category>().Queryable()
                 .AsNoTracking()
                 .Where(c => c.Id == categoryId)
                 .ToListAsync();
+
+            var productcategory = categories.FirstOrDefault(c => c.Id == categoryId);
+            productbyBrand.CategoryName = productcategory != null
+                ? (lang == "ar" ? productcategory.NameAr : productcategory.NameEn)
+                : string.Empty;
+
+            if (!products.Any())
+                return Ok(productbyBrand);
+
+            // Collect all brandIds for lookup
+            var brandIds = products.Select(p => p.BrandId).Distinct().ToList();
+
 
             var brands = await _unitOfWork.Repository<Brands>().Queryable()
                 .AsNoTracking()
@@ -194,7 +206,8 @@ namespace KHQ.Controllers
                 .ToListAsync();
 
             var result = _mapper.Map<List<ProductDto>>(products, opt => opt.Items["lang"] = lang);
-
+            
+            
             foreach (var productDto in result)
             {
                 var entity = products.First(p => p.Id == productDto.Id);
@@ -215,14 +228,16 @@ namespace KHQ.Controllers
                     sub.ImageUrl = img?.PathLink;
                 }
             }
+            productbyBrand.Products = result.OrderBy(x => x.Name).ToList();
 
-            return Ok(result);
+            return Ok(productbyBrand);
         }
 
 
         [HttpGet("GetByBrand/{brandId}")]
         public async Task<IActionResult> GetByBrandId(Guid brandId)
         {
+            ProductDtoNew productbyBrand = new ProductDtoNew();
             var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault()?.ToLower() ?? "en";
 
             var products = await _unitOfWork.Repository<Product>().Queryable()
@@ -230,9 +245,22 @@ namespace KHQ.Controllers
                 .Include(p => p.SubProducts)
                 .Where(p => p.BrandId == brandId)
                 .ToListAsync();
+            var coverPhoto = await _unitOfWork.Repository<Image>().Queryable()
+                        .Where(x => x.ImageType == ImageType.Brands_Cover)
+                        .FirstOrDefaultAsync();
+            productbyBrand.CoverPhoto = coverPhoto.PathLink;
+
+            var brands = await _unitOfWork.Repository<Brands>().Queryable()
+                .AsNoTracking()
+                .Where(b => b.Id == brandId)
+                .ToListAsync();
+            var productbrand = brands.FirstOrDefault(b => b.Id == brandId);
+            productbyBrand.BrandName = productbrand != null
+                ? (lang == "ar" ? productbrand.NameAr : productbrand.NameEn)
+                : string.Empty;
 
             if (!products.Any())
-                return Ok(new List<ProductDto>());
+                return Ok(productbyBrand);
 
             // Collect all categoryIds for lookup
             var categoryIds = products.Select(p => p.CategoryId).Distinct().ToList();
@@ -242,10 +270,6 @@ namespace KHQ.Controllers
                 .Where(c => categoryIds.Contains(c.Id))
                 .ToListAsync();
 
-            var brands = await _unitOfWork.Repository<Brands>().Queryable()
-                .AsNoTracking()
-                .Where(b => b.Id == brandId)
-                .ToListAsync();
 
             // Collect subproduct IDs to get images
             var subProductIds = products.Select(sp => sp.Id).ToList();
@@ -258,7 +282,9 @@ namespace KHQ.Controllers
                 .ToListAsync();
 
             var result = _mapper.Map<List<ProductDto>>(products, opt => opt.Items["lang"] = lang);
-
+            
+               
+            
             foreach (var productDto in result)
             {
                 var entity = products.First(p => p.Id == productDto.Id);
@@ -279,8 +305,9 @@ namespace KHQ.Controllers
                     sub.ImageUrl = img?.PathLink;
                 }
             }
+            productbyBrand.Products = result.OrderBy(x => x.Name).ToList();
 
-            return Ok(result);
+            return Ok(productbyBrand);
         }
 
 

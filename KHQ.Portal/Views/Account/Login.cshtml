@@ -7,6 +7,16 @@
     .field-validation-error, .validation-summary-errors {
         color: red;
     }
+
+    .all-btn {
+        background-color: #1BBCE8 !important;
+
+    }
+
+    .all-btn:hover {
+            background-color: #842e91 !important;
+
+    }
 </style>
 
 <div class="account-pages mt-5 mb-5">
@@ -53,7 +63,7 @@
                             <span asp-validation-for="Password" class=field-validation-valid data-valmsg-for=Password data-valmsg-replace=true></span>
 
                             <div class="text-center d-grid">
-                                <button class="btn btn-primary" type="submit"> Log In </button>
+                                <button class="btn btn-primary all-btn all-btn" type="submit"> Log In </button>
                             </div>
 
                         </form>

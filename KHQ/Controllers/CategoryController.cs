@@ -61,7 +61,7 @@ namespace KHQ.Controllers
             }
             var dto = new CategoryDtoNew
 			{
-				CategoriesDtos = result.ToList(),
+				CategoriesDtos = result.OrderBy(x => x.Name).ToList(),
 				Title = (baseHomeDto?.Title) ?? "Categories",
 				Main_Description = (baseHomeDto?.Description) ?? "Categories",
 				CoverPhoto = data.coverPhoto.PathLink

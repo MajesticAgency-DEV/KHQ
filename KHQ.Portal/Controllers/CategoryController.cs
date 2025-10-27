@@ -37,7 +37,7 @@ namespace KHQ.Portal.Controllers
                     categoryVM.ImageLink = image.PathLink;
                 }
             }
-            return View(categoryData);
+            return View(categoryData.OrderBy(x => x.NameEn));
         }
 
         public async Task<IActionResult> CoverSection()

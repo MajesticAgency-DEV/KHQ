@@ -29,6 +29,6 @@
         FAQ = 4 ,
         WhyChooseUs = 5 ,
         Stains = 6,
-        Statestics = 7,
+        Statistics = 7,
     }
 }

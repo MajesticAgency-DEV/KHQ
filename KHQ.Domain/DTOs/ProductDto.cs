@@ -21,6 +21,8 @@ namespace KHQ.Domain.DTOs
     public class ProductDtoNew
     {
         public string CoverPhoto { get; set; }
+        public string CategoryName { get; set; }
+        public string BrandName { get; set; }
         public List<ProductDto> Products { get; set; }
 
     }

@@ -59,7 +59,7 @@ namespace KHQ.Controllers
                 }
             }
             BrandDtoNew brandDtoNew = new BrandDtoNew();
-            brandDtoNew.BrandsDtos = (List<BrandsDto>)result;
+            brandDtoNew.BrandsDtos = result.OrderBy(x => x.Name).ToList();
             brandDtoNew.Main_Description = bh_result.Description?? "Brands";
             brandDtoNew.Title = bh_result.Title?? "Brands";
             brandDtoNew.CoverPhoto = data.coverPhoto == null ? "" : data.coverPhoto.PathLink;

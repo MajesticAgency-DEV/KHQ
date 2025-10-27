@@ -64,7 +64,7 @@
 
             <!-- INNER PAGE BANNER -->
             <div class="wt-bnr-inr overlay-wraper bg-center p-t120 bg-section" style="background-image:url();">
-                <div class="overlay-main site-bg-primary opacity-09"></div>
+                <div class="overlay-main opacity-09"></div>
                 <div class="container">
                     <div class="wt-bnr-inr-entry">
                         <div class="banner-title-outer">
@@ -86,8 +86,8 @@
                 </div>
             </div>
             <!-- INNER PAGE BANNER END -->
-            <!-- ABOUT ONE SECTION START -->
-            <div class="section-full p-t120 p-b90 bg-no-repeat bg-no-repeat bg-bottom-center bg-gray-light" style="">
+            <!-- ABOUT TWO SECTION START -->
+            <div class="section-full p-b90 bg-no-repeat p-t120 bg-no-repeat bg-bottom-center bg-gray-light" style="">
                 <div class="about-section-one">
                     <div class="container">
                         <div class="section-content">
@@ -98,6 +98,38 @@
                                         <div class="about-clean-one-media"><img src="" alt="" class="radius-md"></div>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-6 col-md-12 m-b30">
+                                    <div class="about-section-two-right">
+                                        <!-- TITLE START-->
+                                        <div class="left wt-small-separator-outer">
+                                            <!--<div class="wt-small-separator site-text-primary">
+                                                <div data-i18n-key="AboutCompany">AboutCompany</div>
+
+                                            </div>-->
+                                            <h2></h2>
+                                            <p></p>
+                                        </div>
+                                        <!-- TITLE END-->
+                                        <!--<ul class="site-list-style-two">
+                                            <li><div class="check-list-outer"><span><i class="flaticon-checked"></i></span></div></li>
+                                        </ul>-->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ABOUT TWO SECTION END -->
+            <!-- ABOUT ONE SECTION START -->
+            <div class="section-full p-t120 p-b90 bg-no-repeat bg-no-repeat bg-bottom-center bg-gray" style="">
+                <div class="about-section-one">
+                    <div class="container">
+                        <div class="section-content">
+                            <div class="row justify-content-center d-flex">
 
                                 <div class="col-lg-6 col-md-12 m-b30">
                                     <div class="about-section-two-right">
@@ -118,6 +150,12 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-6 col-md-12 m-b30">
+                                    <div class="about-clean-one">
+                                        <div class="about-clean-one-media"><img src="" alt="" class="radius-md"></div>
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>
@@ -125,44 +163,6 @@
                 </div>
             </div>
             <!-- ABOUT ONE SECTION END -->
-            <!-- ABOUT TWO SECTION START -->
-            <div class="section-full p-b90 bg-no-repeat bg-no-repeat bg-bottom-center bg-gray-light" style="">
-                <div class="about-section-one">
-                    <div class="container">
-                        <div class="section-content">
-                            <div class="row justify-content-center d-flex">
-
-                                <div class="col-lg-6 col-md-12 m-b30">
-                                    <div class="about-section-two-right">
-                                        <!-- TITLE START-->
-                                        <div class="left wt-small-separator-outer">
-                                            <!--<div class="wt-small-separator site-text-primary">
-                                                <div data-i18n-key="AboutCompany">AboutCompany</div>
-
-                                            </div>-->
-                                            <h2></h2>
-                                            <p></p>
-                                        </div>
-                                        <!-- TITLE END-->
-
-                                        <!--<ul class="site-list-style-two">
-                                            <li><div class="check-list-outer"><span><i class="flaticon-checked"></i></span></div></li>
-                                        </ul>-->
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-md-12 m-b30">
-                                    <div class="about-clean-one">
-                                        <div class="about-clean-one-media"><img src="" alt="" class="radius-md"></div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ABOUT TWO SECTION END -->
 
 
         </div>
@@ -220,7 +220,7 @@
                     // Handle the new array structure from GetAll method
                     var first = Array.isArray(data) && data.length > 0 ? data[0] : data;
                     var second = Array.isArray(data) && data.length > 1 ? data[1] : null;
-                    
+
                     // First section (image left, content right)
                     var $titleEl1 = $(".about-section-one .about-section-two-right .left h2").first();
                     var $descEl1 = $(".about-section-one .about-section-two-right .left p").first();

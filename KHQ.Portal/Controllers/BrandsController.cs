@@ -37,7 +37,7 @@ namespace KHQ.Portal.Controllers
                 }
             }
 
-            return View(brandsData);
+            return View(brandsData.OrderBy(x => x.NameEn));
         }
 
         public async Task<IActionResult> CoverSection()

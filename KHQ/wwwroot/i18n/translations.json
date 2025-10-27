@@ -1,7 +1,7 @@
 {
   "en": {
     "Home": "Home",
-    "AboutUs": "About Us",
+    "AboutUs": "About us",
     "Brands": "Brands",
     "Products": "Products",
     "Categories": "Categories",
@@ -25,12 +25,16 @@
     "EmailAddress": "Email Address",
     "AddressInfo": "Address info",
     "AR": "Arabic",
-    "EN": "انجليزي",
+    "EN": "English",
+    "ENs": "Arabic",
     "Brand": "Brand",
     "Category": "Category",
     "Capacity": "Capacity / Weight",
     "Description": "Description",
     "ProductDetails": "Product Details",
+    "NoProductTitle": "No Products Found",
+    "NoProductDesc": "No products match the selected filters. Please try a different combination.",
+    "StainsDetails": "Stains",
     "Copyright": "Copyright ©,<script>document.write(new Date().getFullYear())</script><strong>Khayrat Al-Qastal For DetergentI ndustry Co.</strong> All rights reserved."
   },
   "ar": {
@@ -60,12 +64,16 @@
     "EmailAddress": "البريد الإلكتروني",
     "AddressInfo": "العنوان",
     "AR": "عربي",
-    "EN": "English",
+    "EN": "انجليزي",
+    "ENs": "انجليزي",
     "Brand": "العلامة التجارية",
     "Category": "الفئة",
     "Capacity": "السعة / الوزن",
-    "Description": "تفاصيل المنتج",
+    "Description": "الوصف",
     "ProductDetails": "تفاصيل المنتج",
+    "NoProductDesc": "لا توجد منتجات مطابقة للفلاتر المحددة. يُرجى تجربة خيار آخر.",
+    "NoProductTitle": "لم يتم العثور على أي منتجات",
+    "StainsDetails": "البقع",
     "Copyright": "حقوق النشر @ 2025 شركة خيرات القسطل لصناعة المنظفات. جميع الحقوق محفوظة."
   }
 }

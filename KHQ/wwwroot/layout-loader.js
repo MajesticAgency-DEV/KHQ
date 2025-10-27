@@ -190,7 +190,9 @@ document.addEventListener("DOMContentLoaded", loadLayout);
         if (curEl) { curEl.textContent = cur.toUpperCase(); }
 
         var logoHeader = document.querySelector('.logo-header');
+        var menuHeader = document.querySelector('#mobile-side-drawer');
         var navTabsHeader = document.querySelector('.nav-tabs-header');
+        var navbarcollapse = document.querySelector('.navbar-collapse');
         var logoImage = document.querySelector('.logo-header-one-img');
 
         if (cur === 'ar'){
@@ -200,12 +202,18 @@ document.addEventListener("DOMContentLoaded", loadLayout);
 
             if (logoHeader) {
                 logoHeader.style.float = 'right';
+                menuHeader.style.float = 'left';
             }
             if (navTabsHeader) {
                 navTabsHeader.style.direction = 'rtl';
+                
+            }
+            if (navbarcollapse) {
+                navbarcollapse.style.textAlign = 'right';
+                navbarcollapse.style.direction = 'rtl';
             }
             if (logoImage) {
-                logoImage.setAttribute('src','test');
+                logoImage.setAttribute('src','images/khayrat-alqastal-logo-ar-white-2.png');
             }
         } 
         else {

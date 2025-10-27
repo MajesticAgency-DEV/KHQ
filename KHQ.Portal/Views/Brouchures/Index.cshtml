@@ -52,7 +52,7 @@
                                 <h5>@item.FileName</h5>
                                 @if (!string.IsNullOrEmpty(item.FilePath))
                                 {
-                                    <button class="btn btn-primary btn-sm" onclick="downloadFile('@item.Id')">
+                                    <button class="btn btn-primary all-btn btn-sm" onclick="downloadFile('@item.Id')">
                                         <i class="fa-regular fa-download"></i> Download
                                     </button>
                                 }
@@ -80,7 +80,7 @@
                                                     <span class="validationFileUpload text-danger display-none">* this field is required</span>
                                                 </div>
                                                 <div class="mb-2 text-center">
-                                                    <button class="btn btn-primary btn-submit" id="EditBrouchuresSectionsbtn-@item.Id"
+                                                    <button class="btn btn-primary all-btn btn-submit" id="EditBrouchuresSectionsbtn-@item.Id"
                                                             type="button" onclick="saveEdit('@item.Id')">
                                                         Save
                                                     </button>
@@ -133,7 +133,7 @@
                         <span class="validationFileUpload text-danger display-none">* this field is required</span>
                     </div>
                     <div class="mb-2 text-center">
-                        <button class="btn btn-primary btn-submit" id="SaveBrouchuresSectionsbtn"
+                        <button class="btn btn-primary all-btn btn-submit" id="SaveBrouchuresSectionsbtn"
                                 type="button">
                             Save
                         </button>
