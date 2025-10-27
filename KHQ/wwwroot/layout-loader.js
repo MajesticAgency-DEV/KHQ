@@ -196,6 +196,10 @@ document.addEventListener("DOMContentLoaded", loadLayout);
         var submenuToogle = document.querySelector('.submenu-toogle');
         var logoImage = document.querySelector('.logo-header-one-img');
 
+        var singProjectDetail = document.querySelector('.sing-project-detail');
+
+
+
         if (cur === 'ar'){
             //document.documentElement.setAttribute('dir','rtl');
             //document.documentElement.setAttribute('lang','ar');
@@ -247,6 +251,10 @@ document.addEventListener("DOMContentLoaded", loadLayout);
             }
             if (logoImage) {
                 logoImage.setAttribute('src','images/khayrat-alqastal-logo-ar-white-2.png');
+            }
+            if (singProjectDetail) {
+                singProjectDetail.style.direction = 'rtl'
+                singProjectDetail.style.textAlign = 'right'
             }
         } 
         else {
