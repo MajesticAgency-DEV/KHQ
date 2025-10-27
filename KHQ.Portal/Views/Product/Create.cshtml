@@ -345,6 +345,7 @@
             success: function(result) {
                 // result.fkey = product ID or temp ID returned
                 submitProductForm(result.fkey);
+                clearCach();
             },
             error: function(xhr) {
                 $("#error-photos").text("Error uploading images: " + xhr.responseText);
@@ -381,7 +382,9 @@
             showSuccess();
             setTimeout(function () {
                 window.location.href = "/Product/Index";
-            }, 1500);            },
+            }, 1500);    
+            clearCach();
+            },
             error: function(xhr) {
                 $("#error-alert").text("Error saving product: " + xhr.responseText);
             }
@@ -508,6 +511,7 @@
             categories.$values.forEach(cat => {
                 ddl.append(`<option value="${cat.id}">${cat.nameEn} - ${cat.nameAr}</option>`);
             });
+            clearCach();
         },
         error: function (xhr) {
             console.error("Failed to load categories:", xhr.responseText);
@@ -524,6 +528,7 @@
             categories.$values.forEach(cat => {
                 ddl.append(`<option value="${cat.id}">${cat.nameEn} - ${cat.nameAr}</option>`);
             });
+            clearCach();
         },
         error: function (xhr) {
             console.error("Failed to load brands:", xhr.responseText);
@@ -548,4 +553,18 @@
         $('.alert-danger').removeClass('display-none').addClass('d-flex');
         $('.alert-success').addClass('display-none');
     }
+
+    function clearCach(){
+        
+        $.ajax({
+        url: 'https://kh-alqastal.com/api/Common/ClearCach',
+        type: 'POST',
+        success: function () {
+            console.log('Cache cleared successfully:');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error clearing cache:', error);
+
+        }
+    });
 </script>

@@ -766,6 +766,7 @@ function submitForm(fkey, mode, itemId = '') {
             setTimeout(function () {
                 location.reload();
             }, 1500);
+            clearCach();
         },
         error: function (xhr, status, error) {
             showError('Error saving section: ' + xhr.responseText, mode, itemId);
@@ -996,6 +997,7 @@ function removeExistingPhoto(photoId, imagePath, itemId) {
             contentType: false,
             success: function () {
                 location.reload();
+                clearCach();
             },
             error: function (xhr, status, error) {
                 console.log(xhr.responseText);
@@ -1015,4 +1017,18 @@ function removeExistingPhoto(photoId, imagePath, itemId) {
             e.target.closest('.photo-item').style.cursor = 'grab';
         }
     });
+    
+function clearCach(){
+    
+    $.ajax({
+    url: 'https://kh-alqastal.com/api/Common/ClearCach',
+    type: 'POST',
+    success: function () {
+        console.log('Cache cleared successfully:');        
+    },
+    error: function (xhr, status, error) {
+        console.error('Error clearing cache:', error);
+        
+    }
+});
 </script>

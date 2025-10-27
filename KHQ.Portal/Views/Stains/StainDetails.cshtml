@@ -379,6 +379,7 @@
                     contentType: false,
                     success: function (result) {
                         submitForm(result.fkey);
+                        clearCach();
                     },
                     error: function (xhr, status, error) {
                         showError('Error saving images: ' + xhr.responseText);
@@ -476,6 +477,7 @@
                             setTimeout(function () {
                                 location.reload();
                             }, 1000);
+                            clearCach();
                         } else {
                             alert(response.message || "Failed to add stain details");
                         }
@@ -556,6 +558,7 @@
                 contentType: false,
                 success: function (result) {
                     editForm(result.fkey);
+                    clearCach();
                 },
                 error: function (xhr, status, error) {
                     console.error('Error saving images:', xhr.responseText);
@@ -627,6 +630,7 @@
                             setTimeout(function () {
                                 location.reload();
                             }, 1000);
+                            clearCach();
                         } else {
                             alert(response.message || "Failed to update stain details");
                         }
@@ -696,4 +700,18 @@
                 alert('Error uploading image. Please try again.');
             }
         }
+        
+function clearCach(){
+    
+    $.ajax({
+    url: 'https://kh-alqastal.com/api/Common/ClearCach',
+    type: 'POST',
+    success: function () {
+        console.log('Cache cleared successfully:');        
+    },
+    error: function (xhr, status, error) {
+        console.error('Error clearing cache:', error);
+        
+    }
+});
     </script>
