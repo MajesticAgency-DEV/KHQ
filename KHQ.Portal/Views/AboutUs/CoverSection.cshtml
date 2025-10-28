@@ -227,6 +227,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     location.reload();
                 }, 1000);
+                clearCach();
             },
             error: function (xhr, status, error) {
                 showError('Error saving images: ' + xhr.responseText);
@@ -279,6 +280,7 @@ function saveEdit(itemId) {
                 setTimeout(function () {
                     location.reload();
                 }, 1000);
+                clearCach();
         },
         error: function (xhr, status, error) {
             console.error('Error saving images:', xhr.responseText);
@@ -343,5 +345,21 @@ function uploadImage(event, itemId) {
         console.error('Error in uploadImage function:', error);
         alert('Error uploading image. Please try again.');
     }
+}
+
+function clearCach(){
+    
+    $.ajax({
+    url: 'https://kh-alqastal.com/api/Common/ClearCach',
+    type: 'POST',
+    success: function () {
+        console.log('Cache cleared successfully:');        
+    },
+    error: function (xhr, status, error) {
+        console.error('Error clearing cache:', error);
+        
+    }
+});
+
 }
 </script>

@@ -193,7 +193,12 @@ document.addEventListener("DOMContentLoaded", loadLayout);
         var menuHeader = document.querySelector('#mobile-side-drawer');
         var navTabsHeader = document.querySelector('.nav-tabs-header');
         var navbarcollapse = document.querySelector('.navbar-collapse');
+        var submenuToogle = document.querySelector('.submenu-toogle');
         var logoImage = document.querySelector('.logo-header-one-img');
+
+        var singProjectDetail = document.querySelector('.sing-project-detail');
+
+
 
         if (cur === 'ar'){
             //document.documentElement.setAttribute('dir','rtl');
@@ -208,12 +213,48 @@ document.addEventListener("DOMContentLoaded", loadLayout);
                 navTabsHeader.style.direction = 'rtl';
                 
             }
+            var navbarcollapse = document.querySelector('.navbar-collapse');
+
             if (navbarcollapse) {
-                navbarcollapse.style.textAlign = 'right';
-                navbarcollapse.style.direction = 'rtl';
+                const observer = new MutationObserver(function (mutationsList) {
+                    for (const mutation of mutationsList) {
+                        if (mutation.attributeName === 'class') {
+                            if (navbarcollapse.classList.contains('show')) {
+                                // Add styles when 'show' class is present
+                                navbarcollapse.style.textAlign = 'right';
+                                navbarcollapse.style.direction = 'rtl';
+                                navbarcollapse.style.right = '15px';
+                                navbarcollapse.style.left = 'unset';
+                            } else {
+                                // Remove styles when 'show' class is removed
+                                navbarcollapse.style.textAlign = '';
+                                navbarcollapse.style.direction = '';
+                                navbarcollapse.style.right = '';
+                                navbarcollapse.style.left = '';
+                            }
+                        }
+                    }
+                });
+
+                observer.observe(navbarcollapse, { attributes: true });
+            }
+
+            if (submenuToogle) {
+                submenuToogle.style.right = 'unset';
+                submenuToogle.style.left = '4px';
+                const icon = document.querySelector('.fa-angle-right');
+                if (icon) {
+                    icon.classList.remove('fa-angle-right');
+                    icon.classList.add('fa-angle-left');
+                }
+
             }
             if (logoImage) {
                 logoImage.setAttribute('src','images/khayrat-alqastal-logo-ar-white-2.png');
+            }
+            if (singProjectDetail) {
+                singProjectDetail.style.direction = 'rtl'
+                singProjectDetail.style.textAlign = 'right'
             }
         } 
         else {

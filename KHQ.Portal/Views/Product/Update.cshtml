@@ -300,6 +300,7 @@ function saveProductImagesBeforeUpdate(){
                 });
             }
             submitUpdateForm();
+            clearCach();
         },
         error: x => alert("Error uploading images: " + x.responseText)
     });
@@ -451,4 +452,19 @@ function loadCategories(){
     });
 }
 $(document).ready(loadCategories);
+
+
+function clearCach(){
+    
+    $.ajax({
+    url: 'https://kh-alqastal.com/api/Common/ClearCach',
+    type: 'POST',
+    success: function () {
+        console.log('Cache cleared successfully:');        
+    },
+    error: function (xhr, status, error) {
+        console.error('Error clearing cache:', error);
+        
+    }
+});
 </script>

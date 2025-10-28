@@ -12,16 +12,16 @@ namespace KHQ.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommonController : ControllerBase
+    public class CachingController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
-        public CommonController(IUnitOfWork unitOfWork, IMapper mapper , ICacheService cacheService) 
+        public CachingController(IUnitOfWork unitOfWork, IMapper mapper , ICacheService cacheService) 
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _cacheService = cacheService;
+            _cacheService = cacheService;   
         }
 
         [HttpGet]
