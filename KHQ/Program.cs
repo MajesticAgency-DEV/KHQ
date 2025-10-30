@@ -67,7 +67,6 @@ builder.Services.AddScoped<IEmailSettingsSRV, EmailSettingsSRV>();
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
 
 var sharedImagesPath = Path.Combine(builder.Environment.ContentRootPath, "..", "SharedImages");
 
@@ -100,6 +99,7 @@ var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOpt
 app.UseRequestLocalization(locOptions.Value); // detects Accept-Language
 app.UseMiddleware<LocalizationHeaderMiddleware>(); // adds Content-Language to response
 app.UseRouting();
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 app.MapFallbackToFile("index.html");

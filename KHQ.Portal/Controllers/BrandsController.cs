@@ -36,8 +36,8 @@ namespace KHQ.Portal.Controllers
                     brandsVM.ImageLink = image.PathLink;
                 }
             }
-
-            return View(brandsData.OrderBy(x => x.NameEn));
+            brandsData = brandsData.OrderBy(x => x.NameEn).ToList();
+            return View(brandsData);
         }
 
         public async Task<IActionResult> CoverSection()

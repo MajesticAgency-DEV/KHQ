@@ -3,15 +3,12 @@ using KHQ.Domain.DTOs;
 using KHQ.Domain.Entities;
 using KHQ.Domain.ViewModel;
 using KHQ.Repo.UOW;
-using System.Net;
-using System.Net.Mail;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MimeKit;
+using MailKit.Security;
+using MailKit.Net.Smtp;
 
 namespace KHQ.Srv.Services
 {
@@ -124,22 +121,58 @@ namespace KHQ.Srv.Services
             }
         }
 
+        //private async Task SendEmailAsync(string from, string to, string subject, string body)
+        //{
+        //    var mail = new MailMessage
+        //    {
+        //        From = new MailAddress(from, _configuration["DisplayName"]),
+        //        Subject = subject,
+        //        Body = body,
+        //        IsBodyHtml = false
+        //    };
+        //    mail.To.Add(to);
+
+        //    using (var smtp = new SmtpClient("mail5006.site4now.net", 465))
+        //    {
+        //        smtp.Credentials = new NetworkCredential(_configuration["EmailUserName"], _configuration["EmailPassword"]);
+        //        smtp.EnableSsl = true;
+        //        await smtp.SendMailAsync(mail);
+        //    }
+        //}
         private async Task SendEmailAsync(string from, string to, string subject, string body)
         {
-            var mail = new MailMessage
-            {
-                From = new MailAddress(from, _configuration["DisplayName"]),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = false
-            };
-            mail.To.Add(to);
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress(_configuration["DisplayName"], from));
+            email.To.Add(MailboxAddress.Parse(to));
+            email.Subject = subject;
 
-            using (var smtp = new SmtpClient("smtp.yourserver.com", 587))
+            email.Body = new TextPart("plain")
             {
-                smtp.Credentials = new NetworkCredential(_configuration["EmailUserName"], _configuration["EmailPassword"]);
-                smtp.EnableSsl = true;
-                await smtp.SendMailAsync(mail);
+                Text = body
+            };
+
+            using (var smtp = new SmtpClient())
+            {
+                try
+                {
+                    // Connect to SMTP server
+                    await smtp.ConnectAsync("mail5006.site4now.net", 587, SecureSocketOptions.StartTls);
+
+                    // Authenticate using credentials from config
+                    await smtp.AuthenticateAsync(_configuration["EmailUserName"], _configuration["EmailPassword"]);
+
+                    // Send the email
+                    await smtp.SendAsync(email);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error sending email: {ex.Message}");
+                    throw;
+                }
+                finally
+                {
+                    await smtp.DisconnectAsync(true);
+                }
             }
         }
 
