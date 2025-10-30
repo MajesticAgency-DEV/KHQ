@@ -305,13 +305,13 @@
                         setTimeout(function () {
                             location.reload();
                         }, 1000);
-                        clearCach();
                     },
                     error: function (xhr, status, error) {
                         console.log(xhr.responseText);
                     }
                 });
             }
+                        clearCach();
     }
 
     function clearCach(){
@@ -327,4 +327,5 @@
 
         }
     });
+    }
 </script>

@@ -268,6 +268,7 @@
                         setTimeout(function () {
                             location.reload();
                         }, 1000);
+                        clearCach();
                     },
                     error: function (xhr, status, error) {
                         console.log(xhr.responseText);
@@ -289,6 +290,7 @@
                 contentType: false,
                 success: function () {
                     location.reload();
+                        clearCach();
                 },
                 error: function (xhr, status, error) {
                     console.log(xhr.responseText);
@@ -359,11 +361,28 @@
                         setTimeout(function () {
                             location.reload();
                         }, 1000);
+
+                        clearCach();
                     },
                     error: function (xhr, status, error) {
                         console.log(xhr.responseText);
                     }
                 });
             }
+    }
+        function clearCach(){
+
+        $.ajax({
+        url: 'https://kh-alqastal.com/api/Common/ClearCach',
+        type: 'POST',
+        success: function () {
+            console.log('Cache cleared successfully:');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error clearing cache:', error);
+
+        }
+    });
+
     }
 </script>
